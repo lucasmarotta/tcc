@@ -1,0 +1,12 @@
+*.log
+material
+*.aux
+*.bbl
+*.blg
+*.out
+*.lot
+*.toc
+*.lol
+*.lof
+main.synctex.gz
+tcc
