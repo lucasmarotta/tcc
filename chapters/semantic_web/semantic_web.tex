@@ -184,6 +184,33 @@ O LOD (Linked Open Data) tornou-se o projeto de maior adoção dos princípios d
 	\label{fig:lod-graph}
 \end{figure}
 
+\section{Similaridade Semântica}
+
+A similaridade semântica entre dois termos, recursos, itens ou documentos é uma métrica para medir a distância de seus significados ou semântica, dado suas ontologias \citep{Slimani2013}. O objetivo é estabelecer características em comum entre dois conceitos. A distância entre dois conceitos para humanos pode não ter uma definição formal, já que se pode criar juízo de valor diferentes no relacionamento entre eles. Como exemplo, para uma pessoa a maçã e a banana podem estar mais relacionadas do que a maçã e a pera para outra. A similaridade e relação semântica podem por vezes determinadas como a mesma coisa, ambas como métricas de distâncias entre termos, contudo a similaridade semântica é mais específica \citep{Slimani2013}. A relação semântica é calculada usando um modelo de espaço vetorial e uma métrica de similaridade, como a similaridade do cosseno \ref{eq:cosine_sim} que dado dois vetores $A$ e $B$ como uma representação de dois documentos e $A_i$ e $B_i$ seus componentes, seja calculado o produto vetorial euclidiano. \citep{Singhal2001}.
+
+\begin{equation}
+	A \cdot B = \norm{A}_2 \norm{B}_2 \cos(\theta)
+\label{eq:cosine_sim_eu}
+\end{equation}
+
+\begin{equation}
+	similaridade = \cos(\theta) = \frac{ A \cdot B }{ \norm{A}_2 \cdot \norm{B}_2 }
+	= \frac{ \sum_{i=1}^{n} A_i B_i }{ \sqrt{ \sum_{i=1}^{n} A_i^{2} } \sqrt{ \sum_{i=1}^{n} B_i^{2} } }
+\label{eq:cosine_sim}
+\end{equation}
+
+Entretanto, para a similaridade semântica é levado em consideração relações léxicas de sinonímia e hiperonímia onde o significado é abrangido pelo outro termo mais geral (como carro e veículo) \citep{Gracia2008}. Na prática, a similaridade semântica pode ser medida pelo menor caminho entre dois termos utilizando suas ontologias associadas. Para calcular a similaridade podem ser usadas diversos tipos de ontologias. \cite{Slimani2013} descreve dois principais tipos de ontologias usadas para medir similaridade.
+
+\begin{itemize}
+	\item{\textbf{Propósito genérico}: \textit{Wordnet}\footnote{https://wordnet.princeton.edu} é um banco de dados que modela o conhecimento léxico da língua inglesa. Nomes, verbos, adjetivos e advérbios são agrupados em conjuntos sinônimos, onde cada um expressa um conceito distinto. Essa ontologia pode ser utilizada para criar um \textit{score} de similaridade. Pode ser considerada um ontologia para termos de linguagem natural.}
+	
+	\item{\textbf{De domínio específico}: \textit{ULMS}\footnote{https://www.nlm.nih.gov/research/umls} é um sistema de linguagem médica com uma rede semântica de ontologias de multiuso, multilíngue para biomedicina, conceitos e assuntos relacionados à saúde. O banco de dados do sistema possui uma coleção de vocabulários de conceitos e termos e seus relacionamentos que são denominados de \textit{Metathesaurus}. Cada Metathesaurus é classificado como pelo menos uma categoria semântica.}	
+\end{itemize}
+
+\subsection{Medidas de Similaridade Semântica}
+
+
+
 \section{Projetos na Web Semântica}
 
 \subsection{DBPedia}
