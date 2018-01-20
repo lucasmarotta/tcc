@@ -4,21 +4,21 @@
 I found myself answering the same questions asked frequently of me by different people. It would be so much easier if everyone could just read my database
 \end{quotation}
 
-A introdução e expansão da \textit{World Wide Web} possibilitou acessar e publicar uma grande variedade de conteúdo, seja para o consumo de entretenimento, exposição de opiniões, compras online. O crescimento da rede tornou-se tão grande que é latente a necessidade para seus usuários encontrar informações. Para eles foram criados e desenvolvidos os indexadores de páginas, como o Google\footnote{https://www.google.com}, Yahoo\footnote{https://www.yahoo.com}, Bing\footnote{https://www.bing.com}. Tais sistemas facilitam encontrar informações em serviços populares na Internet. Entretanto, e se quiséssemos encontrar algum médico de confiança para marcar uma consulta, levando em consideração uma agenda de compromissos? Ou então se estamos realizando um trabalho escolar e queremos encontrar os reis do século XV? Essas pesquisas, certamente são mais complicadas, e resultados de buscas tradicionais levam a informações fragmentadas com uma série de outras buscas separadas para alinhar todo o conhecimento e semântica envolvidos nessas tarefas. É nesse ponto que entra o conceito da Web Semântica, como uma extensão da já existente.
+A introdução e expansão da \textit{World Wide Web} possibilitou acessar e publicar uma grande variedade de conteúdo, seja para o consumo de entretenimento, exposição de opiniões, compras online etc. O crescimento da rede tornou-se tão grande que é latente a necessidade para seus usuários encontrar informações. Para eles, foram criados e desenvolvidos os indexadores de páginas, como o Google\footnote{https://www.google.com}, Yahoo\footnote{https://www.yahoo.com}, Bing\footnote{https://www.bing.com}. Tais sistemas facilitam encontrar informações em serviços populares na Internet. Entretanto, e se quiséssemos encontrar algum médico de confiança para marcar uma consulta, levando em consideração uma agenda de compromissos? Ou então se estamos realizando um trabalho escolar e queremos encontrar os reis do século XV? Essas pesquisas certamente são mais complicadas, e resultados de buscas tradicionais levam a informações fragmentadas, com uma série de outras buscas separadas para alinhar todo o conhecimento e semântica envolvidos nessas tarefas. É nesse ponto que entra o conceito da Web Semântica, como uma extensão da já existente.
 
-O conteúdo da Web tradicional é fundamentalmente desenvolvido para humanos lerem, não para máquinas manipularem de forma produtiva, significante \citep{bernerslee2001semantic}. Originalmente desenvolvida para compartilhar e apresentar conteúdo de forma que fosse possível interagir e navegar entre hipertextos e hipermídia, a WWW torna fácil a apresentação de layouts. É possível estruturar um documento com um cabeçalho, um link para outra página, entretanto, dificilmente as máquinas poderão processar semanticamente que informações estão disponíveis e podem ser organizadas naquela página ou site, como exemplo esta é a página de João com link para seu currículo informando que possui especialização em cardiologia. Todas essas informações podem até serem compreendidas por humanos ao associar a semântica das entidades presentes numa página, analisando com links e seus relacionados, mas para a máquina não há uma estrutura comum e eficiente que leve a essas mesmas conclusões.
+O conteúdo da Web tradicional é fundamentalmente desenvolvido para humanos lerem, não para máquinas manipularem de forma produtiva e significante \citep{bernerslee2001semantic}. Originalmente desenvolvida para compartilhar e apresentar conteúdo de forma que fosse possível interagir e navegar entre hipertextos e hipermídia, a WWW torna fácil a apresentação de layouts. É possível estruturar um documento com um cabeçalho, um link para outra página, entretanto, dificilmente as máquinas poderão processar semanticamente que informações estão disponíveis e que podem ser organizadas naquela página ou site. Como exemplo, uma página de João com link para seu currículo informando que possui especialização em cardiologia. Todas essas informações podem até serem compreendidas por humanos ao associar a semântica das entidades presentes numa página e analisando links relacionados, mas para a máquina não há uma estrutura comum e eficiente que leve a essas mesmas conclusões.
 
-O objetivo da Web Semântica é de estender a WWW, aproveitando a enorme variedade de dados já existente, mas agregando uma nova camada de metadados que possibilitem o processamento pela máquina e agentes de forma a compreender a semântica das informações ali apresentadas. Assim, a Web Semântica trata-se de prover formatos para integração de dados de diferentes fontes \citep{SemanticWebW3C}, onde a Web tradicional mantém-se como o meio de publicação e interconexão de documentos, e na contraparte semântica, armazena-se como os dados se relacionam com objetos e coisas do mundo real. Um agente pode se deparar com uma página de clínica na Web e não apenas compreenderá que possui palavras como “tratamento, terapia, remédios, médicos”, como tipicamente é encontrado na Web tradicional, mas também saber o Dr João trabalha nessa clínica nas segundas e quartas com horários no formato \textit{dd/mm/YYYY}.
+O objetivo da Web Semântica é de estender a WWW, aproveitando a enorme variedade de dados já existente, mas agregando uma nova camada de metadados que possibilitem o processamento pela máquina e agentes de forma a compreender a semântica das informações apresentadas. Assim, a Web Semântica trata-se de prover formatos para integração de dados de diferentes fontes \citep{SemanticWebW3C}, onde a Web tradicional mantém-se como o meio de publicação e interconexão de documentos, e na contraparte semântica, armazena-se dados que se relacionam com objetos e coisas do mundo real. Um agente pode se deparar com uma página de clínica na Web e não apenas compreenderá que possui palavras como “tratamento, terapia, remédios, médicos”, como tipicamente é encontrado na Web tradicional, mas também saber o Dr João trabalha nessa clínica nas segundas e quartas com horários no formato \textit{dd/mm/YYYY}.
 
 \section{Arquitetura e formato de dados}
 
-O funcionamento da Web Semântica depende da capacidade de máquinas acessar coleções estruturadas de informações, dados e regras de inferência para executar raciocínio automatizado \citep{bernerslee2001semantic}. O desafio é de como representar conhecimento. Inicialmente o desenvolvimento desses sistemas utilizaram uma abordagem centralizadora, requerendo que as partes envolvidas compartilhem exatamente as mesmas definições de conceitos comuns ou hierárquicos. Entretanto, com a quantidade de conteúdo existente hoje em diferentes línguas, controle centralizado é desafiador. Contrastando essa visão inicial, na Web Semântica cria-se linguagens para regras as quão expressivas for necessário para que a Web seja tão ampla como desejado \citep{bernerslee2001semantic}. Com um sistema que não seja centralizado é possível que não se responda todas as perguntas, ou seja, encontrado todas as informações, mas permite que regras sejam usadas para criar inferências e escolher o curso de ações para poder ou tentar responder tais perguntas.
+O funcionamento da Web Semântica depende da capacidade de máquinas acessar coleções estruturadas de informações, dados e regras de inferência para executar raciocínio automatizado \citep{bernerslee2001semantic}. O desafio é de como representar conhecimento. Inicialmente o desenvolvimento desses sistemas utilizaram uma abordagem centralizadora, requerendo que as partes envolvidas compartilhem exatamente as mesmas definições de conceitos comuns ou hierárquicos. Entretanto, com a quantidade de conteúdo existente hoje em diferentes línguas, controle centralizado é desafiador. Contrastando essa visão inicial, na Web Semântica cria-se linguagens para regras as quais são tão expressivas quanto o necessário para que a Web seja ampla como desejado \citep{bernerslee2001semantic}. Com um sistema que não seja centralizado é possível que não se responda todas as perguntas, ou seja, encontrado todas as informações, mas permite que regras sejam usadas para criar inferências e escolher o curso de ações para poder ou tentar responder tais perguntas.
 
-Com esses fundamentos os pesquisadores da Web Semantic, em especial o \textit{World Wide Web Consortium}, desenvolveram uma série de padrões e formatos de dados para o uso na Web. O intuito é possibilitar máquinas compreender documentos com dados semânticos e não discursos e textos criados pelo homem. Uma tecnologia muito importante para o desenvolvimento da representação do conhecimento e protocolo de comunicação entre máquinas, foi o XML. Com o XML é possível que qualquer um seja capaz de criar suas próprias \textit{tags} e estruturas de um documento com definição de cada termo presente de forma arbitrária. Desse ponto de vista o XML é fundamental como um padrão de comunicação entre máquinas. Anos seguintes, a W3C introduziu outras três importantes tecnologias presentes no cenário atual da Web Semântica: RDF, SPARQL, OWL.
+Com esses fundamentos os pesquisadores da Web Semântica, em especial o \textit{World Wide Web Consortium}, desenvolveram uma série de padrões e formatos de dados para o uso na Web. O intuito é possibilitar máquinas compreenderem documentos com dados semânticos e não discursos e textos criados pelo homem. Uma tecnologia muito importante para o desenvolvimento da representação do conhecimento e protocolo de comunicação entre máquinas, foi o XML. Com o XML é possível que qualquer um seja capaz de criar suas próprias \textit{tags} e estruturas de um documento com definição de cada termo presente de forma arbitrária. Desse ponto de vista o XML é fundamental como um padrão de comunicação entre máquinas. Anos seguintes, a W3C introduziu outras três importantes tecnologias presentes no cenário atual da Web Semântica: RDF, SPARQL, OWL.
 
 \subsection{RDF}
 
-Resource Descripton Framework é um modelo de dado para a Web que facilita a junção de dados mesmo que seu \textit{schema} difiram, além de permitir a sua evolução sem requerer que seus consumidores tenham que se adaptar \citep{W3CRDF}. No RDF a estrutura da Web de links é estendida para usar as URIs para nomear a relação entre qualquer coisa, com ambas as pontas do link, formando o que é conhecido como a tripla.
+Resource Descripton Framework é um modelo de dado para a Web que facilita a junção de dados mesmo que seu \textit{schema} difira, além de permitir a sua evolução sem requerer que seus consumidores tenham que se adaptar \citep{W3CRDF}. No RDF a estrutura da \textit{web} de links é estendida para usar as URIs para nomear a relação entre qualquer coisa, com ambas as pontas, formando o que é conhecido como a tripla.
 
 \begin{figure}
 	\centering
@@ -34,7 +34,7 @@ Resource Descripton Framework é um modelo de dado para a Web que facilita a jun
 	\label{fig:rdf_graph2}
 \end{figure}
 
-O uso da URI é especialmente notável para o uso na Web, uma vez que não é possível apenas se basear em valores literais, mesmo para representar um atributo de algo, já que é desejado ter a definição e estrutura do mesmo podendo considerar um domínio em específico. Como exemplo com uma URI é possível identificar de forma única o predicado “título” que se refere ao título da função em uma empresa, e não um título de filme. Então, a tripla forma um grupo de três entidades que expressam uma declaração sobre o dado semântico sob a forma de “sujeito, predicado, objeto”. Com essa estrutura de links é formado um grafo direcionado, com \textit{labels}, aonde suas arestas representam o link nomeado entre dois recursos representados pelos seus nós \citep{W3CRDF}.
+O uso da URI é especialmente notável para a Web, uma vez que não é possível apenas se basear em valores literais, mesmo para representar um atributo de algo, já que é desejado ter a definição e estrutura podendo considerar um domínio em específico. Como exemplo, com uma URI é possível identificar de forma única o predicado “título” que se refere ao título da função em uma empresa, e não um título de filme. Então, a tripla forma um grupo de três entidades que expressam uma declaração sobre o dado semântico, na forma de “sujeito, predicado, objeto”. Com essa estrutura de links é formado um grafo direcionado, com \textit{labels}, aonde suas arestas representam o link nomeado entre dois recursos representados pelos seus nós \citep{W3CRDF}.
 
 \subsection{SPARQL}
 
@@ -58,7 +58,7 @@ WHERE
 
 \subsection{OWL}
 
-Ontology Web Language é uma linguagem para definir e instanciar ontologias na Web \citep{OWLW3C}. Um programa que deseja comparar ou combinar informações entre dois bancos de dados com URIs distintas, deve saber se termos podem ser usados para descrever o significado da mesma coisa \citep{bernerslee2001semantic}. O objetivo é que um programa descubra o significado comum seja para o que for encontrado entre os conjuntos de dados. A solução proposta na Web Semântica para esse problema é a utilização de uma coleção de informações denominadas de ontologias. Na filosofia uma ontologia tem por objeto o estudo das propriedades do ser, tratando da natureza da existência. Entretanto, no campo da Inteligência artificial e Web, define os termos básicos e relações que compreendem um vocabulário de um domínio, bem como regras para combinar termos e as relações para definir extensões desse vocabulário \citep{Patil:1992:DKS:3087223.3087302}.
+Ontology Web Language é uma linguagem para definir e instanciar ontologias na Web \citep{OWLW3C}. Um programa que deseja comparar ou combinar informações entre dois bancos de dados com URIs distintas, deve saber se termos podem ser usados para descrever o significado da mesma coisa \citep{bernerslee2001semantic}. O objetivo é que um programa descubra o significado comum seja para o que for encontrado entre os conjuntos de dados. A solução proposta na Web Semântica para esse problema é a utilização de uma coleção de informações denominadas de ontologias. Na filosofia uma ontologia tem por objeto o estudo das propriedades do ser, tratando da natureza da existência. Entretanto, no campo da inteligência artificial e na Web, é definido como os termos básicos e relações que compreendem um vocabulário de um domínio, bem como regras para combiná-los junto com relações para definir extensões desse vocabulário \citep{Patil:1992:DKS:3087223.3087302}.
 
 Em essência a ontologia é um documento que define formalmente as relações entre termos. As ontologias podem ser vistas de forma semelhante à hierarquia de classes na programação orientada a objetos. Tipicamente uma ontologia para a Web possui uma taxonomia e um conjunto de regras de inferência. A taxonomia define classes (ou conceitos) de objetos e suas relações, sendo assim, um endereço pode ser definido como um tipo de localidade e o código de uma cidade pode ser definido para ser aplicado apenas a localizações, entre outros exemplos.
 
@@ -72,11 +72,11 @@ A linguagem OWL provê três sublinguagens, OWL Lite, OWL DL, OWL Full como apre
 	\item{\textbf{OWL Full}: Oferece o máximo de expressividade e é sintaticamente livre do RDF sem garantias computacionais. Nessa linguagem uma classe pode ser tratada simultaneamente como uma coleção de indivíduos ou indivíduo como todo. Então, a OWL Full permite uma ontologia ter seu significado ampliado ao pré-definido (RDF ou OWL) vocabulário.}
 \end{itemize}
 
-Todas as sub-linguagens são extensões de sua predecessora, sendo assim cada ontologia válida em OWL Lite é uma ontologia válida em OWL DL que por sua vez é uma ontologia válida em OWL Full \citep{ OWLW3C}. É notável destacar que o inverso das relações não é verdadeiro. Completando, todo documento OWL é um documento em XML construído com o RDF.
+Todas as sub-linguagens são extensões de sua predecessora, sendo assim cada ontologia válida em OWL Lite é uma ontologia válida em OWL DL que por sua vez é uma ontologia válida em OWL Full \citep{OWLW3C}. É notável destacar que o inverso das relações não é verdadeiro. Completando, todo documento OWL é um documento em XML construído com o RDF.
 
 \subsubsection{Estrutura de um documento:}
 
-Com a OWL é possível descrever de forma natural classes e relacionamentos entre documentos e aplicações na Web \citep{OWLReport:2005}. Os termos descritos devem estar dispostos de tal maneira que não cause ambiguidade, assim é necessário que seja informado quais vocabulários serão empregados. Para o uso de vocabulários a \citep{OWLW3C} deve-se definir no topo do documento os \textit{xml namespaces} \footnote{No XML, os namespaces são nomes únicos para elementos e atributos no documento. Para resolver as ambiguidades e facilitar as referências antes dos nomes são utilizados prefixos}, conforme mostrado no código fonte \ref{cod:owl-prefixes}.
+Com a OWL é possível descrever de forma natural classes e relacionamentos entre documentos e aplicações na Web \citep{OWLReport:2005}. Os termos descritos devem estar dispostos de tal maneira que não cause ambiguidade, assim é necessário que seja informado quais vocabulários serão empregados. Para o uso de vocabulários a \cite{OWLW3C} informa que deve-se definir no topo do documento os \textit{xml namespaces} \footnote{No XML, os namespaces são nomes únicos para elementos e atributos no documento. Para resolver as ambiguidades e facilitar as referências antes dos nomes são utilizados prefixos}, conforme mostrado no código fonte \ref{cod:owl-prefixes}.
 
 \begin{lstlisting}[caption=Exemplo do topo de um documento OWL, language=XML, frame=single, label={cod:owl-prefixes}, float, numbers=left]
 <rdf:RDF 
@@ -90,7 +90,7 @@ Com a OWL é possível descrever de forma natural classes e relacionamentos entr
     xmlns:xsd ="http://www.w3.org/2001/XMLSchema#">
 \end{lstlisting}
 
-Acrescentando, a W3C recomenda incluir um cabeçalho XML no documento que preceda as definições das ontologias como apresentado no código fonte \ref{cod:owl-head}
+Acrescentando, a W3C recomenda incluir no documento um cabeçalho XML que preceda as definições das ontologias como apresentado no código fonte \ref{cod:owl-head}
 
 \begin{lstlisting}[caption=Exemplo do cabeçalho XML de um documento OWL, language=XML, frame=single, label={cod:owl-head}, float, numbers=left]
 <!DOCTYPE rdf:RDF [
@@ -125,7 +125,7 @@ Acrescentando, a W3C recomenda incluir um cabeçalho XML no documento que preced
 
 Por último será informado o cabeçalho da ontologia junto a suas propriedades. Nesse cabeçalho é importante fornecer informações sobre ela própria. Para descrevê-las utiliza-se as propriedades do OWL, uma vez que a ontologia é um recurso, assim demonstrado no código fonte \ref{cod:owl-ontology-head}
 
-Dentro da definição da ontologia poderão ser informados as classes e indivíduos relacionados como as propriedades e suas relações. As propriedades podem ser descritas como transitivas, simétricas, funcionais ou inversamente funcional. Como exemplo, numa propriedade transitiva de subordinado, sem é dito que João é subordinado de Pedro e Pedro é subordinado de Maria, portanto João é subordinado de Maria. No código fonte \ref{cod:owl-props} é demonstrado a declaração desse tipo de propriedade.
+Dentro da definição da ontologia poderão ser informados as classes e indivíduos relacionados como as propriedades e suas relações. As propriedades podem ser descritas como transitivas, simétricas, funcionais ou inversamente funcional. Como exemplo, numa propriedade transitiva de subordinado, se é dito que João é subordinado de Pedro e Pedro é subordinado de Maria, portanto João é subordinado de Maria. No código fonte \ref{cod:owl-props} é demonstrado a declaração desse tipo de propriedade.
 
 \subsection{Estrutura na rede semântica}
 
@@ -143,7 +143,7 @@ Dentro da definição da ontologia poderão ser informados as classes e indivíd
 	\label{fig:sw-w3c-stack}
 \end{figure}
 
-A introdução das tecnologias para alcançar os princípios idealizados na Web Semântica são implantados em camadas. De acordo com \cite{bernerslee2001semantic} é possível dividir esses serviços em três grandes camadas, como demonstrado na figura \ref{fig:sw-layers}. Na camada de estrutura os dados são organizados e é definido seus significados, na qual utiliza-se as triplas do RDF. A camada com os esquemas estão as ontologias, utilizando-se o OWL para a representação de conceitos, inferências através das taxonomias e conjunto de regras. Por último na camada lógica são definidos para fazer inferência sobre os dados. Dessa forma, o desenvolvimento dessas tecnologias (ainda em andamento) e padronização dos formatos foi formulado pela W3C uma pilha das camadas \citep{SemanticWebStack} da Web Semântica confiável, conforme mostrado na figura \ref{fig:sw-w3c-stack}.
+A introdução das tecnologias para alcançar os princípios idealizados na Web Semântica são implantados em camadas. De acordo com \cite{bernerslee2001semantic} é possível dividir esses serviços em três grandes camadas, como demonstrado na figura \ref{fig:sw-layers}. Na camada de estrutura os dados são organizados e definidos seus significados, na qual utiliza-se as triplas do RDF. A camada com os esquemas estão as ontologias, utilizando-se o OWL para a representação de conceitos, inferências através das taxonomias e conjunto de regras. Por último na camada lógica são definidos para fazer inferência sobre os dados. Dessa forma, o desenvolvimento dessas tecnologias (ainda em andamento) e padronização dos formatos foi formulado pela W3C uma pilha das camadas \citep{SemanticWebStack} da Web Semântica confiável, conforme mostrado na figura \ref{fig:sw-w3c-stack}.
 
 \section{Dados ligados}
 
@@ -186,7 +186,7 @@ O LOD (Linked Open Data) tornou-se o projeto de maior adoção dos princípios d
 
 \section{Similaridade Semântica}
 
-A similaridade semântica entre dois termos, recursos, itens ou documentos é uma métrica para medir a distância de seus significados ou semântica, dado suas ontologias \citep{Slimani2013}. O objetivo é estabelecer características em comum entre dois conceitos. A distância entre dois conceitos para humanos pode não ter uma definição formal, já que se pode criar juízo de valor diferentes no relacionamento entre eles. Como exemplo, para uma pessoa a maçã e a banana podem estar mais relacionadas do que a maçã e a pera para outra. A similaridade e relação semântica podem por vezes determinadas como a mesma coisa, ambas como métricas de distâncias entre termos, contudo a similaridade semântica é mais específica \citep{Slimani2013}. A relação semântica é calculada usando um modelo de espaço vetorial e uma métrica de similaridade, como a similaridade do cosseno \ref{eq:cosine_sim} que dado dois vetores $A$ e $B$ como uma representação de dois documentos e $A_i$ e $B_i$ seus componentes, seja calculado o produto vetorial euclidiano. \citep{Singhal2001}.
+A similaridade semântica entre dois termos, recursos, itens ou documentos é uma métrica para medir a distância de seus significados ou semântica, dado suas ontologias \citep{Slimani2013}. O objetivo é estabelecer características em comum entre dois conceitos. A distância entre dois conceitos para humanos pode não ter uma definição formal, já que se pode criar um juízo de valor diferente no relacionamento entre eles. Como exemplo, para uma pessoa a maçã e a banana podem estar mais relacionadas do que a maçã e a pera para outra. A similaridade e relação semântica podem por vezes determinadas como a mesma coisa, ambas como métricas de distâncias entre termos, contudo a similaridade semântica é mais específica \citep{Slimani2013}. A relação semântica é calculada usando um modelo de espaço vetorial e uma métrica de similaridade, como a similaridade do cosseno \ref{eq:cosine_sim} que dado dois vetores $A$ e $B$ como uma representação de dois documentos e $A_i$ e $B_i$ seus componentes, seja calculado o produto vetorial euclidiano. \citep{Singhal2001}.
 
 \begin{equation}
 	A \cdot B = \norm{A}_2 \norm{B}_2 \cos(\theta)
@@ -209,7 +209,70 @@ Entretanto, para a similaridade semântica é levado em consideração relaçõe
 
 \subsection{Medidas de Similaridade Semântica}
 
+Na literatura já foram apresentadas algumas medidas de similaridade semântica, mas comumente existem três fatores principais \citep{Slimani2013} que podem ser associados na topologia (i.e. nós do grafo direcionado) das ontologias: \textit{path length}, \textit{depth}, \textit{density}. Todos esses fatores afetam a medida da distância semântica, assim como as características entre dois termos, que podem aumentar ou diminuir as medidas de acordo com suas semelhanças. Quanto a densidade entre dois termos trata-se do número de filhos dos quais pertencem ao menor caminho (\textit{path}) da raiz ao mais específico conceito entre esses termos. Os fatores que influenciam nas medidas levam a definição de uma classificação que podem ser divididas em quatro principais \citep{Slimani2013}: baseadas em estrutura, conteúdo, recursos ou características e as híbridas que combinam as características estruturais (\textit{path length}, \textit{depth}, \textit{density}) e alguma outra abordagem.
 
+\subsubsection{Baseadas em estrutura:}
+
+As medidas baseadas em estrutura (\textit{Structured-based ou Path-based}, utilizam funções que computam a similaridade baseada na hierarquia e estrutura da ontologia, ou seja, onde um conceito é definido como “é parte de”, “é um” etc. A função calcula o tamanho do caminho que liga os termos e seus posicionamentos no grafo direcionado da ontologia. Quanto mais dois conceitos são similares, mais \textit{links} existem entre eles. Dentre as medidas baseadas em estrutura se destacam:
+
+\begin{itemize}
+	\item{\textbf{\textit{Shortest Path} \citep{Rada:1989}}: A medida do menor caminho é um tipo de medida de distância que é primariamente voltada para lidar com hierarquias em redes semânticas. A função da similaridade entre conceitos $C_1$ e $C_2$ é definida como:
+
+	\begin{equation}
+		Sim(C_1, C_2) = 2 * Max(C_1, C_2) - SP	
+	\label{eq:shortest_path}
+	\end{equation}
+	
+	A função $Max$ é o maior tamanho do caminho entre $C_1$ e $C_2$, quanto a $SP$ é menor caminho relacionando os dois conceitos.}
+	
+	\item{\textbf{\textit{Weighted Links}}: Similar a medida do menor caminho, contudo é introduzido um conceito de pesos para os links entre os conceitos a serem comparados.}
+	
+	\item{\textbf{\cite{Wu:1994}}: Para essa medida sejam dois conceitos $C_1$ e $C_2$, é levado em consideração a noção intuitiva de que quanto maior a profundidade, mais similares os conceitos são. Na função tem-se que $N_1$ e $N_2$ são a quantidade de links da forma "é um" de $C_1$ e $C_2$, onde o conceito mais específico é o mais próximo ancestral  $C$ entre eles. 
+
+	\begin{equation}
+		Sim_{W \& P}(C_1, C_2) = \frac{2H}{N_1 + N_2 + 2H}	
+	\label{eq:wu_palmer}
+	\end{equation}	}	
+\end{itemize}
+
+\subsubsection{Baseadas em conteúdo:}
+
+As medidas baseadas no conteúdo, são aquelas que utilizam a informação do conteúdo para medir similaridade. O conteúdo de um conceito é definido pela frequência de termos dado uma coleção de documentos. Grande parte das medidas deste tipo utilizam a informação compartilhada de dois conceitos pais $C_1$ e $C_2$, dos qual $S(C_1; C_2)$ é o conjunto de conceitos que os engloba, conforme a equação \ref{eq:mis}.  O menor $p(C)$ é utilizado quando há mais de um pai em comum que $C$ é o \textit{most informative subsume} (MIS), ou seja, o conceito mais informacional que os engloba.
+
+	\begin{equation}
+		P_{mis}(C_1, C_2) = min_{C \in S(C_1;C_2)} \{p(C)\}
+	\label{eq:mis}
+	\end{equation}
+
+Algumas das medidas deste tipo são:
+
+\begin{itemize}
+
+	\item{\textbf{\cite{Resnik:1999}}: O principio desta medida define que dois conceitos são mais similares se eles possuem mais informações compartilhadas. A informação compartilhada entre $C_1$ e $C_2$ é o conteúdo de conceitos que os engloba no grafo. A definição de \textit{Resnik} define a medida como a seguinte equação:
+	
+	\begin{equation}
+		Sim_{Resnik}(C_1, C_2) = - \ln (p_{mis}(C_1, C_2))
+	\label{eq:resnik}
+	\end{equation}}
+	
+	\item{\textbf{\cite{Lin1993PrincipleBasedPW}}: A proposta é incorporar o vetor semântico e a ordem das palavras para calcular a similaridade. A medida combina o menor caminho $SP$ entre dois conceitos e a profundidade $N$ da taxonomia em relação ao conceito $C$ mais em comum. A definição da equação segue conforme abaixo:
+
+	\begin{equation}
+		Sim_{Li}(C_1, C_2) = \mathrm{e}^{-\alpha * SP} * \frac{ \mathrm{e}^{\beta * N} - \mathrm{e}^{- \beta * N} }{ \mathrm{e}^{\beta * N} + \mathrm{e}^{- \beta * N} }
+	\label{eq:li}
+	\end{equation}}
+	
+\end{itemize}
+
+\subsubsection{Baseadas em características ou recursos:}
+
+Baseia-se em características ou recursos (\textit{Featured-based}), que partem do princípio de valorizar informações importantes em relação ao conhecimento sobre um termo. A medida assume que os conceitos são descritos por termos indicando suas propriedades ou \textit{features}. A similaridade entre dois conceitos é definida por uma função (\ref{eq:tversky}) que relaciona suas propriedades ou relacionamentos a outros termos similares na hierarquia da ontologia. \cite{Tversky:1977} apresenta uma medida \textit{Feature-based} de termos para calcular a similaridade entre diferentes conceitos, contudo o posicionamento desses termos na taxonomia e a informação do conteúdo não são levadas em consideração. A proposta é de que com termos descritos por um conjunto de palavras como propriedades do conceito, então as que são em comum tendem a aumentar a similaridade, enquanto as que não são em tendem a diminuí-la. Dessa forma, é definida uma equação onde $C_1$ e $C_2$ representam o conjunto de descrições dos termos e $\alpha \in [0,1]$ é a relação de relevância das características que não são em comum. O valor de $\alpha$ aumenta o quão mais em comum dois conceitos são, e decresce com suas diferenças, e não é necessariamente uma relação de simetria, mas mais baseada na similaridade \citep{Slimani2013}.
+
+\begin{equation}
+	Sim_{Tversky}(C_1, C_2) = \frac{ |C_1 \cap C_2| }
+	{ |C_1 \cap C_2| + \alpha |C_1 - C_2| + (\alpha - 1)|C_2 - C_1| }
+\label{eq:tversky}
+\end{equation}
 
 \section{Projetos na Web Semântica}
 
@@ -260,6 +323,6 @@ Com \textit{Knowledge Graph} é possível pesquisar por pessoas, lugares, esport
 
 \section{Sumário}
 
-Neste capítulo, foi apresentado os conceitos que fundamentam o desenvolvimento de sistemas para representação de conhecimentos, assim como a abordagem e objetivos da Web Semântica sobre o tema. Em sequência foram introduzidas as principais tecnologias e princípios que são utilizados e o aprofundamento do significado das ontologias. Também foi abordado um panorama sobre a estrutura das tecnologias utilizadas na Web Semântica. Ainda foi introduzido o princípio e prática dos dados ligados e sua extensão com os dados abertos. Por fim, foram apresentados projetos proeminentes no cenário da Web Semântica. No capítulo \ref{cap:proposal} será discutido os conceitos da proposta do sistema de recomendação implementado por este trabalho.
+Neste capítulo, foi apresentado os conceitos que fundamentam o desenvolvimento de sistemas para representação de conhecimentos, assim como a abordagem e objetivos da Web Semântica sobre o tema. Em sequência foram introduzidas as principais tecnologias e princípios que são utilizados e o aprofundamento do significado das ontologias. Também foi abordado um panorama sobre a estrutura das tecnologias utilizadas na Web Semântica. Ainda foi introduzido o princípio e prática dos dados ligados e sua extensão com os dados abertos. Ainda foi exposto um panorama da similaridade semântica e tipos de medidas. Por fim, foram apresentados projetos proeminentes no cenário da Web Semântica. No capítulo \ref{cap:proposal} será discutido os conceitos da proposta do sistema de recomendação implementado por este trabalho.
 
 \label{cap:semantic_web}

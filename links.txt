@@ -5,3 +5,7 @@ researchgate.net
 tandfonline.com
 http://www.bookmetrix.com/detail/book/f897c324-da63-414a-ba97-4c3f05169b42#citations
 http://www.inf.unibz.it/~ricci/papers/intro-rec-sys-handbook.pdf
+
+https://groups.google.com/forum/#!topic/recsysufba/LLUuEC1g9ws
+https://www.quora.com/Whats-the-difference-between-semantic-relatedness-and-semantic-similarity-and-how-to-calculate-them
+https://en.wikipedia.org/wiki/Semantic_similarity
