@@ -1,16 +1,17 @@
+\label{cap:proposal}
 \chapter{Um Sistema de Recomendação Semântico baseado em conteúdo}
 
 Desde de tempos o homem busca construir ferramentas e máquinas que facilitem, ampliem, sustem sua capacidade de trabalho e produção. Com o advento dos computadores e dos programas de máquina, o \textit{software} tornou-se essencial para a contínua demanda de problemas e desafios da crescente população global. Como avaliado por \cite{Sommerville2010},  o software não se restringe a propriedades materiais das leis da física ou por processos de manufatura. Por um lado, este fato simplifica a engenharia de software devido falta de restrições físicas, mas o torna complexo e de alto custo na realização de mudanças. Dessa forma, com a crescente quantidade de computadores e a diversidade de dispositivos, é cada vez mais relevante a qualidade de software.
 
 O tema não é novo e já é levantado desde a década de sessenta, como na conferência NATO \citep{NR68} sobre problemas e desafios no desenvolvimento de software. A qualidade de software não somente aborda problemas do ponto de vista da coordenação do desenvolvimento, viabilizando a execução pelas máquinas, mas também estuda a importância da legibilidade a fim facilitar a manutenção e compreensão por humanos. Assim, é de suma importância documentar funcionalidades, decisões técnicas a serem utilizadas no processo do desenvolvimento de software, para que outros possam entender o trabalho que está sendo construído \citep{Pressman2009}.
 
-Neste capítulo será apresentado os requisitos funcionais e não funcionais para um sistema de de recomendação semântico baseado em conteúdo. Será discutida as tecnologias, comportamentos, modelos e arquiteturas utilizadas. Por fim, será demonstrado o funcionamento de um protótipo de um site para recomendações de filmes, implementando esse sistema.
+Neste capítulo será apresentado os requisitos funcionais e não funcionais para um sistema de de recomendação semântico baseado em conteúdo. Serão discutida as tecnologias, comportamentos, modelos e arquiteturas utilizadas. Por fim, será demonstrado o funcionamento de um protótipo de um site para recomendações de filmes, implementando esse sistema.
 
 \section{Requisitos}
 
 Os requisitos de um sistema são descrições do que deve fazer, suas funcionalidades e serviços que restringem sua operação \citep{Sommerville2010}. Tais requisitos são uma reflexão das necessidades dos consumidores do sistema e definem um propósito específico, como cadastrar um usuário, encontrar produtos etc. Os requisitos de software, então, tratam-se de descobrir, analisar e documentar tais serviços e restrições para a operação do produto final. A descrição desses requisitos deve ser clara e objetiva, para apenas descrever o objetivo final da funcionalidade a ser desenvolvida.
 
-Os requisitos de software são tradicionalmente classificados entre \textbf{funcionais} e \textbf{não funcionais}, para diferentes níveis de detalhamento para diferentes leitores.
+Os requisitos de software são tradicionalmente classificados entre \textbf{funcionais} e \textbf{não funcionais}, para diferentes níveis de detalhamento e diferentes leitores.
 
 \begin{itemize}
 	\item{\textbf{Requisitos funcionais}: Descrevem o funcionamento do sistema, e para isso devem prover como o sistema deve reagir à entrada/saída assim como seus comportamentos em diferentes situações.}
@@ -25,12 +26,13 @@ Para cada requisito é utilizado um código para identificar a funcionalidade, a
 A Tabela \ref{tab:req-funcionais} apresenta os requisitos funcionais do sistema.
 
 \begin{table}[H]
+	\label{tab:req-funcionais}
 	\centering
 	\caption{Requisitos funcionais do sistema.}
-	\label{tab:req-funcionais}
 	\def\arraystretch{1.2} % padding da linhas da tabela
 	\begin{tabular}{|m{1.2cm} | m{3cm} | m{7.2cm}| c | m{1.9cm}}
 		\hline
+		
 		\multicolumn{1}{|c|}{\bfseries Código} & \multicolumn{1}{c|}{\bfseries Nome} & \multicolumn{1}{c|}{\bfseries Descrição} & \multicolumn{1}{c|}{\bfseries Prioridade} \\ \hline
 		RF01	& Cadastrar usuário	& Realizar o cadastro de usuários para criação do seu perfil	& Essencial \\ \hline
 		RF02	& Cadastrar usuário com o Facebook	& Permitir o cadastro de usuários utilizando sua conta do Facebook	& Importante \\ \hline
@@ -53,10 +55,9 @@ A Tabela \ref{tab:req-funcionais} apresenta os requisitos funcionais do sistema.
 A tabela \ref{tab:req-nao-funcionais} apresenta os requisitos não funcionais informando sua característica. Todos os requisitos apresentados são considerados essenciais.
 
 \begin{table}[H]
+	\label{tab:req-nao-funcionais}
 	\centering
 	\caption{Requisitos não funcionais do sistema.}
-	\label{tab:req-nao-funcionais}
-	\bgroup
 	\def\arraystretch{1.3} % padding da linhas da tabela
 	\begin{tabular}{| m{1.3cm} | m{9.4cm}| c | m{2cm}}
 		\hline
@@ -67,9 +68,8 @@ A tabela \ref{tab:req-nao-funcionais} apresenta os requisitos não funcionais in
 		RNF04	& O sistema deve ser capaz de atualizar as similaridades calculadas dos filmes em \textit{background}	& Funcionalidade \\ \hline
 		RNF05	& O sistema deve prover uma metalinguagem para momentos em que o usuário deve aguardar o processamento de dados, tais como ícones, informativos etc.	& Usuabilidade \\ \hline
 		RNF06	& O sistema deve possuir um desempenho adequado para que o cálculo da lista de filmes recomendados tenham o menor impacto de carregamento na navegação do usuário.	& Funcionalidade \\ \hline
-		RNF07	& O sistema deve ser capaz de incluir novos filmes em \textit{background}	& Funcionalidade	
+		RNF07	& O sistema deve ser capaz de incluir novos filmes em \textit{background}	& Funcionalidade \\ \hline	
 	\end{tabular}
-	\egroup
 \end{table}
 
 \section{Arquitetura}
@@ -78,22 +78,13 @@ A arquitetura de software trata-se das estruturas e componentes, assim como as i
 
 Para a organização e estrutura deste projeto foi escolhida o padrão de arquitetura \ac{MVC}. O objetivo desse padrão é organizar o sistema em camadas em que cada uma seja responsável por funcionalidades específicas no fluxo entre o sistema e o usuário. Assim, o desenvolvimento e alterações podem ser realizadas de forma independente. No \ac{MVC} o sistema é estruturado em três camada que interagem entre si:
 
-\begin{figure}
-	\centering
-	\includegraphics[scale=0.60]{imagens/mvc.png}
-	\caption{Organização das camadas do padrão MVC \citep{Sommerville2010}}
-	\label{fig:mvc}
-\end{figure}
-
 \begin{itemize}
-	\item{\textbf{Model}: Camada da representação ou modelo para a manipulação dos dados da aplicação, sendo usado tanto na manipulação de elementos da interface como na persistência de dados. Comumente para a persistência de dados modela-se cada entidade da base dados como entidades que manipularam os registros armazenados. Nessa camada também são estabelecidos elementos que implementam recursos de \textit{proxy} para os dados de fato, como os \textit{repositories}, assim facilitando o reuso da aplicação, devido a abstração dos dados já que a camada do \textit{Controller} apenas se comunicaria com estes.}
+	\item{\textbf{Model}: Camada da representação ou modelo para a manipulação dos dados da aplicação, sendo usado tanto na manipulação de elementos da interface como na persistência de dados.}
 	
-	\item{\textbf{View}: Camada da apresentação para o usuário, a interface. Envolve toda a parte de visualização e interação com o sistema do ponto de vista do usuário. Nessa camada serão apresentados os dados das \textit{models}.}
+	\item{\textbf{View}: Camada da apresentação para o usuário, a interface. Envolve toda a parte de visualização de dados e interação com o sistema do ponto de vista do usuário.}
 	
-	\item{\textbf{Controller}: Camada que controla o fluxo das informações e/ou comportamentos entre a \textit{view} e a \textit{model}. Pode receber dados da \textit{view} para ser passado à camada das \textit{models}, além de obter dados da \textit{model} para exibição na \textit{view}. Essa camada também pode acessar a de serviços terceiros que manipulem dados vindos da \textit{view} ou da \textit{model}.  A camada ainda é responsável pela validação dos dados vindos \textit{view} passados pelos usuários, além do controle do acesso entre outros comportamentos dos requisitos.}
+	\item{\textbf{Controller}: Camada que controla o fluxo das informações, validação, controle de acesso e comportamentos entre a \textit{view} e a \textit{model}.}
 \end{itemize}
-
-Na figura \ref{fig:mvc} é demonstrado o fluxo da comunicação entre as três camadas do \ac{MVC}. Iniciando pela requisição e interação do usuário através da interface na camada da \textit{view}. Nos \textit{controllers} são implementados os pontos de acesso, endereços para a camada da \textit{view}, assim como todas as regras e controles da entrada de dados, controle de acesso e utilização das \textit{models}. O \textit{controller} também poderá transformar os dados para suportar o formato de dados da \textit{model}. Por último na \textit{model} encontra-se as representações das entidades da base de dados, assim como dados possíveis dados para facilitar a manipulação dos dados da \textit{view}.
 
 \section{Tecnologias}
 
@@ -112,22 +103,22 @@ A linguagem JAVA é usada em diversos sistemas e plataformas, com inúmeros prop
 Spring Boot\footnote{https://projects.spring.io/spring-boot/} é um projeto da 	Pivotal Software\footnote{https://pivotal.io} para facilitar o processo de configuração e publicação de aplicações e serviços providos pelo Spring\footnote{https://spring.io}, com baixo esforço e configuração. O \textit{Spring} é um framework \textit{open source}\footnote{Modelo de desenvolvimento que promove um licenciamento livre para o design ou esquematização  de um produto} que provê um compreensivo conjunto de modelos de configuração para aplicações JAVA. O elemento principal do \textit{Spring} é prover infraestrutura para aplicações oferecendo os seguintes principais recursos:
 
 \begin{itemize}
-	\item{\textbf{Inversão de Controle}: \ac{IOC}, também conhecido como \textit{dependency injection} é um princípio que as “dependências” devem ser supridas, injetadas por outro objeto. As dependências são objetos que serão usados como “serviços” para acessar suas funcionalidades, dentro dos \textit{containers} de \ac{IOC}. A injeção é a passagem da dependência para um objeto (o cliente) \citep{DependencyInjection2006}. O termo “inversão de controle” origina-se do fato que a criação de valores de classes externas ao objeto não pode ser realizada pelo próprio objeto mas, sim pelos \textit{containers} de \ac{IOC}.}
+	\item{\textbf{Inversão de Controle}: \ac{IOC}, também conhecido como \textit{dependency injection} é um princípio que as “dependências” devem ser supridas, injetadas por outro objeto. As dependências são objetos que serão usados como “serviços” para acessar suas funcionalidades, dentro dos \textit{containers} de \ac{IOC}. A injeção é a passagem da dependência para um objeto (o cliente) \citep{DependencyInjection2006}. O termo “inversão de controle” origina-se do fato que a criação de valores de classes externas ao objeto não deve ser realizada pelo próprio objeto mas, sim pelos \textit{containers} de \ac{IOC}.}
 	
-	\item{\textbf{Acesso a dados}: O framework possui diversas bibliotecas para o acesso a dados, tanto para bancos relacionais como não relacionais. Também é oferecido um sistema ORM que trata-se de uma técnica para traduzir o formato de dados de um banco relacional para \ac{OOP}, facilitando sua manipulação.}
+	\item{\textbf{Acesso a dados}: O framework possui diversas bibliotecas para o acesso a dados, tanto para bancos relacionais como não relacionais. Também é oferecido um sistema \ac{ORM} que trata-se de uma técnica para traduzir o formato de dados de um banco relacional para \ac{OOP}, facilitando sua manipulação.}
 	
 	\item{\textbf{Arquitetura MVC}: Fornece todo suporte para customizar e criar uma arquitetura \ac{MVC}.}
 \end{itemize}
 
 \subsection{HTML, CSS, Javascript}
 
-O HTML\footnote{https://www.w3.org/html}, \ac{CSS}\footnote{https://www.w3.org/Style/CSS/} e JavaScript forma a principal pilha de tecnologias utilizadas na Web. O HTML é uma linguagem de marcação mantida pela \ac{W3C} para criação de páginas, originalmente desenvolvida por Tim-Berners-Lee \citep{Raggett1998}. O objetivo é a fácil construção e publicação de conteúdo no ambiente Web e consequentemente na \ac{WWW}. No \textit{Spring Boot} as páginas HTML podem ser escritas utilizando algum dos mecanismo de templates, como o \textit{thymeleaf}. Uma das vantagens porá utilização desses mecanismos é a herança de visualizações, assim como facilidade de interligar em manipular os dados passados do \textit{controller}.
+O HTML\footnote{https://www.w3.org/html}, \ac{CSS}\footnote{https://www.w3.org/Style/CSS/} e JavaScript forma a principal pilha de tecnologias utilizadas na Web. O HTML é uma linguagem de marcação mantida pela \ac{W3C} para criação de páginas, originalmente desenvolvida por Tim-Berners-Lee \citep{Raggett1998}. O objetivo é a fácil construção e publicação de conteúdo no ambiente Web e consequentemente na \ac{WWW}. No \textit{Spring Boot} as páginas HTML podem ser escritas utilizando algum dos mecanismos de \textit{templates}, como o \textit{thymeleaf}. Uma das vantagens da utilização desses mecanismos é a herança de visualizações, assim como facilidade de interligar em manipular os dados passados pelo \textit{controller}.
 
 O \ac{CSS} é uma linguagem para criar regras de estilização das páginas \ac{HTML}. O CSS cria ou altera um formato de apresentação (tamanho, cores, margens etc) de algum elemento do HTML, como blocos, parágrafos, imagens entre outros. Quanto ao JavaScript é uma linguagem de programação originalmente criada por Brendan Eich na Netscape Communications\footnote{ http://isp.netscape.com}. A linguagem é utilizada para controlar o comportamento de páginas HTML, oferecendo dinamicidade, podendo alterar elementos da página em tempo real.
 
 \subsection{MySQL}
 
-O MySQL\footnote{https://www.mysql.com} trata-se de um \ac{SGBD} que utiliza a linguagem \ac{SQL} para manipulação de dados guardados em um sistema de arquivos \citep{MySQLSGBD}. Originalmente desenvolvido por Michael Widenius em 1994, o seu foco é para o desenvolvimento de aplicações Web, embora tenha se popularizado para a maioria das plataformas existentes \citep{MySQLDevelopers}. Foi o banco de dados escolhido para a persistência de dados da aplicação e ser de fácil integração com o \textit{Spring Boot}.
+O MySQL\footnote{https://www.mysql.com} trata-se de um \ac{SGBD} que utiliza a linguagem \ac{SQL} para manipulação de dados guardados em um sistema de arquivos \citep{MySQLSGBD}. Originalmente desenvolvido por Michael Widenius em 1994, o seu foco é para o desenvolvimento de aplicações Web, embora tenha se popularizado para a maioria das plataformas existentes \citep{MySQLDevelopers}. Foi o banco de dados escolhido para a persistência de dados da aplicação, além de ser de fácil integração com o \textit{framework} \textit{Spring Boot}.
 
 \subsection{Apache Jena}
 
@@ -139,7 +130,7 @@ Apache OpenNLP\footnote{https://opennlp.apache.org} é um \textit{framework} \te
 
 \begin{figure}
 	\centering
-	\includegraphics[scale=0.60]{imagens/nlp.jpg}
+	\includegraphics[scale=1]{imagens/nlp.jpg}
 	\caption{Segmentação de tarefas no NLP. \citep{NLP2016}}
 	\label{fig:nlp}
 \end{figure}
@@ -191,5 +182,3 @@ A \ref{fig:recsys_fluxo} mostra como esse fluxo de funcionalidades é operado po
 \section{Sistema em ação}
 
 \section{Sumário}
-
-\label{cap:proposal}
