@@ -77,8 +77,18 @@
 \usepackage{tikz}
 \usepackage{float}
 \usepackage{url}
+\usepackage{longtable}
 \usepackage{enumitem}
 \usepackage{listings}
+\usepackage{graphicx}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+\newtheorem{definition}{Definition}
+\theoremstyle{definition}
+
+\let\oldReturn\Return
+\renewcommand{\Return}{\State\oldReturn}
 
 
 %% Aumenta a margem entre o label e as tabelas
