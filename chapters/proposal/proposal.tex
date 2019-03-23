@@ -1,5 +1,6 @@
-\label{cap:proposal}
+
 \chapter{Um sistema de recomendação semântico baseado em conteúdo}
+\label{cap:proposal}
 
 Desde de tempos o homem busca construir ferramentas e máquinas que facilitem, ampliem, sustem sua capacidade de trabalho e produção. Com o advento dos computadores e dos programas de máquina, o \textit{software} tornou-se essencial para a contínua demanda de problemas e desafios da crescente população global. Como avaliado por \cite{Sommerville2010},  o software não se restringe a propriedades materiais das leis da física ou por processos de manufatura. Por um lado, este fato simplifica a engenharia de software devido falta de restrições físicas, mas o torna complexo e de alto custo na realização de mudanças. Dessa forma, com a crescente quantidade de computadores e a diversidade de dispositivos, é cada vez mais relevante a qualidade de software.
 
@@ -9,7 +10,7 @@ Neste capítulo será apresentado os requisitos funcionais e não funcionais par
 
 \section{Requisitos}
 
-Os requisitos de um sistema são descrições do que deve fazer, suas funcionalidades e serviços que restringem sua operação \citep{Sommerville2010}. Tais requisitos são uma reflexão das necessidades dos consumidores do sistema e definem um propósito específico, como cadastrar um usuário, encontrar produtos etc. Os requisitos de software, então, tratam-se de descobrir, analisar e documentar tais serviços e restrições para a operação do produto final. A descrição desses requisitos deve ser clara e objetiva, para apenas descrever o objetivo final da funcionalidade a ser desenvolvida.
+Os requisitos de um sistema são descrições do que deve fazer, suas funcionalidades e serviços que restringem sua operação \citep{Sommerville2010}. Esses requisitos são reflexões das necessidades dos consumidores do sistema e definem um propósito específico, como cadastrar um usuário, encontrar produtos etc. Os requisitos de software, então, tratam-se de descobrir, analisar e documentar tais serviços e restrições para a operação do produto final. A descrição desses requisitos deve ser clara e objetiva, para apenas descrever o objetivo final da funcionalidade a ser desenvolvida.
 
 Os requisitos de software são tradicionalmente classificados entre \textbf{funcionais} e \textbf{não funcionais}, para diferentes níveis de detalhamento e diferentes leitores.
 
@@ -40,7 +41,7 @@ A Tabela \ref{tab:req-funcionais} apresenta os requisitos funcionais do sistema.
 		RF04	& Fazer login pelo Facebook	& Permitir o login do usuário pelo Facebook	& Importante \\ \hline
 		RF05	& Cadastrar filmes do usuário	& Usuários identificados podem cadastrar novos filmes no seu perfil	& Essencial \\ \hline
 		RF06	& Visualizar filmes do usuário	& Usuários identificados podem visualizar os filmes cadastrados no seu perfil	& Essencial \\ \hline
-		RF07	& Remover filmes do usuário	& Usuários identificados podem remover filmes cadastrados no seu perfil	& Essencial \\ \hline
+		RF07	& Remover filmes do usuário	& Usuários identificados podem remover filmes cadastrados no seu perfil	& Desejável \\ \hline
 		RF08	& Pesquisar filmes cadastrados	& Usuários identificados podem pesquisar filmes cadastrados na base do sistema	& Importante \\ \hline
 		RF09	& Cadastrar filmes	& O sistema deve permitir a alimentação de filmes para a base dados	& Essencial \\ \hline
 		RF010	& Edição de filmes	& O sistema deve permitir a edição de filmes alimentados para a base	& Essencial \\ \hline
@@ -76,7 +77,7 @@ A tabela \ref{tab:req-nao-funcionais} apresenta os requisitos não funcionais in
 
 A arquitetura de software trata-se das estruturas e componentes, assim como as interações entre essas partes que irão compor o software do sistema. Para \cite{Perry1992} a arquitetura de software manifesta-se principalmente em partes do software do produto em relação a: 1) Requisitos para a determinação da informação, processamento e características que serão necessárias para o usuário e o sistema; 2) Arquitetura quando preocupa-se com a seleção de elementos, suas interações, e restrições necessárias para prover um \textit{framework} que satisfaça os requisitos; 3) Design quando está interessado na modularização e detalhamento do design dos elementos, algoritmos, procedimentos e tipos de dados que suportem a arquitetura e os requisitos; 4) Implementação quando preocupa-se com a representação de algoritmos, tipos de dados que satisfaçam a arquitetura, design e os requisitos.
 
-Para a organização e estrutura deste projeto foi escolhida o padrão de arquitetura \ac{MVC}. O objetivo desse padrão é organizar o sistema em camadas em que cada uma seja responsável por funcionalidades específicas no fluxo entre o sistema e o usuário. Assim, o desenvolvimento e alterações podem ser realizadas de forma independente. No \ac{MVC} o sistema é estruturado em três camada que interagem entre si:
+Para a organização e estrutura o projeto se divide em duas camadas, uma para prover a interação com o usuário (através de uma interface WEB) utilizando o padrão \ac{MVC}, e outra camada responsável pela administração e construção das recomendações. O objetivo da divisão dessas camadas é prover independência entre os processos, uma vez que a geração das recomendações não ocorre em tempo real, ou seja, durante o tempo que o usuário interage com o sistema. Outra razão é organizar o sistema em camadas em que cada uma seja responsável por funcionalidades específicas no fluxo entre o sistema e o usuário. Assim, o desenvolvimento e alterações podem ser realizadas de forma independente. Na camada primeira camada que provê interações com o usuário com o padrão \ac{MVC}, o sistema é estruturado em três subcamadas que interagem entre si:
 
 \begin{itemize}
 	\item{\textbf{Model}: Camada da representação ou modelo para a manipulação dos dados da aplicação, sendo usado tanto na manipulação de elementos da interface como na persistência de dados.}
@@ -85,6 +86,18 @@ Para a organização e estrutura deste projeto foi escolhida o padrão de arquit
 	
 	\item{\textbf{Controller}: Camada que controla o fluxo das informações, validação, controle de acesso e comportamentos entre a \textit{view} e a \textit{model}.}
 \end{itemize}
+
+Para a segunda camada para o cálculo das recomendações o sistema provê de três principais serviços:
+
+\begin{itemize}
+	\item{\textbf{Geração de Tokens}: O sistema proposto por este trabalho trata-se de recomendar itens baseando-se no conteúdo não estruturado, no caso a sinopse dos filmes. A primeira tarefa é extrair as palavras, os \textit{tokens} relevantes dos textos, como nomes, adjetivos, lugares, entre outras, utilizando o processo de \ac{NLP}.}
+	
+	\item{\textbf{Métrica de similaridade}: Após a geração dos tokens dos filmes, o sistema deve possuir um serviço para realizar o cálculo da similaridade entre dois tokens quaisquer, tirando proveito dos serviços da Web Semântica, no caso o DBPedia. Mais a frente será apresentada a fórmula da similaridade construída para este projeto, conforme consta na seção \ref{ssec:sim_rec}.}
+	
+	\item{\textbf{Geração das recomendações}: Por fim no último serviço, o sistema deverá ser capaz de utilizar a métrica de similaridade para construir um método de comparação que construa um modelo de usuário baseado nas suas preferências para ser comparado com o modelo construído dos filmes. Na seção \ref{ssec:sim_rec}, é apresentado como é construído esses modelos e o método utilizado para gerar a comparação e prover as recomendações.}
+\end{itemize}
+
+O fluxo de dados entre as camadas de interação e recomendação funcionam de tal forma que num primeiro momento, o usuário constrói seu perfil na plataforma, escolhendo seus filmes de preferência e em seguida solicita recomendações que serão adicionadas posteriormente. A camada de interação realiza a gestão dessas interações com o usuário e enfileira uma solicitação para a camada de recomendação que irá analisar o perfil do usuário e gerará as recomendações, armazenando-as num banco de dados para fácil consulta posteriormente. A diante serão apresentadas as tecnologias utilizadas para a construção dos sistema.
 
 \section{Tecnologias}
 
@@ -112,7 +125,7 @@ Spring Boot\footnote{https://projects.spring.io/spring-boot/} é um projeto da 	
 
 \subsection{HTML, CSS, Javascript}
 
-O HTML\footnote{https://www.w3.org/html}, \ac{CSS}\footnote{https://www.w3.org/Style/CSS/} e JavaScript forma a principal pilha de tecnologias utilizadas na Web. O HTML é uma linguagem de marcação mantida pela \ac{W3C} para criação de páginas, originalmente desenvolvida por Tim-Berners-Lee \citep{Raggett1998}. O objetivo é a fácil construção e publicação de conteúdo no ambiente Web e consequentemente na \ac{WWW}. No \textit{Spring Boot} as páginas HTML podem ser escritas utilizando algum dos mecanismos de \textit{templates}, como o \textit{thymeleaf}. Uma das vantagens da utilização desses mecanismos é a herança de visualizações, assim como facilidade de interligar em manipular os dados passados pelo \textit{controller}.
+O HTML\footnote{https://www.w3.org/html}, \ac{CSS}\footnote{https://www.w3.org/Style/CSS/} e JavaScript forma a principal pilha de tecnologias utilizadas na Web. O HTML é uma linguagem de marcação mantida pela \ac{W3C} para criação de páginas, originalmente desenvolvida por Tim-Berners-Lee \citep{Raggett1998}. O objetivo é a fácil construção e publicação de conteúdo no ambiente Web e consequentemente na \ac{WWW}. No \textit{Spring Boot} as páginas HTML podem ser escritas utilizando algum dos mecanismos de \textit{templates}, como o \textit{thymeleaf}. Uma das vantagens da utilização desses mecanismos é a herança de visualizações, assim como facilidade de interligar em manipular os dados passados pela camada do \textit{controller} no \ac{MVC}.
 
 O \ac{CSS} é uma linguagem para criar regras de estilização das páginas \ac{HTML}. O CSS cria ou altera um formato de apresentação (tamanho, cores, margens etc) de algum elemento do HTML, como blocos, parágrafos, imagens entre outros. Quanto ao JavaScript é uma linguagem de programação originalmente criada por Brendan Eich na Netscape Communications\footnote{ http://isp.netscape.com}. A linguagem é utilizada para controlar o comportamento de páginas HTML, oferecendo dinamicidade, podendo alterar elementos da página em tempo real.
 
@@ -144,7 +157,7 @@ No projeto essa tecnologia será utilizada para tirar proveito dos algoritmos de
 
 \section{Funcionamento}
 
-As tecnologias apresentadas anteriormente serão utilizadas para construir toda a arquitetura do sistema de recomendação. A proposta é criar uma recomendação baseada em conteúdo, e para este trabalho foi definido o domínio de filmes como exemplo de utilização. Sendo assim, o sistema possui algumas etapas de processamento para viabilizar a recomendação:
+As tecnologias apresentadas anteriormente serão utilizadas para construir toda a arquitetura do sistema de recomendação. A proposta é criar uma recomendação baseada em conteúdo, ou seja, nos interesses que o usuário demonstrou no passado. A \textit{feature} analisada nos itens a serem avaliados, trata-se de um conteúdo não estruturado, no caso a descrição do item. Para este trabalho foi definido o domínio de filmes como exemplo de utilização, sendo assim, utilizando o texto da sinopse dos filmes como base para recomendação. Sendo assim, o sistema possui algumas etapas de processamento:
 
 \begin{itemize}
 	\item{\textbf{Coleta dos filmes}: Serão coletados dados dos filmes utilizando o projeto MovieLens\footnote{https://movielens.org} (ver \ref{ssec:dataModel}).}
@@ -153,11 +166,11 @@ As tecnologias apresentadas anteriormente serão utilizadas para construir toda 
 	
 	\item{\textbf{Coleta das preferências do usuário}: Serão coletados dados das preferências dos usuários, ou seja, os filmes de interesse, que neste trabalho trata-se da coleção de filmes que o usuário gostou (\textit{like}). Nessa etapa poderá ser utilizado o perfil do Facebook para obter \footnote{https://facebook.com} para obter tais dados.}
 
-	\item{\textbf{Cálculo da Similaridade}: Após a etapa de pré-processamento dos filmes, será realizado o cálculo da similaridade, utilizando o método proposto \ac{RLWS} entre uma representação que refletirá as preferências do usuário, com outros filmes que ele não tenha escolhido e/ou marcado como \textit{deslike}.}
+	\item{\textbf{Cálculo da Similaridade}: Após a etapa de pré-processamento dos filmes, será realizado o cálculo da similaridade, utilizando o método proposto \ac{RLWS} entre uma representação que refletirá as preferências do usuário, com outros filmes que ele não tenha escolhido.}
 	
-	\item{\textbf{Geração das recomendações}: Como este trabalho trata-se da apresentação de um sistema de recomendação baseado em conteúdo, então as sugestões de novos itens depende exclusivamente do histórico do usuário. Sendo assim, com a similaridade comparada entre o perfil do usuário em relação a outros filmes, será gerada uma lista de tamanho qualquer com os melhores \textit{scores} obtidos do cálculo desta similaridade. Posteriormente essa coleção filmes sugeridos será armazenada no banco, podendo ser atualizada conforme o perfil do usuário altera ou novos filmes são cadastrados na base de dados. No item \ref{ssec:recsysAlgo} é demonstrado e discutido o algoritmo central para a similaridade e recomendação.}
+	\item{\textbf{Geração das recomendações}: Como este trabalho trata-se da apresentação de um sistema de recomendação baseado em conteúdo, então as sugestões de novos itens depende exclusivamente do histórico do usuário. Sendo assim, com a similaridade comparada entre o perfil do usuário em relação a outros filmes, será gerada uma lista de tamanho qualquer com os melhores \textit{scores} obtidos do cálculo desta similaridade. Posteriormente essa coleção filmes sugeridos será armazenada no banco, podendo ser atualizada conforme o perfil do usuário altera ou novos filmes são cadastrados na base de dados. No seção \ref{ssec:sim_rec} é demonstrado e discutido o algoritmo central para a similaridade e recomendação.}
 	
-	\item{\textbf{Apresentação dos resultados}: Apresentação dos resultados: Por fim o sistema apresentará os resultados das recomendações para o usuário.}		
+	\item{\textbf{Apresentação dos resultados}: Apresentação dos resultados: Por fim o sistema apresentará os resultados das recomendações para o usuário, que posteriormente poderão ser avaliados pelo usuário.}
 \end{itemize}
 
 \begin{figure}
@@ -176,9 +189,13 @@ Para a estrutura do sistema de recomendação deste trabalho, foi elaborado um m
 \begin{itemize}
 	\item{A entidade "user\textunderscore movie" persiste as preferências do usuário, tanto dos filmes que ele marcou como \textit{like} e \textit{deslike}, sendo que o primeiro adquire valor de 1 e o outro de 0. Esse modelo pode ser futuramente revisado para aceitar valores que não sejam binários.}
 	
-	\item{A entidade "user\textunderscore recomendation" persiste as sugestões de filmes calculadas pelo sistema, e o atributo "similarity" trata-se do algoritmo de similaridade utilizado, o que torna-se especialmente útil para realizar comparações com outros métodos (será discutido no \ref{cap:evaluation})}.
+	\item{A entidade "user\textunderscore recomendation" persiste as sugestões de filmes calculadas pelo sistema, e o atributo "similarity" trata-se do algoritmo de similaridade utilizado, o que torna-se especialmente útil para realizar comparações com outros métodos (será discutido no \ref{cap:evaluation}).}
 	
 	\item{A entidade "movie" persiste os dados dos filmes retirados do projeto MovieLens\footnote{https://movielens.org}, assim como o processamento da sinopse dos filmes para geração dos \textit{tokens}.}
+	
+	\item{A entidade "idf" persiste o cálculo do \ac{IDF} da fórmula \ref{eq:tfidf}, que servirá para o cálculo da similaridade cosseno, por motivos de comparação que serão discutidos no \ref{cap:evaluation}.}
+	
+	\item{As entidades "lod\_cache" e "lod\_cache\_relation" tratam-se do serviço de cache para o cálculo da similaridade, assim poupando tempo para consultas do serviço do DBPedia. Na seção \ref{ssec:cache} a estrutura de cache dos sistema é melhor abordada.}
 \end{itemize}
 
 \begin{figure}
@@ -191,9 +208,9 @@ Para a estrutura do sistema de recomendação deste trabalho, foi elaborado um m
 
 \subsection{Preparação dos dados para recomendação}
 
-Antes da execução das recomendações é necessário realizar a etapa do pré-processamento dos dados. Para cada filme é gerada uma sequência de tokens de palavras relevantes presentes na descrição. Essas palavras relevantes tratam-se do processo de exclusão daquelas que pouco agregam significado ao que se refere a temática do filme, como é o exemplo de preposições e conjunções. 
+Antes da execução das recomendações é necessário realizar a etapa do pré-processamento dos dados. Para cada filme é gerado são gerados tokens, palavras relevantes presentes na descrição. Essas palavras relevantes tratam-se do processo de exclusão daquelas que pouco agregam significado ao que se refere a temática do filme, como é o exemplo de preposições, conjunções e artigos. 
 
-Para este projeto foi utilizado o \textit{framework} OpenNLP\footnote{https://opennlp.apache.org} para realizar a remoção das palavras não desejadas, que através da marcação das "partes do discurso", adiciona a cada palavra uma \textit{tag} com a parte da linguagem que ela representa, como adjetivos, nomes, verbos etc. Uma vez realizada a anotação do texto com as partes do discurso, foi definido apenas capturar as palavras marcadas com as seguintes tags, conforme mostra a tabela \ref{tab:nlp_tags}. Vale ressaltar que essas definições foram concebidas para língua inglesa.
+Para este projeto foi utilizado o \textit{framework} OpenNLP\footnote{https://opennlp.apache.org} para realizar a remoção das palavras não desejadas, que através da marcação das "partes do discurso", adiciona a cada palavra uma \textit{tag} com a parte da linguagem que ela representa, como adjetivos, nomes, verbos etc. Uma vez realizada a anotação do texto com as partes do discurso, foi definido para apenas capturar as palavras marcadas com as seguintes \textit{tags}, conforme mostra a tabela \ref{tab:nlp_tags}. Vale ressaltar que essas definições foram concebidas para língua inglesa.
 
 \begin{table}[H]
 	\label{tab:nlp_tags}
@@ -203,15 +220,19 @@ Para este projeto foi utilizado o \textit{framework} OpenNLP\footnote{https://op
 	\begin{tabular}{| m{1.3cm} | m{9.4cm}| c | m{2cm}}
 		\hline
 		\multicolumn{1}{|c|}{\bfseries Tag} & \multicolumn{1}{c|}{\bfseries Descrição} \\ \hline
-		NN & Substantivo, singular ou incontável \\ \hline 
-		NNS	& Substantivo, plural \\ \hline
+		NN & Substantivo, singular ou incontável \\ \hline 	
+		NNS	& Substantivo, plural \\ \hline]
+		NNP	& Nome próprio, singular \\ \hline
+		NNP	& Nome próprio, plural \\ \hline
 		JJ & Adjetivo \\ \hline
 		JJR & Adjetivo comparativo \\ \hline
 		JJS & Adjetivo superlativo \\ \hline
+		FW & Palavra estrangeira \\ \hline
+		VB & Verbo, forma base \\ \hline
 	\end{tabular}
 \end{table}
 
-Em sequência a lista das palavras retiradas da análise das partes do discurso, é incluída a lista de nomes retirados do processo de \ac{NER} (reconhecimento de entidades nomeadas), o que não é meramente o reconhecimento de nomes próprios da língua, mas também de nomes compostos. Esse processo é de grande valia para a etapa de similaridade uma vez que, tendo um nome como "Buzz Lightyear", apenas utilizando o processo da marcação das partes do discurso resultaria em dois termos "Buzz" e "Lightyear", sendo que o ideal seja ter o nome composto por inteiro. Para os nomes reconhecidos nesse processo foi realizada uma formatação para adequação a consultas \ac{SPARQL}, ou seja, nomes compostos como "Buzz Lightyear" serão formatados para "Buzz\textunderscore Lightyear".
+Em sequência a lista das palavras retiradas da análise das partes do discurso, é incluída a lista de nomes retirados do processo de \ac{NER} (reconhecimento de entidades nomeadas), o que não é meramente o reconhecimento de nomes próprios da língua, mas também de nomes compostos. Esse processo é de grande valia para a etapa de similaridade uma vez que, tendo um nome como "Buzz Lightyear", apenas utilizando o processo da marcação das partes do discurso resultaria em dois termos "Buzz" e "Lightyear", sendo que o ideal seja ter apenas o nome composto por inteiro. Os nomes próprios são mantidos nas partes do discurso, uma vez que o framework utilizado no processo de \ac{NLP} apenas extrai, nomes, lugares e organizações. Para os nomes reconhecidos nesse processo foi realizada uma formatação para adequação a consultas \ac{SPARQL}, ou seja, nomes compostos como "Buzz Lightyear" serão formatados para "Buzz\textunderscore Lightyear".
 
 A tabela \ref{tab:nlp_example} abaixo demonstra alguns exemplos do tratamento da descrição de filmes para geração de \textit{tokens}. 
 
@@ -223,14 +244,15 @@ A tabela \ref{tab:nlp_example} abaixo demonstra alguns exemplos do tratamento da
 	\begin{tabular}{|p{2cm}|p{6cm}|p{6cm}|}
 	\hline
 	\textbf{Filme} & \textbf{Sinopse} & \textbf{Tokens} \\ \hline
-	Toy Story & Led by Woody, Andy's toys live happily in his room until Andy's birthday brings Buzz Lightyear onto the scene. Afraid of losing his place in Andy's heart, Woody plots against Buzz. But when circumstances separate Buzz and Woody from their owner, the duo eventually learns to put aside their differences. & Andy, Andy, Buzz\_Lightyear, Andy, Buzz, Room, Birthday, Lightyear, Scene, Place, Heart, Owner, Duo \\ \hline
-	GoldenEye & James Bond must unmask the mysterious head of the Janus Syndicate and prevent the leader from utilizing the GoldenEye weapons system to inflict devastating revenge on Britain. & James\_Bond, Britain, Mysterious, Head, Leader, System, Devastating, Revenge \\ \hline
+	Toy Story & Led by Woody, Andy's toys live happily in his room until Andy's birthday brings Buzz Lightyear onto the scene. Afraid of losing his place in Andy's heart, Woody plots against Buzz. But when circumstances separate Buzz and Woody from their owner, the duo eventually learns to put aside their differences.& Woody, Andy, Toys, Room, Andy, Birthday, Scene, Place, Andy, Heart, Woody, Plots, Circumstances, Woody, Owner, Duo, Put, Differences, Buzz\_Lightyear \\ \hline
+	GoldenEye & James Bond must unmask the mysterious head of the Janus Syndicate and prevent the leader from utilizing the GoldenEye weapons system to inflict devastating revenge on Britain. & Unmask, Mysterious, Head, Janus, Syndicate, Prevent, Leader, Goldeneye, Weapons, System, Inflict, Devastating, Revenge, Britain, James\_Bond \\ \hline
 	\end{tabular}
 \end{table}
 
+\label{ssec:sim_rec}
 \section{Similaridade e recomendação}
 
-A recomendação de itens envolve a predição de quão provável o usuário gostará do conteúdo recomendado que neste trabalho foi desenvolvido um método baseado em similaridade semântica. Conforme abordado no capítulo \ref{cap:semantic_web} a similaridade semântica utiliza-se e retira proveito das estruturas de uma ontologia que neste caso trata-se das acessíveis através do projeto do movimento \ac{LOD}, o DBPedia\footnote{http://wiki.dbpedia.org}. Diante disso, partindo de outros estudos que apresentaram métodos como LDSD \citep{PassantLDSD} e Resim \citep{PiaoResim}, este trabalho propõe um novo método, denominado de \ac{RLWS} para realizar a medida da distância entre dois recursos presentes no DBPedia, gerando um valor na escala de 0 a 1, onde valores menores denotam menos similaridade. 
+A recomendação de itens envolve a predição de quão provável o usuário gostará do conteúdo recomendado que neste trabalho foi desenvolvido um método baseado em similaridade semântica. Conforme abordado no capítulo \ref{cap:semantic_web} a similaridade semântica utiliza-se e retira proveito das estruturas de uma ontologia que neste caso trata-se das acessíveis através do projeto do movimento \ac{LOD}, o DBPedia\footnote{http://wiki.dbpedia.org}. Diante disso, partindo de outros estudos que apresentaram métodos como LDSD \citep{PassantLDSD} e Resim \citep{PiaoResim}, este trabalho propõe um novo método, denominado de \ac{RLWS} para realizar a medida da similaridade entre dois recursos presentes no DBPedia, gerando um valor na escala de 0 a 1, onde valores menores denotam menor similaridade.
 
 \subsection{Fórmula para similaridade semântica}
 
@@ -243,19 +265,19 @@ Um conjunto que segue os princípios LOD é um grafo $G$ tal que $G = (R, L, I)$
 \begin{equation}
 	RLWS(r_a, r_b) = 
 	\begin{cases}
-		1 \text{, } URI(r_a) = URI(r_b)\\
-		1 - \frac{1}{1 + \frac{P_d(r_a, r_b) * w_d + P_i(r_a, r_b) * w_i}{w_d + w_i}} \text{, caso contrário}
+		1 \text{, } URI(r_a) = URI(r_b) \text{ ou } r_a \textit{ dbo:wikiPageRedirects } r_b\\
+		\frac{P_d(r_a, r_b) * w_d + P_i(r_a, r_b) * w_i}{w_d + w_i} \text{, caso contrário}
 	\end{cases}
 \label{eq:rlws}
 \end{equation}
 
 \begin{equation}
-	P_d(r_a, r_b) = \frac{\sum_i C_{di}(l_i, r_a, r_b) + \sum_i C_{do}(l_i, r_a, r_b)}{1 + \log (C_d(r_a) + C_d(r_b))}
+	P_d(r_a, r_b) = 1 - \frac{1}{1 + \frac{\sum_i C_{di}(l_i, r_a, r_b) + \sum_i C_{do}(l_i, r_a, r_b)}{1 + \log (C_d(r_a) + C_d(r_b))}}
 \label{eq:rlws_ex1}
 \end{equation}
 
 \begin{equation}
-	P_i(r_a, r_b) = \frac{\sum_i C_{ii}(li, r_a, r_b)}{1 + \log (C_i(r_a) + C_i(r_b))}
+	P_i(r_a, r_b) = 1 - \frac{1}{1 + \frac{\sum_i C_{ii}(l_i, r_a, r_b)}{1 + \log (C_i(r_a) + C_i(r_b))}}
 \label{eq:rlws_ex2}
 \end{equation}
 
@@ -266,19 +288,28 @@ Um conjunto que segue os princípios LOD é um grafo $G$ tal que $G = (R, L, I)$
 	\label{fig:cd_links}
 \end{figure}
 
-Para maior generalização o termo "link" será utilizado para se referir a ligações tanto como recursos ou propriedades relacionadas. Assim, as funções $C_d$ e $C_i$ tratam-se de computar os links distintos de um recurso qualquer, ou seja todas as ligações distintas a outros recursos, de forma direta e indireta respectivamente. No caso da função $C_d$, são computados todos os recursos distintos que sejam alcançados por uma propriedade qualquer através de um recurso analisado em questão, mais aqueles que partem de outro recurso e chegam nesse mesmo desejado. O exemplo da figura \ref{fig:cd_links} apresenta o recurso "Tom\_Cruise" a ser calculado, onde possui um link direto sainte para o recurso "American\_filma\_producers" através da propriedade "sujeito de", e outro link direto de entrada pelo recurso "Jack\_Reacher" através da propriedade "retratado por". 
+Verifique que a fórmula possui um condicional que implica o valor 1 quando os dois recursos comparados sejam iguais ou estejam relacionados pela propriedade \textit{dbo:wikiPageRedirects}. Essa propriedade nada mais trata-se de redirecionamentos do próprio serviço do DBPedia, que quando consultado recursos como "Movie" e "Film", resultam na mesma página, pois são redirecionamentos. Para maior generalização o termo "link" será utilizado para se referir a ligações tanto como recursos ou propriedades relacionadas. Assim, as funções $C_d$ e $C_i$ tratam-se de computar os links distintos de um recurso qualquer, ou seja todas as ligações distintas a outros recursos, de forma direta e indireta respectivamente. No caso da função $C_d$, são computados todos os recursos distintos que sejam alcançados por uma propriedade qualquer através de um recurso analisado em questão, mais aqueles que partem de outro recurso e chegam nesse mesmo desejado. O exemplo da figura \ref{fig:cd_links} apresenta o recurso "Tom\_Cruise" a ser calculado, onde possui um link direto sainte para o recurso "American\_film\_producers" através da propriedade "sujeito de", e outro link direto de entrada pelo recurso "Jack\_Reacher" através da propriedade "retratado por". 
 
 
 \begin{lstlisting}[caption=Consulta SPARQL para contagem de links diretos, language=SQL, frame=single, label={cod:sparql_cd}, float, numbers=left]
-SELECT (count (distinct ?r2) as ?x)
+PREFIX  :  <http://dbpedia.org/resource/>
+PREFIX  dbo:  <http://dbpedia.org/ontology/>
+SELECT (count (distinct ?p1) as ?x)
 WHERE {
-	{values (?r1) {(<http://dbpedia.org/resource/r1>)} ?r1 ?p1 ?r2 . FILTER (?r1 != ?r2) . FILTER (!isLiteral(?r2) )}
+	{values (?r1) {(<http://dbpedia.org/resource/r1>)} ?r1 ?p1 ?r2 . FILTER (?r1 != ?r2)}
 	UNION
-	{values (?r1) {(<http://dbpedia.org/resource/r1>)} ?r2 ?p1 ?r1 . FILTER (?r1 != ?r2) . FILTER (!isLiteral(?r2) )}
+	{values (?r1) {(<http://dbpedia.org/resource/r1>)} ?r2 ?p1 ?r1 . FILTER (?r1 != ?r2)}
+	FILTER ( ?p1 != dbo:wikiPageID )
+	FILTER ( ?p1 != dbo:wikiPageRevisionID )
+	FILTER ( ?p1 != dbo:wikiPageRedirects )
+	FILTER ( ?p1 != dbo:wikiPageExternalLink )
+	FILTER ( ! isLiteral(?r2) )
 }
 \end{lstlisting}
 
-A contagem desses links é realizada através da consulta \ac{SPARQL} conforme a figura \ref{fig:cd_links}. Quanto para função $C_i$ apenas são contabilizados os links indiretos de saída, por motivos de desempenho de consultas SPARQL no DBPedia. A imagem \ref{fig:ci_links} retrata o cenário para os links indiretos, e o código \ref{cod:sparql_ci} a contagem dos links indiretos.
+A contagem desses links é realizada através da consulta \ac{SPARQL} conforme a figura \ref{fig:cd_links}. Alguns filtros de propriedades são realizados, pois não são relevantes para a consulta. A priori da consulta para contagem de links é realizada uma outra consulta \ac{SPARQL} para verificar se os dois recursos em questão são redirecionamentos, por este motivo na consulta dos links existe a adição do filtro desta propriedade.
+
+Quanto para função $C_i$ apenas são contabilizados os links indiretos de saída, por motivos de desempenho de consultas SPARQL no DBPedia. A imagem \ref{fig:ci_links} retrata o cenário para os links indiretos, e o código \ref{cod:sparql_ci} a contagem dos links indiretos.
 
 \begin{figure}
 	\centering
@@ -288,30 +319,62 @@ A contagem desses links é realizada através da consulta \ac{SPARQL} conforme a
 \end{figure}
 
 \begin{lstlisting}[caption=Consulta SPARQL para contagem de links indiretos, language=SQL, frame=single, label={cod:sparql_ci}, float, numbers=left]
-SELECT (count (distinct ?r3) as ?x)
+PREFIX  :  <http://dbpedia.org/resource/>
+PREFIX  dbo:  <http://dbpedia.org/ontology/>
+SELECT (count (distinct ?r2) as ?x)
 WHERE {
-	{values (?r1) {(<http://dbpedia.org/resource/r1>)} ?r2 ?p1 ?r1 . ?r2 ?p1 ?r3 . FILTER (?r1 != ?r3) . FILTER (!isLiteral(?r2) )}
+	{values (?r1) {(<http://dbpedia.org/resource/r1>)} ?r2 ?p1 ?r1 . ?r2 ?p2 ?r3 . FILTER (?r1 != ?r3 && ?r2 != ?r1 && ?r2 != ?r3)}
+	FILTER ( ?p1 != dbo:wikiPageID )
+	FILTER ( ?p1 != dbo:wikiPageRevisionID )
+	FILTER ( ?p1 != dbo:wikiPageRedirects )
+	FILTER ( ?p1 != dbo:wikiPageExternalLink )
+	FILTER ( ! isLiteral(?r2) )
+	FILTER ( ?p2 != dbo:wikiPageID )
+	FILTER ( ?p2 != dbo:wikiPageRevisionID )
+	FILTER ( ?p2 != dbo:wikiPageRedirects )
+	FILTER ( ?p2 != dbo:wikiPageExternalLink )
 }
 \end{lstlisting}
 
 Quanto as funções $Cdi$, $Cdo$ e $Cio$, referem-se a contagem dos links distintos compartilhados entre dois recursos, sendo os dois primeiros de forma direta e o último de forma indireta. As equações \ref{cod:sparql_cdio} e \ref{cod:sparql_cio} apresentam as consultas \ac{SPARQL} para realizar a contagem dos links.
 
 \begin{lstlisting}[caption=Consulta SPARQL para contagem de links diretos (saíntes e entrantes) entre dois recursos, language=SQL, frame=single, label={cod:sparql_cdio}, float, numbers=left]
+PREFIX  :  <http://dbpedia.org/resource/>
+PREFIX  dbo:  <http://dbpedia.org/ontology/>
 SELECT (count(distinct ?p1) as ?x)
 WHERE {
-	{values (?r1 ?r2) {(<http://dbpedia.org/resource/r1> <http://dbpedia.org/resource/r2>)} ?r1 ?p1 ?r2 . FILTER (?r1 != ?r2) . FILTER (!isLiteral(?r2)) } UNION
-	{values (?r1 ?r2) {(<http://dbpedia.org/resource/r2> <http://dbpedia.org/resource/r1>)} ?r1 ?p1 ?r2 . FILTER (?r1 != ?r2) . FILTER (!isLiteral(?r2)) }
+	{values (?r1 ?r2) {(<http://dbpedia.org/resource/r1> <http://dbpedia.org/resource/France>)} ?r1 ?p1 ?r2 . FILTER (?r1 != ?r2) }
+	UNION
+	{values (?r1 ?r2) {(<http://dbpedia.org/resource/r2> <http://dbpedia.org/resource/Paris>)} ?r1 ?p1 ?r2 . FILTER (?r1 != ?r2) }
+	FILTER ( ?p1 != dbo:wikiPageID )
+	FILTER ( ?p1 != dbo:wikiPageRevisionID )
+	FILTER ( ?p1 != dbo:wikiPageRedirects )
+	FILTER ( ?p1 != dbo:wikiPageExternalLink )
+	FILTER ( ! isLiteral(?r2) )
 }
 \end{lstlisting}
 
 \begin{lstlisting}[caption=Consulta SPARQL para contagem de links indiretos (saíntes) entre dois recursos, language=SQL, frame=single, label={cod:sparql_cio}, float, numbers=left]
-SELECT (count (distinct ?p1) as ?x)
+PREFIX  :  <http://dbpedia.org/resource/>
+PREFIX  dbo:  <http://dbpedia.org/ontology/>
+SELECT (count (distinct ?r2) as ?x)
 WHERE {
-	{values (?r1 ?r3) {(<http://dbpedia.org/resource/r1> <http://dbpedia.org/resource/r2>)} ?r2 ?p1 ?r1 . ?r2 ?p1 ?r3 . FILTER (?r1 != ?r3) . FILTER (!isLiteral(?r2) )}
+	{values (?r1 ?r3) {(<http://dbpedia.org/resource/r1> <http://dbpedia.org/resource/r2>)} ?r2 ?p1 ?r1 . ?r2 ?p2 ?r3 . FILTER (?r1 != ?r3 && ?r2 != ?r1 && ?r2 != ?r3)}
+	FILTER ( ?p1 != dbo:wikiPageID )
+	FILTER ( ?p1 != dbo:wikiPageRevisionID )
+	FILTER ( ?p1 != dbo:wikiPageRedirects )
+	FILTER ( ?p1 != dbo:wikiPageExternalLink )
+	FILTER ( ! isLiteral(?r2) )
+	FILTER ( ?p2 != dbo:wikiPageID )
+	FILTER ( ?p2 != dbo:wikiPageRevisionID )
+	FILTER ( ?p2 != dbo:wikiPageRedirects )
+	FILTER ( ?p2 != dbo:wikiPageExternalLink )
 }
 \end{lstlisting}
 
-A fórmula apresentada tenta obter um peso da porcentagem de participação da comparação entre dois recursos em relação ao universo da união dos links desses recursos. Para a participação dos links diretos $P_d$ é atribuída o peso $w_d$ e já para a participação $P_i$ o peso $w_i$. Assim, para a fórmula manter correta é necessário que a soma dos pesos seja 1. A introdução das funções de $\log$ tem o objetivo de "suavizar" os valores, uma vez que a quantidade de links diretos ou indiretos entre recursos é exponencialmente maior que o total de links dos dois recursos somados. Com a comparação feita em relação a soma dos links do recurso $r_a$, e $r_b$, garante-se os seguintes axiomas:
+A fórmula apresentada tenta obter um peso da porcentagem de participação da comparação entre dois recursos em relação ao universo da união dos links desses recursos. Para a participação dos links diretos $P_d$ é atribuída o peso $w_d$ e já para a participação $P_i$ o peso $w_i$. Assim, para a fórmula manter correta é necessário que a soma dos pesos seja 1. A introdução das funções de $\log$ tem o objetivo de transformar os dados, suavizando o enviesamento da proporção entre os valores do total da soma de links diretos dos recurso em relação aos links que relacionam os mesmos. De caráter ilustrativo, quando comparamos termos como "United\_States" e "Group" em relação aos links indiretos temos uma soma de 429.116 links que em relação entre os dois é de 2.010.
+
+Com a comparação feita em relação a soma dos links do recurso $r_a$, e $r_b$, e os condicionais de similaridade iguais 1, garante-se os seguintes axiomas:
 
 \begin{itemize}
 	\item{\textbf{Similaridade reflexiva}: $RLWS(r_a, r_a) = RLWS(r_b, r_b), \text{ para todo } r_a \text{ e } r_b$.}
@@ -320,9 +383,9 @@ A fórmula apresentada tenta obter um peso da porcentagem de participação da c
 
 \subsection{Recomendação}
 
-De posse da fórmula de similaridade semântica entre dois recurso, é possível construir o \textit{ranking} de filmes mais similares em relação as preferências do usuário. Para montar o perfil do usuário, este deverá tornar-se uma \textit{query} no mesmo formato de filmes, ou seja, uma lista de termos. Apesar de ser possível utilizar todos os termos de todos os filmes que o usuário gostou, optou-se por escolher uma quantidade determinada de "melhores termos". Esses melhores termos são calculados através de um modelo construído pela frequência, o \ac{TFIDF}. Esse cálculo trata-se de uma estatística que tem por objetivo de refletir o quão importante um termo é para o documento numa coleção \citep{rajaraman_ullman_2011}. 
+De posse da fórmula de similaridade semântica entre dois recurso, é possível construir o \textit{ranking} de filmes mais similares em relação as preferências do usuário. Para montar o perfil, o modelo do usuário, este deverá tornar-se uma \textit{query} no mesmo formato do modelo de filmes, ou seja, uma lista de termos. Apesar de ser possível utilizar todos os termos de todos os filmes que o usuário gostou, optou-se por escolher uma quantidade determinada de "melhores termos únicos". Esses melhores termos são calculados através de um modelo construído pela frequência, o \ac{TFIDF}. Esse cálculo trata-se de uma estatística que tem por objetivo de refletir o quão importante um termo é para o documento numa coleção \citep{rajaraman_ullman_2011}.
 
-A primeira parte trata-se da frequência do termo em relação ao documento, o que neste caso refere-se a cada termo de um filme do usuário e sua frequência em relação aos termos desse filme. Quanto a segunda parte refere-se ao inverso da frequência do documento, que busca balancear  os termos muito frequentes em relação aos pouco frequentes, uma vez que não necessariamente todos os termos tem importância igual. Dessa forma é construída uma listagem única de todos os termos de todos os filmes do usuário que para cada um deles seja contabilizado a presença na coleção dos filmes. Dessa forma, é calculado uma avaliação de cada termo, conforme a fórmula {\ref{eq:tfidf}}.
+A primeira parte trata-se da frequência do termo em relação ao documento, o que neste caso refere-se a cada termo de um filme do usuário e sua frequência em relação aos termos desse filme. Quanto a segunda parte refere-se ao inverso da frequência do documento, que busca balancear os termos muito frequentes em relação aos pouco frequentes, uma vez que não necessariamente todos os termos tem importância igual. Dessa forma é construída uma listagem única de todos os termos de todos os filmes do usuário que para cada um deles seja contabilizado a presença na coleção dos filmes. Por fim, à avaliação de cada termo, segue conforme a fórmula {\ref{eq:tfidf}}.
 
 \begin{equation}
 	TFIDF(t) = TF(t) * IDF(t)
@@ -339,8 +402,18 @@ A primeira parte trata-se da frequência do termo em relação ao documento, o q
 \label{eq:idf}
 \end{equation}
 
-Após o cálculo dos melhores termos, é montado o perfil do usuário no mesmo formato de um filme que posteriormente é comparado com todos os outros filmes que o usuário não tenha informado preferência ou tenha desgostado. Dessa forma conclui-se com o algoritmo \ref{alg:alg_recomendacao} para a geração dos filmes recomendados.
+Após o cálculo dos melhores termos, é montado o perfil do usuário no mesmo formato de um filme que posteriormente é comparado com todos os outros filmes que o usuário não tenha informado preferência. Dessa forma conclui-se com o algoritmo \ref{alg:alg_recomendacao} para a geração dos filmes recomendados. Esse algorítimo de recomendação utiliza a fórmula de similaridade (\ac{RLWS}) da seguinte forma:
 
+\begin{itemize}
+	\item{Para cada termo do usuário é realizada uma comparação com todos os outros termos do filme.}
+	\item{Caso a quantidade de termos do usuário seja menor que a do filme, será feita uma comparação partindo-se dos termos do filme, assim a similaridade dos filmes mantém-se simétrica.}
+	\item{Caso um dos termos a ser comparado não se trate de um recurso no DBPedia, então esta comparação é descartada e não impacta na similaridade.}
+	\item{Na comparação de cada termo seja partindo da lista do usuário ou do filme, no final será escolhido o score com maior similaridade daquele termo.}
+	\item{Após a escolha dos melhores scores de comparação de todos os termos, é realizada uma média simples dos scores, tendo no final o score final da similaridade entre o filme e o usuário.}
+	\item{No fim são escolhidos os \textit{n} melhores scores das comparações entre filmes e o usuário. Caso um score seja igual, a escolha entre um e outro será aleatória.}
+\end{itemize}
+
+O pseudo-código \ref{alg:alg_recomendacao} exemplifica os passos para o cálculo da similaridade entre os termos do usuário e os termos do filme.
 
 \begin{algorithm}
 	\caption{Pseudocódigo da geração dos filmes recomendados/sugeridos}
@@ -354,8 +427,13 @@ Após o cálculo dos melhores termos, é montado o perfil do usuário no mesmo f
         		\State $similaridades$ {inclui} \Call{CalculaRLWSEntreTermos}{$melhoresTermos, termosDoFilme, wi, wd$}
         	\EndFor
         \EndFunction
-		
-		\State
+    \end{algorithmic}
+    \label{alg:alg_recomendacao}
+\end{algorithm}
+
+\begin{algorithm}
+	\caption{Pseudocódigo da geração dos melhores termos}
+	\begin{algorithmic}[1]
         \Function{ObtemMelhoresTermos}{$usuario, qtdTermos$}
             \State  $termos\gets U$\Comment{U é o conjunto único de todos os termos dos filmes que o usuário marcou como like}
             \State  $melhoresTermos\gets S$\Comment{S é um conjunto vazio de termos}
@@ -368,16 +446,27 @@ Após o cálculo dos melhores termos, é montado o perfil do usuário no mesmo f
             \State {ordena $tfIdfTermos$ de forma decrescente}
             \Return {subconjunto de tamanho $qtdTermos$, da relação de $melhoresTermos$}
         \EndFunction
-        
-        \State
+    \end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+	\caption{Cálculo do RLWS entre termos do usuário e do filme}
+	\begin{algorithmic}[1]
         \Function{CalculaRLWSEntreTermos}{$termos1, termos2, wi, wd$}\Comment{wd - é o peso para os links diretos, wi - é o peso para os links indiretos}
         	\State $combinacoes\gets 0$
         	\State $similaridade\gets 0$
         	\ForAll{termo $t1$ de $termos1$}
+        		\State $melhorScore\gets -1$
         		\ForAll{termo $t2$ de $termos2$}
-        			\State $combinacaoes\gets combinacoes + 1$
-        			\State $similaridade\gets$ RLWS($t1, t2, wi, wd$) + $similaridade$
-        		\EndFor        	
+        			\State $s\gets$ RLWS($t1, t2, wi, wd$)
+        			\If{$s$ is valido \ $s > melhorScore$}
+        				$melhorScore\gets s$
+        			\EndIf
+        		\EndFor
+        		\If{$melhorScore > -1$}
+        			$similaridade\gets similaridade + melhorScore$
+        			$combinacoes\gets combinacoes + 1$
+        		\EndIf        		      	
         	\EndFor
 			\If{$combinacoes > 0$}
 				\Return $similaridade / combinacoes$
@@ -386,8 +475,19 @@ Após o cálculo dos melhores termos, é montado o perfil do usuário no mesmo f
 			\EndIf
         \EndFunction
     \end{algorithmic}
-    \label{alg:alg_recomendacao}
 \end{algorithm}
+
+\label{ssec:cache}
+\subsection{Estrutura de Cache para Recomendação}
+
+É importante ressaltar que para este projeto foi desenvolvido um sistema de \textit{cache} para o cálculo da similaridade de recomendação dos filmes, dividido-se em duas camadas:
+
+\begin{itemize}
+	\item{\textbf{Cache remoto com banco de dados}: Para calcular a similaridade entre dois tokens quaisquer, o sistema utiliza uma fórmula (\ref{eq:rlws}) de similaridade que tira proveito do serviço da DBPedia. Na fórmula, conforme abordado em \ref{ssec:sim_rec} realiza-se a contagem de links diretos e indiretos dos recursos. Essa contagem posteriormente é armazenada no banco de dados para uma consulta mais ágil.}
+	\item{\textbf{Cache local, em memória}: Quando novos recursos são comparados e não estão no \textit{cache} do banco de dados (referenciado como cache remoto) eles precisam ser calculados e posteriormente persistidos. Contudo, como o número de comparações é grande, tendo em vista que cada palavra dos termos do usuário são comparadas com todas as palavras dos filmes, o processo de realizar tais consultas ao banco no momento da comparação prejudica o desempenho da aplicação. Dessa forma optou-se por utilizar a estrutura de \textit{cache} em memória fornecida pelo \textit{framework} Spring\footnote{https://spring.io}. No primeiro momento obtém-se todos os recursos em cache do banco dados da comparação de um filme com o usuário, sendo armazenados numa estrutura de dados na memória \ac{RAM} (referenciado como cache local). Num segundo momento durante a comparação dos termos, para aqueles que não estão presentes no cache, também são acumulados numa estrutura à parte, também no cache local, para indicar que esses deverão ser persistidos no banco de dados posteriormente a comparação de filmes. Dessa forma, minimiza-se o tráfego de dados entre a aplicação e o banco de dados durante a comparação de filmes, acelerando o processo.}
+\end{itemize}
+	
+Para não sobrecarregar o tamanho do cache em memória, a cada determinado número de comparações filmes o sistema esvazia o cache, persistindo os dados dos novos recursos e comparações de tokens. Assim tem-se um bom balanço de desempenho entre o cache remoto e cache local.
 
 \section{Sumário}
 

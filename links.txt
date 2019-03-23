@@ -9,3 +9,16 @@ http://www.inf.unibz.it/~ricci/papers/intro-rec-sys-handbook.pdf
 https://groups.google.com/forum/#!topic/recsysufba/LLUuEC1g9ws
 https://www.quora.com/Whats-the-difference-between-semantic-relatedness-and-semantic-similarity-and-how-to-calculate-them
 https://en.wikipedia.org/wiki/Semantic_similarity
+
+WMD Similarity
+
+https://medium.com/@adriensieg/text-similarities-da019229c894
+https://markroxor.github.io/gensim/static/notebooks/WMD_tutorial.html
+https://rare-technologies.com/word2vec-tutorial/
+https://skymind.ai/wiki/word2vec
+https://deeplearning4j.org/docs/latest/deeplearning4j-quickstart
+http://www.mathcs.emory.edu/~cheung/Courses/323/Syllabus/Transportation/algorithm.html
+https://www.youtube.com/watch?v=SqQ7vWrqccA
+https://www.youtube.com/watch?v=1xXRxnyTrgg
+https://www.youtube.com/watch?v=ymWDGzpQdls
+http://mkusner.github.io/publications/WMD.pdf
