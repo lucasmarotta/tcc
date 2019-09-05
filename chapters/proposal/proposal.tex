@@ -1,190 +1,69 @@
-
-\chapter{Um sistema de recomendação semântico baseado em conteúdo}
+\chapter{Recomendação com similaridade semântica ponderada por links de recursos na DBPedia}
 \label{cap:proposal}
 
-Desde de tempos o homem busca construir ferramentas e máquinas que facilitem, ampliem, sustem sua capacidade de trabalho e produção. Com o advento dos computadores e dos programas de máquina, o \textit{software} tornou-se essencial para a contínua demanda de problemas e desafios da crescente população global. Como avaliado por \cite{Sommerville2010},  o software não se restringe a propriedades materiais das leis da física ou por processos de manufatura. Por um lado, este fato simplifica a engenharia de software devido falta de restrições físicas, mas o torna complexo e de alto custo na realização de mudanças. Dessa forma, com a crescente quantidade de computadores e a diversidade de dispositivos, é cada vez mais relevante a qualidade de software.
+\begin{quotation}[]{Steve Jobs}
+You can't connect the dots looking forward; you can only connect them looking backwards. So you have to trust that the dots will somehow connect in your future.
+\end{quotation}
 
-O tema não é novo e já é levantado desde a década de sessenta, como na conferência NATO \citep{NR68} sobre problemas e desafios no desenvolvimento de software. A qualidade de software não somente aborda problemas do ponto de vista da coordenação do desenvolvimento, viabilizando a execução pelas máquinas, mas também estuda a importância da legibilidade a fim facilitar a manutenção e compreensão por humanos. Assim, é de suma importância documentar funcionalidades, decisões técnicas a serem utilizadas no processo do desenvolvimento de software, para que outros possam entender o trabalho que está sendo construído \citep{Pressman2009}.
+Desde tempos o homem busca construir ferramentas e máquinas que ampliem e sustem sua capacidade de trabalho e produção. Com o advento dos programas de máquina, o \textit{software} tornou-se essencial para a demanda de problemas e desafios população. Como avaliado por \citep{Sommerville2010}, o software não se restringe a propriedades materiais das leis da física ou por processos de manufatura, o que por um lado simplifica a engenharia de software devido falta de restrições físicas, mas por outro, o torna complexo e custoso para mudanças. Assim, com a crescente quantidade e diversidade de computadores e dispositivos, é cada vez mais relevante a qualidade de software, visando a legibilidade, manutenção e evolução.
 
-Neste capítulo será apresentado os requisitos funcionais e não funcionais para um sistema de de recomendação semântico baseado em conteúdo. Serão discutida as tecnologias, comportamentos, modelos e arquiteturas utilizadas. Por fim, será apresentado um protótipo do sistema, utilizado para recomendações de filmes.
-
-\section{Requisitos}
-
-Os requisitos de um sistema são descrições do que deve fazer, suas funcionalidades e serviços que restringem sua operação \citep{Sommerville2010}. Esses requisitos são reflexões das necessidades dos consumidores do sistema e definem um propósito específico, como cadastrar um usuário, encontrar produtos etc. Os requisitos de software, então, tratam-se de descobrir, analisar e documentar tais serviços e restrições para a operação do produto final. A descrição desses requisitos deve ser clara e objetiva, para apenas descrever o objetivo final da funcionalidade a ser desenvolvida.
-
-Os requisitos de software são tradicionalmente classificados entre \textbf{funcionais} e \textbf{não funcionais}, para diferentes níveis de detalhamento e diferentes leitores.
-
-\begin{itemize}
-	\item{\textbf{Requisitos funcionais}: Descrevem o funcionamento do sistema, e para isso devem prover como o sistema deve reagir à entrada/saída assim como seus comportamentos em diferentes situações.}
-	
-	\item{\textbf{Requisitos não funcionais}: Devem estabelecer as restrições das funcionalidades e serviços oferecidos pelo sistema. São descritas caraterísticas gerais do sistema, como a usabilidade que não se referem a termos específicos como os requisitos funcionais. Comumente também são descritas questões que devem ser atendidas para a segurança e confiabilidade do sistema.}
-\end{itemize}
-
-Para cada requisito é utilizado um código para identificar a funcionalidade, assim facilitando referenciá-la durante o desenvolvimento. Nesta seção serão apresentados os requisitos funcionais e não funcionais para o desenvolvimento deste projeto. Para a descrição das funcionalidades optou-se por usar códigos com a sintaxe [RF0X] para requisitos funcionais e [RNF0X] para requisitos não funcionais. Junto ao código e a descrição do requisito foi adicionada a sua prioridade. As prioridades são classificadas em três categorias: a) \textbf{Essencial} para os que precisam ser implementados indispensavelmente, ou seja, são estritamente necessários para o funcionamento do sistema; b) \textbf{Importante} para os que são importantes para o funcionamento, mas não são cruciais; c) \textbf{Desejável} para os que não interferem diretamente nas funcionalidades básicas do sistema , embora relevantes, mas que podem ser deixados para ser implementados posteriormente.
-
-\subsection{Requisitos funcionais}
-
-A Tabela \ref{tab:req-funcionais} apresenta os requisitos funcionais do sistema.
-
-\begin{table}[H]
-	\label{tab:req-funcionais}
-	\centering
-	\caption{Requisitos funcionais do sistema.}
-	\def\arraystretch{1.2} % padding da linhas da tabela
-	\begin{tabular}{|m{1.2cm} | m{3cm} | m{7.2cm}| c | m{1.9cm}}
-		\hline
-		
-		\multicolumn{1}{|c|}{\bfseries Código} & \multicolumn{1}{c|}{\bfseries Nome} & \multicolumn{1}{c|}{\bfseries Descrição} & \multicolumn{1}{c|}{\bfseries Prioridade} \\ \hline
-		RF01	& Cadastrar usuário	& Realizar o cadastro de usuários para criação do seu perfil	& Essencial \\ \hline
-		RF02	& Cadastrar usuário com o Facebook	& Permitir o cadastro de usuários utilizando sua conta do Facebook	& Importante \\ \hline
-		RF03	& Fazer login/logout	& Usuários devem ser identificados permitindo a entrada e saída da aplicação	& Essencial \\ \hline
-		RF04	& Fazer login pelo Facebook	& Permitir o login do usuário pelo Facebook	& Importante \\ \hline
-		RF05	& Cadastrar filmes do usuário	& Usuários identificados podem cadastrar novos filmes no seu perfil	& Essencial \\ \hline
-		RF06	& Visualizar filmes do usuário	& Usuários identificados podem visualizar os filmes cadastrados no seu perfil	& Essencial \\ \hline
-		RF07	& Remover filmes do usuário	& Usuários identificados podem remover filmes cadastrados no seu perfil	& Desejável \\ \hline
-		RF08	& Pesquisar filmes cadastrados	& Usuários identificados podem pesquisar filmes cadastrados na base do sistema	& Importante \\ \hline
-		RF09	& Cadastrar filmes	& O sistema deve permitir a alimentação de filmes para a base dados	& Essencial \\ \hline
-		RF010	& Edição de filmes	& O sistema deve permitir a edição de filmes alimentados para a base	& Essencial \\ \hline
-		RF011	& Visualização de filmes recomendados	& O sistema deve ser capaz de criar uma lista de filmes recomendados, baseado nos filmes registrados do perfil do usuário	& Essencial \\ \hline
-		RF012	& Coletar filmes do Facebook	& Usuários identificados devem poder importar filmes marcados no Facebook	& Importante \\ \hline
-		RF013	& Visualizar informações do filme	& Usuários identificados devem ser capaz de visualização a informação de um filme específico, seja na lista de recomendações ou registrados no seu perfil	& Importante \\ \hline
-	\end{tabular}
-\end{table}
-
-\subsection{Requisitos não funcionais}
-
-A tabela \ref{tab:req-nao-funcionais} apresenta os requisitos não funcionais informando sua característica. Todos os requisitos apresentados são considerados essenciais.
-
-\begin{table}[H]
-	\label{tab:req-nao-funcionais}
-	\centering
-	\caption{Requisitos não funcionais do sistema.}
-	\def\arraystretch{1.3} % padding da linhas da tabela
-	\begin{tabular}{| m{1.3cm} | m{9.4cm}| c | m{2cm}}
-		\hline
-		\multicolumn{1}{|c|}{\bfseries Código} & \multicolumn{1}{c|}{\bfseries Descrição} & \multicolumn{1}{c|}{\bfseries Característica} \\ \hline
-		RNF01	& O sistema deve ser fácil uso e dispensar prévio treinamento	& Usuabilidade \\ \hline
-		RNF02	& O sistema deve ser simples de ser utilizado provendo informações e feedback de forma clara e objetiva	& Usuabilidade \\ \hline
-		RNF03	& O sistema deve estar organizado de tal forma a não deixar o usuário confuso e ao mesmo tempo incentivar a sua exploração com interesse visual	& Usuabilidade \\ \hline
-		RNF04	& O sistema deve ser capaz de atualizar as similaridades calculadas dos filmes em \textit{background}	& Funcionalidade \\ \hline
-		RNF05	& O sistema deve prover uma metalinguagem para momentos em que o usuário deve aguardar o processamento de dados, tais como ícones, informativos etc.	& Usuabilidade \\ \hline
-		RNF06	& O sistema deve possuir um desempenho adequado para que o cálculo da lista de filmes recomendados tenham o menor impacto de carregamento na navegação do usuário.	& Funcionalidade \\ \hline
-		RNF07	& O sistema deve ser capaz de incluir novos filmes em \textit{background}	& Funcionalidade \\ \hline	
-	\end{tabular}
-\end{table}
+Neste capítulo serão apresentados os conceitos para a criação de sistema de recomendação com similaridade semântica ponderada por links de recursos na DBPedia\footnote{http://wiki.dbpedia.org}, sendo baseado nas preferências do usuário. Serão discutidas as tecnologias, arquiteturas, modelos dos dados, recomendação, algoritmos e requisitos do protótipo do sistema.
 
 \section{Arquitetura}
 
-A arquitetura de software trata-se das estruturas e componentes, assim como as interações entre essas partes que irão compor o software do sistema. Para \cite{Perry1992} a arquitetura de software manifesta-se principalmente em partes do software do produto em relação a: 1) Requisitos para a determinação da informação, processamento e características que serão necessárias para o usuário e o sistema; 2) Arquitetura quando preocupa-se com a seleção de elementos, suas interações, e restrições necessárias para prover um \textit{framework} que satisfaça os requisitos; 3) Design quando está interessado na modularização e detalhamento do design dos elementos, algoritmos, procedimentos e tipos de dados que suportem a arquitetura e os requisitos; 4) Implementação quando preocupa-se com a representação de algoritmos, tipos de dados que satisfaçam a arquitetura, design e os requisitos.
+A organização e estrutura do protótipo deste projeto divide-se em duas grandes camadas, a primeira através de uma interface Web utilizando o padrão \ac{MVC}\footnote{Padrão de arquitetura de software que separa o software em três camadas que comunicam entre si: apresentação, lógica de negócio e dados} para prover a interação com o usuário registrando seu perfil, histórico de preferências, além da apresentação das recomendações. A segunda grande camada é responsável pela administração e construção das recomendações, sendo executada em \textit{background}.
 
-Para a organização e estrutura o projeto se divide em duas camadas, uma para prover a interação com o usuário (através de uma interface WEB) utilizando o padrão \ac{MVC}, e outra camada responsável pela administração e construção das recomendações. O objetivo da divisão dessas camadas é prover independência entre os processos, uma vez que a geração das recomendações não ocorre em tempo real, ou seja, durante o tempo que o usuário interage com o sistema. Outra razão é organizar o sistema em camadas em que cada uma seja responsável por funcionalidades específicas no fluxo entre o sistema e o usuário. Assim, o desenvolvimento e alterações podem ser realizadas de forma independente. Na camada primeira camada que provê interações com o usuário com o padrão \ac{MVC}, o sistema é estruturado em três subcamadas que interagem entre si:
+O objetivo da divisão dessas camadas é prover independência entre os processos, uma vez que a geração das recomendações não ocorre em tempo real, ou seja, durante o tempo que o usuário interage com o sistema. Outra razão é organizar o sistema em camadas em que cada uma seja responsável por funcionalidades específicas no fluxo entre o sistema e o usuário. Assim, o desenvolvimento e alterações podem ser realizadas de forma mais independente.
 
-\begin{itemize}
-	\item{\textbf{Model}: Camada da representação ou modelo para a manipulação dos dados da aplicação, sendo usado tanto na manipulação de elementos da interface como na persistência de dados.}
-	
-	\item{\textbf{View}: Camada da apresentação para o usuário, a interface. Envolve toda a parte de visualização de dados e interação com o sistema do ponto de vista do usuário.}
-	
-	\item{\textbf{Controller}: Camada que controla o fluxo das informações, validação, controle de acesso e comportamentos entre a \textit{view} e a \textit{model}.}
-\end{itemize}
+\subsection{Arquitetura para recomendação}
 
-Para a segunda camada para o cálculo das recomendações o sistema provê de três principais serviços:
+A camada que é responsável pela construção das recomendações possui os seguintes principais serviços:
 
 \begin{itemize}
-	\item{\textbf{Geração de Tokens}: O sistema proposto por este trabalho trata-se de recomendar itens baseando-se no conteúdo não estruturado, no caso a sinopse dos filmes. A primeira tarefa é extrair as palavras, os \textit{tokens} relevantes dos textos, como nomes, adjetivos, lugares, entre outras, utilizando o processo de \ac{NLP}.}
+	\item{\textbf{Geração de Tokens}: Um dos objetivos do sistema é recomendar itens baseando-se no conteúdo não estruturado, no caso a sinopse dos filmes. A primeira tarefa é extrair as palavras, os \textit{tokens} relevantes dos textos, como nomes, adjetivos, lugares, entre outras, utilizando o processo de \ac{NLP}.}
 	
-	\item{\textbf{Métrica de similaridade}: Após a geração dos tokens dos filmes, o sistema deve possuir um serviço para realizar o cálculo da similaridade entre dois tokens quaisquer, tirando proveito dos serviços da Web Semântica, no caso o DBPedia. Mais a frente será apresentada a fórmula da similaridade construída para este projeto, conforme consta na seção \ref{ssec:sim_rec}.}
+	\item{\textbf{Cálculo da métrica de similaridade}: Após a geração das palavras importantes dos filmes, o sistema deve possuir um serviço para realizar o cálculo da similaridade entre dois tokens quaisquer, tirando proveito dos serviços da Web Semântica, no caso o DBPedia. Mais a frente será apresentada a equação da similaridade construída para este projeto, conforme consta na seção \ref{ssec:sim_rec}.}
 	
-	\item{\textbf{Geração das recomendações}: Por fim no último serviço, o sistema deverá ser capaz de utilizar a métrica de similaridade para construir um método de comparação que construa um modelo de usuário baseado nas suas preferências para ser comparado com o modelo construído dos filmes. Na seção \ref{ssec:sim_rec}, é apresentado como é construído esses modelos e o método utilizado para gerar a comparação e prover as recomendações.}
+	\item{\textbf{Geração das recomendações}: No último serviço, o sistema deverá construir um modelo dados através da geração de tokens para comparar as preferências do usuário com um filme, utilizando a métrica de similaridade proposta. Na seção \ref{sec:dataModel} é apresentado como é construído esses modelos e na seção \ref{ssec:sim_rec} o método utilizado para gerar a comparação e prover as recomendações.}
 \end{itemize}
 
-O fluxo de dados entre as camadas de interação e recomendação funcionam de tal forma que num primeiro momento, o usuário constrói seu perfil na plataforma, escolhendo seus filmes de preferência e em seguida solicita recomendações que serão adicionadas posteriormente. A camada de interação realiza a gestão dessas interações com o usuário e enfileira uma solicitação para a camada de recomendação que irá analisar o perfil do usuário e gerará as recomendações, armazenando-as num banco de dados para fácil consulta posteriormente. A diante serão apresentadas as tecnologias utilizadas para a construção dos sistema.
+O fluxo de dados entre as camadas de interação e recomendação funcionam de tal forma que num primeiro momento o usuário constrói seu perfil na plataforma, escolhendo seus filmes de preferência e em seguida solicita recomendações que serão adicionadas posteriormente. A camada do \ac{MVC} realiza a gestão dessas interações com o usuário e enfileira uma solicitação para a camada de recomendação que irá analisar o perfil do usuário e gerará as recomendações, armazenando-as num banco de dados para fácil consulta posteriormente. A diante será apresentado mais aprofundadamente o processo de recomendação executado pelos serviços apresentados.
 
-\section{Tecnologias}
+\section{Processo de Recomendação}
 
-Para o desenvolvimento do sistema foram escolhidas algumas tecnologias para arquitetura software, como linguagens de programação, \textit{framework} \ac{MVC}, processamento e banco dados, entre outras. A seguir serão apresentadas as tecnologias utilizadas.
-
-\subsection{JAVA}
-
-JAVA\footnote{https://www.java.com} é uma linguagem de programação de propósito genérico, desenvolvida originalmente por James Gosling na Sun Microsystems\footnote{ https://www.oracle.com/br/sun/index.html} em 1995. Atualmente a linguagem foi comprada pela Oracle Corporation\footnote{https://www.oracle.com}. As características em destaque da linguagem estão no fato de ser baseada em classes e orientada a objetos. A \ac{OOP} é um paradigma de programação que abstrai conceitos em objetos, que podem conter dados, campos e comportamentos nomeados de \textit{methods} \citep{Lewis2000}. 
-
-Outra caraterística importante da linguagem trata-se da filosofia apresentada pelos desenvolvedores de “escreva uma vez, rode em qualquer lugar”. A filosofia trata-se da linguagem ser compilada por uma \ac{VM} possibilitando escrever um mesmo pedaço de código que possa ser portado para outra plataforma sem necessidade de alterá-lo, uma vez que cada \ac{VM} implementa as especificidades da nova plataforma abstraindo o acesso ao \ac{SO}.
-
-A linguagem JAVA é usada em diversos sistemas e plataformas, com inúmeros propósitos, desde aplicações \textit{desktop}, pesquisa científica, desenvolvimento Web entre outros propósitos.
-
-\subsection{Spring Boot}
-
-Spring Boot\footnote{https://projects.spring.io/spring-boot/} é um projeto da 	Pivotal Software\footnote{https://pivotal.io} para facilitar o processo de configuração e publicação de aplicações e serviços providos pelo Spring\footnote{https://spring.io}, com baixo esforço e configuração. O \textit{Spring} é um framework \textit{open source}\footnote{Modelo de desenvolvimento que promove um licenciamento livre para o design ou esquematização  de um produto} que provê um compreensivo conjunto de modelos de configuração para aplicações JAVA. O elemento principal do \textit{Spring} é prover infraestrutura para aplicações oferecendo os seguintes principais recursos:
-
-\begin{itemize}
-	\item{\textbf{Inversão de Controle}: \ac{IOC}, também conhecido como \textit{dependency injection} é um princípio que as “dependências” devem ser supridas, injetadas por outro objeto. As dependências são objetos que serão usados como “serviços” para acessar suas funcionalidades, dentro dos \textit{containers} de \ac{IOC}. A injeção é a passagem da dependência para um objeto (o cliente) \citep{DependencyInjection2006}. O termo “inversão de controle” origina-se do fato que a criação de valores de classes externas ao objeto não deve ser realizada pelo próprio objeto mas, sim pelos \textit{containers} de \ac{IOC}.}
-	
-	\item{\textbf{Acesso a dados}: O framework possui diversas bibliotecas para o acesso a dados, tanto para bancos relacionais como não relacionais. Também é oferecido um sistema \ac{ORM} que trata-se de uma técnica para traduzir o formato de dados de um banco relacional para \ac{OOP}, facilitando sua manipulação.}
-	
-	\item{\textbf{Arquitetura MVC}: Fornece todo suporte para customizar e criar uma arquitetura \ac{MVC}.}
-\end{itemize}
-
-\subsection{HTML, CSS, Javascript}
-
-O HTML\footnote{https://www.w3.org/html}, \ac{CSS}\footnote{https://www.w3.org/Style/CSS/} e JavaScript forma a principal pilha de tecnologias utilizadas na Web. O HTML é uma linguagem de marcação mantida pela \ac{W3C} para criação de páginas, originalmente desenvolvida por Tim-Berners-Lee \citep{Raggett1998}. O objetivo é a fácil construção e publicação de conteúdo no ambiente Web e consequentemente na \ac{WWW}. No \textit{Spring Boot} as páginas HTML podem ser escritas utilizando algum dos mecanismos de \textit{templates}, como o \textit{thymeleaf}. Uma das vantagens da utilização desses mecanismos é a herança de visualizações, assim como facilidade de interligar em manipular os dados passados pela camada do \textit{controller} no \ac{MVC}.
-
-O \ac{CSS} é uma linguagem para criar regras de estilização das páginas \ac{HTML}. O CSS cria ou altera um formato de apresentação (tamanho, cores, margens etc) de algum elemento do HTML, como blocos, parágrafos, imagens entre outros. Quanto ao JavaScript é uma linguagem de programação originalmente criada por Brendan Eich na Netscape Communications\footnote{ http://isp.netscape.com}. A linguagem é utilizada para controlar o comportamento de páginas HTML, oferecendo dinamicidade, podendo alterar elementos da página em tempo real.
-
-\subsection{MySQL}
-
-O MySQL\footnote{https://www.mysql.com} trata-se de um \ac{SGBD} que utiliza a linguagem \ac{SQL} para manipulação de dados guardados em um sistema de arquivos \citep{MySQLSGBD}. Originalmente desenvolvido por Michael Widenius em 1994, o seu foco é para o desenvolvimento de aplicações Web, embora tenha se popularizado para a maioria das plataformas existentes \citep{MySQLDevelopers}. Foi o banco de dados escolhido para a persistência de dados da aplicação, além de ser de fácil integração com o \textit{framework} \textit{Spring Boot}.
-
-\subsection{Apache Jena}
-
-Apache Jena\footnote{https://jena.apache.org} é um \textit{framework} \textit{open source} para Web Semântica, escrito na linguagem Java. A biblioteca provê uma \ac{API} que facilita a extração e criação de dados nos grafos  do \ac{RDF}, além de oferecer suporte para a linguagem de consulta \ac{SPARQL}. O objetivo da escolha dessa tecnologia para o projeto, é para facilitar a busca e navegação pelo grafo de entidades (\textit{resources}) no sistema da DBPedia\footnote{http://wiki.dbpedia.org} utilizando \ac{SPARQL}. Após o \ac{SR} extrair entidades das descrições do filme, essas serão buscadas no serviço da Web Semântica estendendo o conhecimento do recurso.
-
-\subsection{Apache OpenNLP}
-
-Apache OpenNLP\footnote{https://opennlp.apache.org} é um \textit{framework} \textit{open source} de aprendizado de máquina que é usado para processamento de \ac{NLP}. A biblioteca provê uma \ac{API} com serviços para geração de \textit{tokens}, sentenças, segmentação, reconhecimento de partes da fala, extração de entidade de nome, geração de \textit{chunks} (pedaços), entre outras tarefas do \ac{NLP}. A figura \ref{fig:nlp} mostra algumas das tarefas envolvidas no processamento de linguagem natural.
-
-\begin{figure}
-	\centering
-	\includegraphics[scale=0.70]{imagens/nlp.jpg}
-	\caption{Segmentação de tarefas no NLP. \citep{NLP2016}}
-	\label{fig:nlp}
-\end{figure}
-
-No projeto essa tecnologia será utilizada para o \ac{NER} e extração de partes gramaticais presentes na descrição do filme, assim como a geração dos \textit{tokens}. O objetivo é que com essa biblioteca seja possível gerar \textit{tokens} com entidades encontradas, de nomes localizações, como também partes do texto de nomes próprios, substantivos e adjetivos.
-
-\subsection{Apache Lucene}
-
-Apache Lucene\footnote{https://lucene.apache.org} é um \textit{framework} \textit{open source} para sistemas de recuperação de informação e recomendação. O projeto oferece dois principais recursos: indexação e pesquisa de texto. Lucene é muito reconhecido por sua utilidade na implementação em mecanismos de buscas na Internet \citep{McCandless2010}. O projeto também é muito utilizado em sistemas de recomendação com implementação de diversos algoritmos para calcular a similaridade de documentos.
-No projeto essa tecnologia será utilizada para tirar proveito dos algoritmos de similaridade, como o \textit{cossine similarity} (ver \ref{eq:cosine_sim}), possibilitando estender seu funcionamento e permitir integração com a biblioteca, facilitando o seu uso para outras pessoas e outros projetos.
-
-\section{Funcionamento}
-
-As tecnologias apresentadas anteriormente serão utilizadas para construir toda a arquitetura do sistema de recomendação. A proposta é criar uma recomendação baseada em conteúdo, ou seja, nos interesses que o usuário demonstrou no passado. A \textit{feature} analisada nos itens a serem avaliados, trata-se de um conteúdo não estruturado, no caso a descrição do item. Para este trabalho foi definido o domínio de filmes como exemplo de utilização, sendo assim, utilizando o texto da sinopse dos filmes como base para recomendação. Sendo assim, o sistema possui algumas etapas de processamento:
-
-\begin{itemize}
-	\item{\textbf{Coleta dos filmes}: Serão coletados dados dos filmes utilizando o projeto MovieLens\footnote{https://movielens.org} (ver \ref{ssec:dataModel}).}
-	
-	\item{\textbf{Pré-processamento dos filmes}: Nessa etapa após a coleta dos filmes, os dados serão previamente processados para a geração de \textit{tokens} com \ac{NLP}, analisando a descrição dos itens (sinopse dos filmes). Após todos os processamentos os \textit{tokens} serão persistidos no banco de dados.}
-	
-	\item{\textbf{Coleta das preferências do usuário}: Serão coletados dados das preferências dos usuários, ou seja, os filmes de interesse, que neste trabalho trata-se da coleção de filmes que o usuário gostou (\textit{like}). Nessa etapa poderá ser utilizado o perfil do Facebook para obter \footnote{https://facebook.com} para obter tais dados.}
-
-	\item{\textbf{Cálculo da Similaridade}: Após a etapa de pré-processamento dos filmes, será realizado o cálculo da similaridade, utilizando o método proposto \ac{RLWS} entre uma representação que refletirá as preferências do usuário, com outros filmes que ele não tenha escolhido.}
-	
-	\item{\textbf{Geração das recomendações}: Como este trabalho trata-se da apresentação de um sistema de recomendação baseado em conteúdo, então as sugestões de novos itens depende exclusivamente do histórico do usuário. Sendo assim, com a similaridade comparada entre o perfil do usuário em relação a outros filmes, será gerada uma lista de tamanho qualquer com os melhores \textit{scores} obtidos do cálculo desta similaridade. Posteriormente essa coleção filmes sugeridos será armazenada no banco, podendo ser atualizada conforme o perfil do usuário altera ou novos filmes são cadastrados na base de dados. No seção \ref{ssec:sim_rec} é demonstrado e discutido o algoritmo central para a similaridade e recomendação.}
-	
-	\item{\textbf{Apresentação dos resultados}: Apresentação dos resultados: Por fim o sistema apresentará os resultados das recomendações para o usuário, que posteriormente poderão ser avaliados pelo usuário.}
-\end{itemize}
+A proposta é criar uma recomendação baseada em conteúdo, ou seja, nos interesses que o usuário demonstrou no passado. A \textit{feature} analisada nos itens a serem avaliados, trata-se de um conteúdo não estruturado, no caso a descrição do item. Para este trabalho foi definido o domínio de filmes como exemplo de utilização, sendo assim, utilizando o texto da sinopse dos filmes como base para recomendação. A seguir será apresentado todas as etapas desde a captura dos dados até a apresentação das recomendações.
 
 \begin{figure}
 	\centering
 	\includegraphics[scale=0.42]{imagens/recsys_fluxo.png}
-	\caption{Fluxo das camadas do sistema de recomendação}
+	\caption{Fluxo das camadas do sistema de recomendação.}
 	\label{fig:recsys_fluxo}
 \end{figure}
 
-A figura \ref{fig:recsys_fluxo} mostra como esse fluxo de funcionalidades é operado por todo o sistema. A seguir será aprofundado mais algumas questões sobre a integração dessas camadas.
+\begin{enumerate}
+	\item{\textbf{Coleta dos filmes}: Serão coletados dados dos filmes utilizando o projeto MovieLens\footnote{https://movielens.org} (ver \ref{sec:dataModel}).}
+	
+	\item{\textbf{Pré-processamento dos filmes}: Nessa etapa após a coleta dos filmes, os dados serão previamente processados para a geração de \textit{tokens} com \ac{NLP}, analisando a descrição dos itens (sinopse dos filmes). Após processados os \textit{tokens} serão persistidos no banco de dados.}
+	
+	\item{\textbf{Coleta das preferências do usuário}: Serão coletados dados das preferências dos usuários, ou seja, os filmes de interesse, que neste trabalho trata-se da coleção de filmes que o usuário gostou (\textit{like}). Nessa etapa poderá ser utilizado o perfil do Facebook\footnote{https://facebook.com} para obter para obter tais dados.}
 
-\subsection{Modelo de dados}
+	\item{\textbf{Cálculo da Similaridade}: Após a etapa de pré-processamento dos filmes, será realizado o cálculo da similaridade entre os tokens do modelo do usuário e do filme, utilizando o métrica proposta \ac{RLWS}.}
+	
+	\item{\textbf{Geração das recomendações}: De posse do cálculo da similaridade, será gerada uma lista de tamanho qualquer com os melhores \textit{scores} obtidos do cálculo desta similaridade. Posteriormente essa coleção filmes sugeridos será armazenada no banco, podendo ser atualizada conforme o perfil do usuário altera, ou novos filmes são cadastrados na base de dados. Na seção \ref{ssec:sim_rec} é demonstrado e discutido o algoritmo central para a similaridade e recomendação.}
+	
+	\item{\textbf{Apresentação dos resultados}: Por fim o sistema apresentará os resultados das recomendações para o usuário, que posteriormente poderão ser avaliados pelo usuário.}
+\end{enumerate}
 
-Para a estrutura do sistema de recomendação deste trabalho, foi elaborado um modelo de dados para persistir as preferências do usuário, informações dos filmes com seu pré-processamento pelo \ac{NLP}, além de uma estrutura de \textit{cache} para auxiliar o processamento do cálculo da similaridade. A figura \ref{fig:user_model} mostra como esses dados estão interligados. É importante ressaltar algumas observações quanto a esse modelo:
+A Figura \ref{fig:recsys_fluxo} mostra como esse fluxo de funcionalidades é operado por todo o sistema. A seguir será o modelo dados elaborado para este trabalho.
+
+\section{Modelo de dados}
+\label{sec:dataModel}
+
+Para a estrutura do sistema de recomendação foi elaborado um modelo de dados para o usuário, levando em conta suas preferências, além do modelo para as informações dos filmes. Nesta seção serão apresentados como os dados estão estruturados no banco de dados, além de estabelecer um modelo formal para o usuário e o filme, prontos para serem executado pelos camada de recomendação.
+
+\subsection{Banco de dados}
+
+Para trabalhar com as informações dos usuários e dos filmes, permitindo criar seus modelos para recomendação, os dados foram modelados e organizados de tal forma que possam ser facilmente persistidos e recuperados assim que necessário. A Figura \ref{fig:user_model} mostra como esses dados estão estruturados e interligados. É importante ressaltar algumas observações quanto a essa estrutura:
 
 \begin{itemize}
 	\item{A entidade "user\textunderscore movie" persiste as preferências do usuário, tanto dos filmes que ele marcou como \textit{like} e \textit{deslike}, sendo que o primeiro adquire valor de 1 e o outro de 0. Esse modelo pode ser futuramente revisado para aceitar valores que não sejam binários.}
@@ -193,7 +72,7 @@ Para a estrutura do sistema de recomendação deste trabalho, foi elaborado um m
 	
 	\item{A entidade "movie" persiste os dados dos filmes retirados do projeto MovieLens\footnote{https://movielens.org}, assim como o processamento da sinopse dos filmes para geração dos \textit{tokens}.}
 	
-	\item{A entidade "idf" persiste o cálculo do \ac{IDF} da fórmula \ref{eq:tfidf}, que servirá para o cálculo da similaridade cosseno, por motivos de comparação que serão discutidos no \ref{cap:evaluation}.}
+	\item{A entidade "idf" persiste o cálculo do \ac{IDF} da equação \ref{eq:tfidf}, que servirá para o cálculo da similaridade cosseno, por motivos de comparação que serão discutidos no \ref{cap:evaluation}.}
 	
 	\item{As entidades "lod\_cache" e "lod\_cache\_relation" tratam-se do serviço de cache para o cálculo da similaridade, assim poupando tempo para consultas do serviço do DBPedia. Na seção \ref{ssec:cache} a estrutura de cache dos sistema é melhor abordada.}
 \end{itemize}
@@ -201,16 +80,67 @@ Para a estrutura do sistema de recomendação deste trabalho, foi elaborado um m
 \begin{figure}
 	\centering
 	\includegraphics[scale=0.5]{imagens/user_model.png}
-	\caption{Diagrama da modelagem dos dados}
+	\caption{Diagrama da modelagem dos dados extraído do banco MySQL}
 	\label{fig:user_model}
 \end{figure}
-\label{ssec:dataModel}
+
+\subsection{Modelo de filmes}
+
+De posse da estrutura de dados utilizados para o filme, é importante também formalizar como esses compõem o modelo utilizado na recomendação, afinal este é o item a ser recomendado para o usuário. É definido o conjunto $X$ como sendo conjunto de todos os filmes, onde cada filme $F \subset X$ é um conjunto de tokens $t_f$ extraídos pelo processo de \ac{NLP} (ver \ref{ssec:data_nlp}) através da sinopse deste. Desda forma pode-se formalizar o modelo de filmes conforme mostra as equações \ref{eq:film_model} e \ref{eq:film_model2}.
+
+\begin{equation}
+	X = \bigcup\limits_{i=1}^{\infty} F_{i}
+\label{eq:film_model}
+\end{equation}
+
+\begin{equation}
+	F = \{t_{f1}, ..., t_{fn} \; | \; 1 \leq n \leq \mathbb{N}^*\}
+\label{eq:film_model2}
+\end{equation}
+
+\subsection{Modelo de usuários}
+
+Os usuários inicialmente são estruturados como um conjunto de filmes de sua preferência, contudo desta forma não é possível realizar uma comparação com o modelo de filmes utilizando a métrica de similaridade proposta (ver \ref{ssec:sim_rec}), pois esta realiza uma comparação de termo a termo. Uma opção inicial seria simplesmente calcular todos os termos dos filmes de preferência do usuário, utilizando o processo de \ac{NLP}, e uni-los num grande conjunto, porém isto tornaria o processo muito custoso para ser executado, além de não escalar bem conforme as preferência do usuário aumentam. Sendo assim optou-se por calcular os "melhores termos" que representam o usuário, como sendo um conjunto de termos de um tamanho definido. Para calcular os "melhores termos" é aplicado um modelo de frequência, o \ac{TFIDF} (ver equação \ref{eq:tfidf}), que busca criar um ranking de termos determinando o quão importante são numa coleção, no caso a união de todos os termos de todos os filmes. Com isso é definido $U$ como o conjunto de filmes $F$ de preferências do usuário, onde cada termo do filme $t_f \in F$ forma o conjunto $P$, sendo todos os termos de todos os filmes das preferências. Posteriormente defini-se o conjunto $C_u$ como sendo o modelo do usuário, como o conjunto de tamanho $z$ dos melhores termos $t_f \in P$ ao passar pela seleção da função $M_{tfidf}$ (ver algoritmo \ref{alg:alg_best_terms}). Por fim o conjunto o $Z$ como sendo a união de todos os modelos de usuário $C_u$. O tamanho de $C_u$ é algo que será explorado no capítulo \ref{cap:evaluation}. As equações \ref{eq:user_model} à \ref{eq:user_model4} demonstram a construção do modelo do usuário.
+
+\begin{equation}
+	Z = \bigcup\limits_{i=1}^{\infty} C_{ui}
+\label{eq:user_model}
+\end{equation}
+
+\begin{equation}
+	C_u = \{t_f \;| \; t_f \in P, \; M_{tfidf}(t_f), \; |C_u| = z \land z \in \mathbb{N}^*\}
+\end{equation}
+
+\begin{equation}
+	(\forall F \subset U) \quad P = \{t_{f1}, ..., t_{fn} \; | \; t_f \in F, \; 1 \leq n \leq \mathbb{N}^*\}
+\end{equation}
+
+\begin{equation}
+	U = \bigcup\limits_{i=1}^{\infty} F_i
+\label{eq:user_model4}
+\end{equation}
 
 \subsection{Preparação dos dados para recomendação}
+\label{ssec:data_nlp}
 
-Antes da execução das recomendações é necessário realizar a etapa do pré-processamento dos dados. Para cada filme é gerado são gerados tokens, palavras relevantes presentes na descrição. Essas palavras relevantes tratam-se do processo de exclusão daquelas que pouco agregam significado ao que se refere a temática do filme, como é o exemplo de preposições, conjunções e artigos. 
+Antes da execução das recomendações é necessário realizar a etapa do pré-processamento dos dados. Para cada filme são gerados tokens que são palavras relevantes presentes na descrição. Essas palavras relevantes tratam-se do processo de exclusão daquelas que pouco agregam significado ao que se refere a temática do filme, como é o exemplo de preposições, conjunções e artigos.
 
-Para este projeto foi utilizado o \textit{framework} OpenNLP\footnote{https://opennlp.apache.org} para realizar a remoção das palavras não desejadas, que através da marcação das "partes do discurso", adiciona a cada palavra uma \textit{tag} com a parte da linguagem que ela representa, como adjetivos, nomes, verbos etc. Uma vez realizada a anotação do texto com as partes do discurso, foi definido para apenas capturar as palavras marcadas com as seguintes \textit{tags}, conforme mostra a tabela \ref{tab:nlp_tags}. Vale ressaltar que essas definições foram concebidas para língua inglesa.
+Para este projeto foi utilizado o processo de \ac{NLP} que envolve uma série de tarefas para o processamento de linguagens naturais, para compreensão e interação entre máquinas e humanos, conforme é apresentado por \cite{Collobert:2011}. A Figura \ref{fig:nlp} ilustra as tarefas comuns no processamento de linguagem natural. Este projeto utiliza as seguintes das tarefas para a criação dos termos dos filmes:
+
+\begin{itemize}
+	\item{\textbf{Chunking, tokenization}: Esta tarefa consiste em segmentar um texto em partes da linguagem, sendo responsável por criar separar em tokens. Chunking, visa ir além de separar as palavras mas separar o texto em frases em partes maiores do texto.}
+	\item{\textbf{Tagging, part-of-speech}: O objetivo desta tarefa é reconhecer as palavras do processo de tokenization em "partes do discurso", criando \textit{tags} para identificar o que elas representam na linguagem. Nesta parte é onde se classificam as palavras em verbos, adjetivos, substantivos, pontuações etc.}
+	\item{\textbf{\ac{NER}}: Esta tarefa objetiva reconhecer nas palavras e tokens aquelas que tratam-se de nomes próprios, além de associá-las à algum tipo, como pessoas, lugares, moedas etc.}
+\end{itemize}
+
+\begin{figure}
+	\centering
+	\includegraphics[scale=0.70]{imagens/nlp.jpg}
+	\caption{Segmentação de tarefas no NLP. \citep{NLP2016}}
+	\label{fig:nlp}
+\end{figure}
+
+Para facilitar a execução dessas tarefas do \ac{NLP}, optou-se por utilizar o \textit{framework} OpenNLP\footnote{https://opennlp.apache.org}, conforme também abordado na seção \ref{ssec:open_nlp}, que através de um modelo de treinamento, possibilita facilmente realizar o processo de \textit{tagging}, identificando as partes do discurso. Uma vez realizada a anotação do texto definiu-se apenas capturar as palavras marcadas com as \textit{tags} conforme mostra a tabela \ref{tab:nlp_tags}. Vale ressaltar que essas definições foram concebidas para língua inglesa, uma vez que as sinopses importadas do projeto MovieLens\footnote{https://movielens.org} estão nessa língua.
 
 \begin{table}[H]
 	\label{tab:nlp_tags}
@@ -232,12 +162,11 @@ Para este projeto foi utilizado o \textit{framework} OpenNLP\footnote{https://op
 	\end{tabular}
 \end{table}
 
-Em sequência a lista das palavras retiradas da análise das partes do discurso, é incluída a lista de nomes retirados do processo de \ac{NER} (reconhecimento de entidades nomeadas), o que não é meramente o reconhecimento de nomes próprios da língua, mas também de nomes compostos. Esse processo é de grande valia para a etapa de similaridade uma vez que, tendo um nome como "Buzz Lightyear", apenas utilizando o processo da marcação das partes do discurso resultaria em dois termos "Buzz" e "Lightyear", sendo que o ideal seja ter apenas o nome composto por inteiro. Os nomes próprios são mantidos nas partes do discurso, uma vez que o framework utilizado no processo de \ac{NLP} apenas extrai, nomes, lugares e organizações. Para os nomes reconhecidos nesse processo foi realizada uma formatação para adequação a consultas \ac{SPARQL}, ou seja, nomes compostos como "Buzz Lightyear" serão formatados para "Buzz\textunderscore Lightyear".
+Após o \textit{tagging}, é adicionado aos conjunto de termos os tokens da tarefa \ac{NER}, o que não é meramente o reconhecimento de nomes próprios do texto, mas também de nomes compostos. Esse processo é de grande valia para a etapa de similaridade uma vez que tendo um nome como "Buzz Lightyear", apenas utilizando o processo da marcação das partes do discurso, resultaria em dois termos "Buzz" e "Lightyear", sendo que o ideal seja ter apenas o nome composto por inteiro. Os nomes próprios pelo processo de \textit{tagging} também são mantidos na lista de termos, uma vez que o framework utilizado no processo de \ac{NLP} apenas extrai, nomes, lugares e organizações. Para os nomes reconhecidos nesse processo também foi realizada uma formatação para adequação à consultas \ac{SPARQL}, ou seja, nomes compostos como "Buzz Lightyear" serão formatados para "Buzz\textunderscore Lightyear".
 
 A tabela \ref{tab:nlp_example} abaixo demonstra alguns exemplos do tratamento da descrição de filmes para geração de \textit{tokens}. 
 
 \begin{table}[]
-	\label{tab:nlp_example}
 	\centering
 	\caption{Exemplos da geração de tokens}
 	\def\arraystretch{1.3} % padding da linhas da tabela
@@ -247,16 +176,22 @@ A tabela \ref{tab:nlp_example} abaixo demonstra alguns exemplos do tratamento da
 	Toy Story & Led by Woody, Andy's toys live happily in his room until Andy's birthday brings Buzz Lightyear onto the scene. Afraid of losing his place in Andy's heart, Woody plots against Buzz. But when circumstances separate Buzz and Woody from their owner, the duo eventually learns to put aside their differences.& Woody, Andy, Toys, Room, Andy, Birthday, Scene, Place, Andy, Heart, Woody, Plots, Circumstances, Woody, Owner, Duo, Put, Differences, Buzz\_Lightyear \\ \hline
 	GoldenEye & James Bond must unmask the mysterious head of the Janus Syndicate and prevent the leader from utilizing the GoldenEye weapons system to inflict devastating revenge on Britain. & Unmask, Mysterious, Head, Janus, Syndicate, Prevent, Leader, Goldeneye, Weapons, System, Inflict, Devastating, Revenge, Britain, James\_Bond \\ \hline
 	\end{tabular}
+\label{tab:nlp_example}
 \end{table}
 
+\section{Modelo de Recomendação}
 \label{ssec:sim_rec}
-\section{Similaridade e recomendação}
 
-A recomendação de itens envolve a predição de quão provável o usuário gostará do conteúdo recomendado que neste trabalho foi desenvolvido um método baseado em similaridade semântica. Conforme abordado no capítulo \ref{cap:semantic_web} a similaridade semântica utiliza-se e retira proveito das estruturas de uma ontologia que neste caso trata-se das acessíveis através do projeto do movimento \ac{LOD}, o DBPedia\footnote{http://wiki.dbpedia.org}. Diante disso, partindo de outros estudos que apresentaram métodos como LDSD \citep{PassantLDSD} e Resim \citep{PiaoResim}, este trabalho propõe um novo método, denominado de \ac{RLWS} para realizar a medida da similaridade entre dois recursos presentes no DBPedia, gerando um valor na escala de 0 a 1, onde valores menores denotam menor similaridade.
+A criação de um modelo de recomendação envolve sugerir novos itens, sendo caracterizada como uma predição de o quão provável o usuário gostará do conteúdo recomendado. Nesta seção serão apresentadas as etapas que existem para construção deste modelo, que envolve na definição da métrica de similaridade, através da equação da similaridade semântica (ver \ref{ssec:formula_rlws}) e da construção da recomendação (ver \ref{ssec:rec_alg}).
 
-\subsection{Fórmula para similaridade semântica}
+Conforme abordado no capítulo \ref{cap:semantic_web} a similaridade semântica utiliza e retira proveito das estruturas de uma ontologia que neste caso trata-se das acessíveis através do DBPedia\footnote{http://wiki.dbpedia.org}. Cada termo de um filme será considerado como um potencial recurso na DBPedia, e os recursos tratam-se de entidades de ontologias mapeadas no grafo dos princípios do \ac{LOD}. Diante disso, a métrica proposta é estabelecer uma equação de similaridade, utilizando-se de um modelo considera a estrutura desses recursos, analisando a quantidade de relações, e links diretos ou indiretos entre tais recursos. Para estabelecer a equação proposta, considerou-se dois trabalhos relacionados com similaridade semântica, o de \cite{PassantLDSD} que apresenta a equação \ac{LDSD}, e mais recentemente de \cite{PiaoResim}, que propõem o \ac{RESIM}. O primeiro trabalho tenta estabelecer a importância que um recurso tem em relação ao total de relações da união de dois recursos, sem preferências entre links diretos e indiretos, enquanto que \ref{PiaoResim} estende e modifica esse entendimento criando uma média ponderada entre as relações dos recursos e a similaridade entre as propriedades desses recursos.
 
-A equação \ref{eq:rlws} demonstra o cálculo da similaridade semântica, que consiste em um conjunto de 5 funções  $C_d$, $C_i$, $C_{di}$, $C_{do}$, $C_{io}$. Estas funções tratam-se de levar em consideração a quantidade links de um recurso ou entre recursos dentro de um conjunto seguindo os princípios do \ac{LOD}, de acordo com a seguinte definição \citep{PiaoResim}:
+Este trabalho propõe um novo método, denominado de \ac{RLWS} para realizar a medida da similaridade entre dois recursos presentes no DBPedia, criando uma média ponderada entre a relevância dos links diretos e indiretos, para gerar um valor na escala de 0 a 1, onde valores menores denotam menor similaridade.
+
+\subsection{Equação para similaridade semântica}
+\label{ssec:formula_rlws}
+
+A Equação \ref{eq:rlws} demonstra o cálculo da similaridade semântica, que consiste em um conjunto de 5 funções  $C_d$, $C_i$, $C_{di}$, $C_{do}$, $C_{io}$. Estas funções tratam-se de levar em consideração a quantidade links de um recurso ou entre recursos dentro de um conjunto seguindo os princípios do \ac{LOD}, de acordo com a seguinte definição \citep{PiaoResim}:
 
 \begin{definition}
 Um conjunto que segue os princípios LOD é um grafo $G$ tal que $G = (R, L, I)$ aonde $R = \left\{r_1, r_2, ..., r_n\right\}$ é um conjunto de recursos identificados por suas URI, $L = \left\{i_1, i_2, ..., i_n\right\}$ é um conjunto de instâncias desses links entre recursos, como $i_i = <l_j, r_a, r_b>$.
@@ -264,10 +199,10 @@ Um conjunto que segue os princípios LOD é um grafo $G$ tal que $G = (R, L, I)$
 
 \begin{equation}
 	RLWS(r_a, r_b) = 
-	\begin{cases}
-		1 \text{, } URI(r_a) = URI(r_b) \text{ ou } r_a \textit{ dbo:wikiPageRedirects } r_b\\
-		\frac{P_d(r_a, r_b) * w_d + P_i(r_a, r_b) * w_i}{w_d + w_i} \text{, caso contrário}
-	\end{cases}
+	\begin{dcases*}
+		1 \text{,} \;\; URI(r_a) = URI(r_b) \;\; \text{ou} \;\; r_a \textit{ dbo:wikiPageRedirects } r_b\\
+		\frac{P_d(r_a, r_b) * w_d + P_i(r_a, r_b) * w_i}{w_d + w_i}, \; \text{caso contrário}
+	\end{dcases*}
 \label{eq:rlws}
 \end{equation}
 
@@ -284,12 +219,11 @@ Um conjunto que segue os princípios LOD é um grafo $G$ tal que $G = (R, L, I)$
 \begin{figure}
 	\centering
 	\includegraphics[scale=0.5]{imagens/cd_links.png}
-	\caption{Imagem que retrata os links diretos saintes e entrantes de um recurso}
+	\caption{Imagem que retrata os links diretos saintes e entrantes de um recurso.}
 	\label{fig:cd_links}
 \end{figure}
 
-Verifique que a fórmula possui um condicional que implica o valor 1 quando os dois recursos comparados sejam iguais ou estejam relacionados pela propriedade \textit{dbo:wikiPageRedirects}. Essa propriedade nada mais trata-se de redirecionamentos do próprio serviço do DBPedia, que quando consultado recursos como "Movie" e "Film", resultam na mesma página, pois são redirecionamentos. Para maior generalização o termo "link" será utilizado para se referir a ligações tanto como recursos ou propriedades relacionadas. Assim, as funções $C_d$ e $C_i$ tratam-se de computar os links distintos de um recurso qualquer, ou seja todas as ligações distintas a outros recursos, de forma direta e indireta respectivamente. No caso da função $C_d$, são computados todos os recursos distintos que sejam alcançados por uma propriedade qualquer através de um recurso analisado em questão, mais aqueles que partem de outro recurso e chegam nesse mesmo desejado. O exemplo da figura \ref{fig:cd_links} apresenta o recurso "Tom\_Cruise" a ser calculado, onde possui um link direto sainte para o recurso "American\_film\_producers" através da propriedade "sujeito de", e outro link direto de entrada pelo recurso "Jack\_Reacher" através da propriedade "retratado por". 
-
+A equação possui um condicional que implica o valor 1 quando dois recursos comparados tenham a mesma \textit{URI} ou estejam relacionados pela propriedade \textit{dbo:wikiPageRedirects}. Essa propriedade nada mais trata-se de redirecionamentos do próprio serviço do DBPedia, que quando consultado recursos como "Movie" e "Film", resultam na mesma página, pois são redirecionamentos. Para maior generalização o termo "link" será utilizado para se referir a ligações tanto como recursos ou propriedades relacionadas. As funções $C_d$ e $C_i$ tratam-se de computar os links distintos de um recurso qualquer, ou seja todas as ligações distintas a outros recursos, de forma direta e indireta respectivamente. No caso da função $C_d$, são computados todos os recursos distintos que sejam alcançados por uma propriedade qualquer através de um recurso analisado em questão, mais aqueles que partem de outro recurso e chegam nesse mesmo desejado. O exemplo da Figura \ref{fig:cd_links} apresenta o recurso "Tom\_Cruise" a ser calculado, onde possui um link direto sainte para o recurso "American\_film\_producers" através da propriedade "sujeito de", e outro link direto de entrada pelo recurso "Jack\_Reacher" através da propriedade "retratado por". 
 
 \begin{lstlisting}[caption=Consulta SPARQL para contagem de links diretos, language=SQL, frame=single, label={cod:sparql_cd}, float, numbers=left]
 PREFIX  :  <http://dbpedia.org/resource/>
@@ -307,18 +241,16 @@ WHERE {
 }
 \end{lstlisting}
 
-A contagem desses links é realizada através da consulta \ac{SPARQL} conforme a figura \ref{fig:cd_links}. Alguns filtros de propriedades são realizados, pois não são relevantes para a consulta. A priori da consulta para contagem de links é realizada uma outra consulta \ac{SPARQL} para verificar se os dois recursos em questão são redirecionamentos, por este motivo na consulta dos links existe a adição do filtro desta propriedade.
-
-Quanto para função $C_i$ apenas são contabilizados os links indiretos de saída, por motivos de desempenho de consultas SPARQL no DBPedia. A imagem \ref{fig:ci_links} retrata o cenário para os links indiretos, e o código \ref{cod:sparql_ci} a contagem dos links indiretos.
+A contagem desses links é realizada através da consulta \ac{SPARQL} conforme a Figura \ref{fig:cd_links}. Alguns filtros de propriedades são realizados, pois não são relevantes para a consulta. A propriedade \textit{dbo:wikiPageRedirect} é realizada por outra consulta, mas é adicionada no filtro das consultas de contagem, para não levá-la em consideração. Para a função $C_i$ apenas são contabilizados os links indiretos de saída, por motivos de desempenho de consultas SPARQL no DBPedia. A imagem \ref{fig:ci_links} retrata o cenário para os links indiretos, e o código \ref{cod:sparql_ci} a contagem dos links indiretos. Quanto para as funções $C_{di}$, $C_{do}$ e $C_{io}$, referem-se a contagem dos links distintos compartilhados entre dois recursos, sendo os dois primeiros de forma direta e o último de forma indireta. As equações \ref{cod:sparql_cdio} e \ref{cod:sparql_cio} apresentam as consultas \ac{SPARQL} para realizar a contagem dos links.
 
 \begin{figure}
 	\centering
 	\includegraphics[scale=0.5]{imagens/ci_links.png}
-	\caption{Imagem que retrata os links indiretos saintes de um recurso}
+	\caption{Imagem que retrata os links indiretos saintes de um recurso.}
 	\label{fig:ci_links}
 \end{figure}
 
-\begin{lstlisting}[caption=Consulta SPARQL para contagem de links indiretos, language=SQL, frame=single, label={cod:sparql_ci}, float, numbers=left]
+\begin{lstlisting}[caption=Consulta SPARQL para contagem de links indiretos., language=SQL, frame=single, label={cod:sparql_ci}, float, numbers=left]
 PREFIX  :  <http://dbpedia.org/resource/>
 PREFIX  dbo:  <http://dbpedia.org/ontology/>
 SELECT (count (distinct ?r2) as ?x)
@@ -336,9 +268,7 @@ WHERE {
 }
 \end{lstlisting}
 
-Quanto as funções $Cdi$, $Cdo$ e $Cio$, referem-se a contagem dos links distintos compartilhados entre dois recursos, sendo os dois primeiros de forma direta e o último de forma indireta. As equações \ref{cod:sparql_cdio} e \ref{cod:sparql_cio} apresentam as consultas \ac{SPARQL} para realizar a contagem dos links.
-
-\begin{lstlisting}[caption=Consulta SPARQL para contagem de links diretos (saíntes e entrantes) entre dois recursos, language=SQL, frame=single, label={cod:sparql_cdio}, float, numbers=left]
+\begin{lstlisting}[caption=Consulta SPARQL para contagem de links diretos (saíntes e entrantes) entre dois recursos., language=SQL, frame=single, label={cod:sparql_cdio}, float, numbers=left]
 PREFIX  :  <http://dbpedia.org/resource/>
 PREFIX  dbo:  <http://dbpedia.org/ontology/>
 SELECT (count(distinct ?p1) as ?x)
@@ -354,7 +284,7 @@ WHERE {
 }
 \end{lstlisting}
 
-\begin{lstlisting}[caption=Consulta SPARQL para contagem de links indiretos (saíntes) entre dois recursos, language=SQL, frame=single, label={cod:sparql_cio}, float, numbers=left]
+\begin{lstlisting}[caption=Consulta SPARQL para contagem de links indiretos (saíntes) entre dois recursos., language=SQL, frame=single, label={cod:sparql_cio}, float, numbers=left]
 PREFIX  :  <http://dbpedia.org/resource/>
 PREFIX  dbo:  <http://dbpedia.org/ontology/>
 SELECT (count (distinct ?r2) as ?x)
@@ -372,20 +302,22 @@ WHERE {
 }
 \end{lstlisting}
 
-A fórmula apresentada tenta obter um peso da porcentagem de participação da comparação entre dois recursos em relação ao universo da união dos links desses recursos. Para a participação dos links diretos $P_d$ é atribuída o peso $w_d$ e já para a participação $P_i$ o peso $w_i$. Assim, para a fórmula manter correta é necessário que a soma dos pesos seja 1. A introdução das funções de $\log$ tem o objetivo de transformar os dados, suavizando o enviesamento da proporção entre os valores do total da soma de links diretos dos recurso em relação aos links que relacionam os mesmos. De caráter ilustrativo, quando comparamos termos como "United\_States" e "Group" em relação aos links indiretos temos uma soma de 429.116 links que em relação entre os dois é de 2.010.
+O objetivo da equação é obter o quão relevante é o relacionamento entre dois recursos em relação a soma dos relacionamentos deles a quaisquer outros, obtendo $P_d$ para um percentual de participação dos links diretos e $P_i$ para os indiretos. Posteriormente essa participação ou relevancia é aplicada a equação de média ponderada com os pesos $w_d$ e $w_i$, obtendo esta similaridade semântica média com o peso dos links. É importante ressaltar que para manter a equação correta é necessário que a soma dos pesos seja igual 1. A introdução das funções de $\log$ tem o objetivo de transformar os dados, suavizando o enviesamento da proporção entre os valores do total da soma de links diretos em relação aos links da comparação de $r_a$ e $r_b$. De caráter ilustrativo, quando comparamos termos como "United\_States" e "Group" em relação aos links indiretos temos uma soma de 429.116 links que em comparação entre o que relaciona um ao outro é de 2.010.
 
-Com a comparação feita em relação a soma dos links do recurso $r_a$, e $r_b$, e os condicionais de similaridade iguais 1, garante-se os seguintes axiomas:
+Por último é destacável notar que a equação exibe os axiomas abaixo que são importantes para a consistência da similaridade:
 
 \begin{itemize}
 	\item{\textbf{Similaridade reflexiva}: $RLWS(r_a, r_a) = RLWS(r_b, r_b), \text{ para todo } r_a \text{ e } r_b$.}
 	\item{\textbf{Simetria}: $RLWS(r_a, r_b) = RLWS(r_b, r_a), \text{ para todo } r_a \text{ e } r_b$.}
 \end{itemize}
 
-\subsection{Recomendação}
+\subsection{Algoritmo da recomendação}
+\label{ssec:rec_alg}
 
-De posse da fórmula de similaridade semântica entre dois recurso, é possível construir o \textit{ranking} de filmes mais similares em relação as preferências do usuário. Para montar o perfil, o modelo do usuário, este deverá tornar-se uma \textit{query} no mesmo formato do modelo de filmes, ou seja, uma lista de termos. Apesar de ser possível utilizar todos os termos de todos os filmes que o usuário gostou, optou-se por escolher uma quantidade determinada de "melhores termos únicos". Esses melhores termos são calculados através de um modelo construído pela frequência, o \ac{TFIDF}. Esse cálculo trata-se de uma estatística que tem por objetivo de refletir o quão importante um termo é para o documento numa coleção \citep{rajaraman_ullman_2011}.
+De posse da equação de similaridade semântica entre dois recursos, possibilita
+comparar os termos dos filmes que por sua vez habilita a construção de um \textit{ranking} de filmes mais similares em relação as preferências do usuário. Para montar o perfil, o modelo do usuário, este deverá tornar-se uma \textit{query} no mesmo formato do modelo de filmes, ou seja, uma lista de termos. Apesar de ser possível utilizar todos os termos de todos os filmes que o usuário gostou, optou-se por escolher uma quantidade determinada de "melhores termos únicos". Esses melhores termos são calculados através de um modelo construído pela frequência, o \ac{TFIDF}. Esse cálculo trata-se de uma estatística que tem por objetivo de refletir o quão importante um termo é para o documento numa coleção \citep{rajaraman_ullman_2011}.
 
-A primeira parte trata-se da frequência do termo em relação ao documento, o que neste caso refere-se a cada termo de um filme do usuário e sua frequência em relação aos termos desse filme. Quanto a segunda parte refere-se ao inverso da frequência do documento, que busca balancear os termos muito frequentes em relação aos pouco frequentes, uma vez que não necessariamente todos os termos tem importância igual. Dessa forma é construída uma listagem única de todos os termos de todos os filmes do usuário que para cada um deles seja contabilizado a presença na coleção dos filmes. Por fim, à avaliação de cada termo, segue conforme a fórmula {\ref{eq:tfidf}}.
+A primeira parte trata-se da frequência do termo em relação ao documento, o que neste caso refere-se a cada termo de um filme do usuário e sua frequência em relação aos termos desse filme. Quanto a segunda parte refere-se ao inverso da frequência do documento, que busca balancear os termos muito frequentes em relação aos pouco frequentes, uma vez que não necessariamente todos os termos tem importância igual. Dessa forma é construída uma listagem única de todos os termos de todos os filmes do usuário que para cada um deles seja contabilizado a presença na coleção dos filmes. Por fim, à avaliação de cada termo, segue conforme a equação {\ref{eq:tfidf}}.
 
 \begin{equation}
 	TFIDF(t) = TF(t) * IDF(t)
@@ -402,7 +334,7 @@ A primeira parte trata-se da frequência do termo em relação ao documento, o q
 \label{eq:idf}
 \end{equation}
 
-Após o cálculo dos melhores termos, é montado o perfil do usuário no mesmo formato de um filme que posteriormente é comparado com todos os outros filmes que o usuário não tenha informado preferência. Dessa forma conclui-se com o algoritmo \ref{alg:alg_recomendacao} para a geração dos filmes recomendados. Esse algorítimo de recomendação utiliza a fórmula de similaridade (\ac{RLWS}) da seguinte forma:
+Após o cálculo dos melhores termos, é montado o perfil do usuário no mesmo formato de um filme que posteriormente é comparado com todos os outros filmes que o usuário não tenha informado preferência. Dessa forma conclui-se com o algoritmo \ref{alg:alg_recomendacao} para a geração dos filmes recomendados. Esse algorítimo de recomendação utiliza a equação de similaridade (\ac{RLWS}) da seguinte forma:
 
 \begin{itemize}
 	\item{Para cada termo do usuário é realizada uma comparação com todos os outros termos do filme.}
@@ -416,7 +348,8 @@ Após o cálculo dos melhores termos, é montado o perfil do usuário no mesmo f
 O pseudo-código \ref{alg:alg_recomendacao} exemplifica os passos para o cálculo da similaridade entre os termos do usuário e os termos do filme.
 
 \begin{algorithm}
-	\caption{Pseudocódigo da geração dos filmes recomendados/sugeridos}
+    \label{alg:alg_recomendacao}
+	\caption{Pseudocódigo da geração dos filmes recomendados/sugeridos.}
     \begin{algorithmic}[1]
         \Function{GeraRecomendacoes}{$usuario, qtdTermos, qtdSugestoes, filmes$}
         	\State  $outrosFilmes\gets O$\Comment{Diferença entre $filmes$ e o conjunto de filmes de $usuario$ não marcados (like ou deslike)}
@@ -428,11 +361,11 @@ O pseudo-código \ref{alg:alg_recomendacao} exemplifica os passos para o cálcul
         	\EndFor
         \EndFunction
     \end{algorithmic}
-    \label{alg:alg_recomendacao}
 \end{algorithm}
 
 \begin{algorithm}
-	\caption{Pseudocódigo da geração dos melhores termos}
+\label{alg:alg_best_terms}
+	\caption{Pseudocódigo da geração dos melhores termos.}
 	\begin{algorithmic}[1]
         \Function{ObtemMelhoresTermos}{$usuario, qtdTermos$}
             \State  $termos\gets U$\Comment{U é o conjunto único de todos os termos dos filmes que o usuário marcou como like}
@@ -450,7 +383,7 @@ O pseudo-código \ref{alg:alg_recomendacao} exemplifica os passos para o cálcul
 \end{algorithm}
 
 \begin{algorithm}
-	\caption{Cálculo do RLWS entre termos do usuário e do filme}
+	\caption{Cálculo do RLWS entre termos do usuário e do filme.}
 	\begin{algorithmic}[1]
         \Function{CalculaRLWSEntreTermos}{$termos1, termos2, wi, wd$}\Comment{wd - é o peso para os links diretos, wi - é o peso para os links indiretos}
         	\State $combinacoes\gets 0$
@@ -483,12 +416,120 @@ O pseudo-código \ref{alg:alg_recomendacao} exemplifica os passos para o cálcul
 É importante ressaltar que para este projeto foi desenvolvido um sistema de \textit{cache} para o cálculo da similaridade de recomendação dos filmes, dividido-se em duas camadas:
 
 \begin{itemize}
-	\item{\textbf{Cache remoto com banco de dados}: Para calcular a similaridade entre dois tokens quaisquer, o sistema utiliza uma fórmula (\ref{eq:rlws}) de similaridade que tira proveito do serviço da DBPedia. Na fórmula, conforme abordado em \ref{ssec:sim_rec} realiza-se a contagem de links diretos e indiretos dos recursos. Essa contagem posteriormente é armazenada no banco de dados para uma consulta mais ágil.}
+	\item{\textbf{Cache remoto com banco de dados}: Para calcular a similaridade entre dois tokens quaisquer, o sistema utiliza uma equação (\ref{eq:rlws}) de similaridade que tira proveito do serviço da DBPedia. Na equação, conforme abordado em \ref{ssec:sim_rec} realiza-se a contagem de links diretos e indiretos dos recursos. Essa contagem posteriormente é armazenada no banco de dados para uma consulta mais ágil.}
 	\item{\textbf{Cache local, em memória}: Quando novos recursos são comparados e não estão no \textit{cache} do banco de dados (referenciado como cache remoto) eles precisam ser calculados e posteriormente persistidos. Contudo, como o número de comparações é grande, tendo em vista que cada palavra dos termos do usuário são comparadas com todas as palavras dos filmes, o processo de realizar tais consultas ao banco no momento da comparação prejudica o desempenho da aplicação. Dessa forma optou-se por utilizar a estrutura de \textit{cache} em memória fornecida pelo \textit{framework} Spring\footnote{https://spring.io}. No primeiro momento obtém-se todos os recursos em cache do banco dados da comparação de um filme com o usuário, sendo armazenados numa estrutura de dados na memória \ac{RAM} (referenciado como cache local). Num segundo momento durante a comparação dos termos, para aqueles que não estão presentes no cache, também são acumulados numa estrutura à parte, também no cache local, para indicar que esses deverão ser persistidos no banco de dados posteriormente a comparação de filmes. Dessa forma, minimiza-se o tráfego de dados entre a aplicação e o banco de dados durante a comparação de filmes, acelerando o processo.}
 \end{itemize}
 	
 Para não sobrecarregar o tamanho do cache em memória, a cada determinado número de comparações filmes o sistema esvazia o cache, persistindo os dados dos novos recursos e comparações de tokens. Assim tem-se um bom balanço de desempenho entre o cache remoto e cache local.
 
+\section{Requisitos}
+
+Os requisitos de um sistema são descrições do que deve fazer, suas funcionalidades e serviços que restringem sua operação \citep{Sommerville2010}. Tradicionalmente são classificados entre \textbf{funcionais} e \textbf{não funcionais}, para diferentes níveis de detalhamento e diferentes leitores.
+
+\begin{itemize}
+	\item{\textbf{Requisitos funcionais}: Descrevem o funcionamento do sistema, e para isso devem prover como o sistema deve reagir à entrada/saída assim como seus comportamentos em diferentes situações.}
+	
+	\item{\textbf{Requisitos não funcionais}: Devem estabelecer as restrições das funcionalidades e serviços oferecidos pelo sistema. São descritas caraterísticas gerais do sistema, como a usabilidade que não se referem a termos específicos como os requisitos funcionais.}
+\end{itemize}
+
+Para cada requisito é utilizado um código para identificar a funcionalidade, assim facilitando referenciá-la durante o desenvolvimento. Nesta seção serão apresentados os requisitos funcionais e não funcionais para o desenvolvimento do protótipo do sistema apresentado neste trabalho. Para a descrição das funcionalidades optou-se por usar códigos com a sintaxe [RF0X] para requisitos funcionais e [RNF0X] para requisitos não funcionais. Junto ao código e a descrição do requisito foi adicionada a sua prioridade. As prioridades são classificadas em três categorias: a) \textbf{Essencial} para os que precisam ser implementados indispensavelmente; b) \textbf{Importante} para os que são importantes para o funcionamento, mas não são cruciais; c) \textbf{Desejável} para os que não interferem diretamente nas funcionalidades básicas do sistema, embora relevantes, mas que podem ser deixados para ser implementados posteriormente.
+
+\subsection{Requisitos funcionais}
+
+A Tabela \ref{tab:req-funcionais} apresenta os requisitos funcionais do sistema.
+
+\begin{table}[H]
+	\label{tab:req-funcionais}
+	\centering
+	\caption{Requisitos funcionais do sistema.}
+	\def\arraystretch{1.2} % padding da linhas da tabela
+	\begin{tabular}{|m{1.2cm} | m{3cm} | m{7.2cm}| c | m{1.9cm}}
+		\hline
+		\multicolumn{1}{|c|}{\bfseries Código} & \multicolumn{1}{c|}{\bfseries Nome} & \multicolumn{1}{c|}{\bfseries Descrição} & \multicolumn{1}{c|}{\bfseries Prioridade} \\ \hline
+		RF01	& Cadastrar usuário	& Realizar o cadastro de usuários para criação do seu perfil	& Essencial \\ \hline
+		RF02	& Cadastrar usuário com o Facebook	& Permitir o cadastro de usuários utilizando sua conta do Facebook	& Importante \\ \hline
+		RF03	& Fazer login/logout	& Usuários devem ser identificados permitindo a entrada e saída da aplicação	& Essencial \\ \hline
+		RF04	& Fazer login pelo Facebook	& Permitir o login do usuário pelo Facebook	& Importante \\ \hline
+		RF05	& Cadastrar filmes do usuário	& Usuários identificados podem cadastrar novos filmes no seu perfil	& Essencial \\ \hline
+		RF06	& Visualizar filmes do usuário	& Usuários identificados podem visualizar os filmes cadastrados no seu perfil	& Essencial \\ \hline
+		RF07	& Pesquisar filmes cadastrados	& Usuários identificados podem pesquisar filmes cadastrados na base do sistema	& Importante \\ \hline
+		RF08	& Cadastrar filmes	& O sistema deve permitir a alimentação de filmes para a base dados	& Essencial \\ \hline
+		RF09	& Visualização de filmes recomendados	& O sistema deve ser capaz de criar uma lista de filmes recomendados, baseado nos filmes registrados do perfil do usuário	& Essencial \\ \hline
+		RF10	& Coletar filmes do Facebook	& Usuários identificados com o Facebook devem ter seus filmes importados	& Importante \\ \hline
+	\end{tabular}
+\end{table}
+
+\subsection{Requisitos não funcionais}
+
+A tabela \ref{tab:req-nao-funcionais} apresenta os requisitos não funcionais informando sua característica. Todos os requisitos apresentados são considerados importantes.
+
+\begin{table}[H]
+	\label{tab:req-nao-funcionais}
+	\centering
+	\caption{Requisitos não funcionais do sistema.}
+	\def\arraystretch{1.3} % padding da linhas da tabela
+	\begin{tabular}{| m{1.3cm} | m{9.4cm}| c | m{2cm}}
+		\hline
+		\multicolumn{1}{|c|}{\bfseries Código} & \multicolumn{1}{c|}{\bfseries Descrição} & \multicolumn{1}{c|}{\bfseries Característica} \\ \hline
+		RNF01	& O sistema deve ser fácil uso e dispensar prévio treinamento	& Usuabilidade \\ \hline
+		RNF02	& O sistema deve estar organizado de tal forma a não deixar o usuário confuso e ao mesmo tempo incentivar a sua exploração com interesse visual	& Usuabilidade \\ \hline
+		RNF03	& O sistema deve ser capaz de atualizar as similaridades calculadas dos filmes em \textit{background}	& Funcionalidade \\ \hline
+		RNF04	& O sistema deve prover uma metalinguagem para momentos em que o usuário deve aguardar o processamento de dados, tais como ícones, informativos etc.	& Usuabilidade \\ \hline
+		RNF05	& O sistema deve possuir um desempenho adequado para que o cálculo da lista de filmes recomendados tenham o menor impacto de carregamento na navegação do usuário.	& Funcionalidade \\ \hline
+		RNF06	& O sistema deve ser capaz de incluir novos filmes em \textit{background}	& Funcionalidade \\ \hline
+	\end{tabular}
+\end{table}
+
+\section{Tecnologias}
+
+Para o desenvolvimento do sistema foram escolhidas algumas tecnologias para arquitetura software, como linguagens de programação, \textit{framework} \ac{MVC}, processamento e banco dados, entre outras. A seguir serão apresentadas as tecnologias utilizadas.
+
+\subsection{JAVA}
+
+JAVA\footnote{https://www.java.com} é uma linguagem de programação de propósito genérico, desenvolvida originalmente por James Gosling na Sun Microsystems\footnote{ https://www.oracle.com/br/sun/index.html} em 1995. Atualmente a linguagem foi comprada pela Oracle Corporation\footnote{https://www.oracle.com}. As características em destaque da linguagem estão no fato de ser baseada em classes e orientada a objetos. A \ac{OOP} é um paradigma de programação que abstrai conceitos em objetos, que podem conter dados, campos e comportamentos nomeados de \textit{methods} \citep{Lewis2000}. 
+
+Outra caraterística importante da linguagem trata-se da filosofia apresentada pelos desenvolvedores de “escreva uma vez, rode em qualquer lugar”. A filosofia trata-se da linguagem ser compilada por uma \ac{VM} possibilitando escrever um mesmo pedaço de código que possa ser portado para outra plataforma sem necessidade de alterá-lo, uma vez que cada \ac{VM} implementa as especificidades da nova plataforma abstraindo o acesso ao \ac{SO}.
+
+A linguagem JAVA é usada em diversos sistemas e plataformas, com inúmeros propósitos, desde aplicações \textit{desktop}, pesquisa científica, desenvolvimento Web entre outros propósitos.
+
+\subsection{Spring Boot}
+
+Spring Boot\footnote{https://projects.spring.io/spring-boot/} é um projeto da Pivotal Software\footnote{https://pivotal.io} para facilitar o processo de configuração e publicação de aplicações e serviços providos pelo Spring\footnote{https://spring.io}, com baixo esforço e configuração. O \textit{Spring} é um framework \textit{open source}\footnote{Modelo de desenvolvimento que promove um licenciamento livre para o design ou esquematização de um produto} que provê um compreensivo conjunto de modelos de configuração para aplicações JAVA. O elemento principal do \textit{Spring} é prover infraestrutura para aplicações oferecendo os seguintes principais recursos:
+
+\begin{itemize}
+	\item{\textbf{Inversão de Controle}: \ac{IOC}, também conhecido como \textit{dependency injection} é um princípio em que as “dependências” devem ser supridas, injetadas por outro objeto. As dependências são objetos que serão usados como “serviços” para acessar suas funcionalidades, dentro dos \textit{containers} de \ac{IOC}. A injeção é a passagem da dependência para um objeto (o cliente) \citep{DependencyInjection2006}. O termo “inversão de controle” origina-se do fato que a criação de valores de classes externas ao objeto não deve ser realizada pelo próprio objeto mas, sim pelos \textit{containers} de \ac{IOC}.}
+	
+	\item{\textbf{Acesso a dados}: O framework possui diversas bibliotecas para o acesso a dados, tanto para bancos relacionais como não relacionais. Também é oferecido um sistema \ac{ORM} que trata-se de uma técnica para traduzir o formato de dados de um banco relacional para \ac{OOP}, facilitando sua manipulação.}
+	
+	\item{\textbf{Arquitetura MVC}: Fornece todo suporte para customizar e criar uma arquitetura \ac{MVC}.}
+\end{itemize}
+
+\subsection{HTML, CSS, Javascript}
+
+O HTML\footnote{https://www.w3.org/html}, \ac{CSS}\footnote{https://www.w3.org/Style/CSS/} e JavaScript forma a principal pilha de tecnologias utilizadas na Web. O HTML é uma linguagem de marcação mantida pela \ac{W3C} para criação de páginas, originalmente desenvolvida por Tim-Berners-Lee \citep{Raggett1998}. O objetivo é a fácil construção e publicação de conteúdo no ambiente Web e consequentemente na \ac{WWW}. No \textit{Spring Boot} as páginas HTML podem ser escritas utilizando algum dos mecanismos de \textit{templates}, como o \textit{thymeleaf}. Uma das vantagens da utilização desses mecanismos é a herança de visualizações, assim como facilidade de interligar em manipular os dados passados pela camada do \textit{controller} no \ac{MVC}.
+
+O \ac{CSS} é uma linguagem para criar regras de estilização das páginas \ac{HTML}. O CSS cria ou altera um formato de apresentação (tamanho, cores, margens etc) de algum elemento do HTML, como blocos, parágrafos, imagens entre outros. Quanto ao JavaScript é uma linguagem de programação originalmente criada por Brendan Eich na Netscape Communications\footnote{ http://isp.netscape.com}. A linguagem é utilizada para controlar o comportamento de páginas HTML, oferecendo dinamicidade, podendo alterar elementos da página em tempo real.
+
+\subsection{MySQL}
+
+O MySQL\footnote{https://www.mysql.com} trata-se de um \ac{SGBD} que utiliza a linguagem \ac{SQL} para manipulação de dados guardados em um sistema de arquivos \citep{MySQLSGBD}. Originalmente desenvolvido por Michael Widenius em 1994, o seu foco é para o desenvolvimento de aplicações Web, embora tenha se popularizado para a maioria das plataformas existentes \citep{MySQLDevelopers}. Foi o banco de dados escolhido para a persistência de dados da aplicação, além de ser de fácil integração com o \textit{framework} \textit{Spring Boot}.
+
+\subsection{Apache Jena}
+
+Apache Jena\footnote{https://jena.apache.org} é um \textit{framework} \textit{open source} para Web Semântica, escrito na linguagem Java. A biblioteca provê uma \ac{API} que facilita a extração e criação de dados nos grafos do \ac{RDF}, além de oferecer suporte para a linguagem de consulta \ac{SPARQL}. O objetivo da escolha dessa tecnologia para o projeto, é para facilitar a busca e navegação pelo grafo de entidades (\textit{resources}) no sistema da DBPedia\footnote{http://wiki.dbpedia.org} utilizando \ac{SPARQL}. Após o \ac{SR} extrair entidades das descrições do filme, essas serão buscadas no serviço da Web Semântica estendendo o conhecimento do recurso.
+
+\subsection{Apache OpenNLP}
+\label{ssec:open_nlp}
+
+Apache OpenNLP\footnote{https://opennlp.apache.org} é um \textit{framework} \textit{open source} de aprendizado de máquina que é usado para processamento de \ac{NLP}. A biblioteca provê uma \ac{API} com serviços para geração de \textit{tokens}, sentenças, segmentação, reconhecimento de partes da fala, extração de entidade de nome, geração de \textit{chunks} (pedaços), entre outras tarefas do \ac{NLP}.
+
+No projeto essa tecnologia será utilizada para o \ac{NER} e extração de partes gramaticais presentes na descrição do filme, assim como a geração dos \textit{tokens}. O objetivo é que com essa biblioteca seja possível gerar \textit{tokens} com entidades encontradas, de nomes localizações, como também partes do texto de nomes próprios, substantivos e adjetivos.
+
+\subsection{Apache Lucene}
+
+Apache Lucene\footnote{https://lucene.apache.org} é um \textit{framework} \textit{open source} para sistemas de recuperação de informação e recomendação. O projeto oferece dois principais recursos: indexação e pesquisa de texto. Lucene é muito reconhecido por sua utilidade na implementação em mecanismos de buscas na Internet \citep{McCandless2010}. O projeto também é muito utilizado em sistemas de recomendação com implementação de diversos algoritmos para calcular a similaridade de documentos.
+No projeto essa tecnologia será utilizada para tirar proveito dos algoritmos de similaridade, como o \textit{cossine similarity} (ver \ref{eq:cosine_sim}), possibilitando realizar comparações com as métricas propostas no trabalho.
+
 \section{Sumário}
 
-Neste capítulo foram apresentadas as funcionalidades e especificações do protótipo do projeto, assim como as tecnologias empregadas. Também foram abordadas as etapas do ciclo de vida da aplicação, demonstrando o modelo de dados, assim como a etapa de preparação para recomendação. Por fim foi elaborada a proposta de um novo método de similaridade semântica, mostrando suas características e fórmulas, além dos algoritmos para geração das recomendações. No próximo capítulo serão apresentados os resultados obtidos com novo método elaborado, junto técnicas para sua obtenção, assim como a comparação com outros modelos.
+Neste capítulo foram apresentadas as funcionalidades e especificações do protótipo do projeto, assim como as tecnologias empregadas. Também foram abordadas as etapas do ciclo de vida da aplicação, demonstrando o modelo de dados, assim como a etapa de preparação para recomendação. Por fim foi elaborada a proposta de um novo método de similaridade semântica, mostrando suas características e equações, além dos algoritmos para geração das recomendações. No próximo capítulo serão apresentados os resultados obtidos com novo método elaborado, junto técnicas para sua obtenção, assim como a comparação com outros modelos.

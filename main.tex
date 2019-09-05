@@ -82,12 +82,14 @@
 \usepackage{graphicx}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
-\usepackage{amsmath, amssymb}
-
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
 \newtheorem{definition}{Definition}
 \theoremstyle{definition}
 
 \let\oldReturn\Return
+\newcommand*{\N}{\mathrm{N}}
 \renewcommand{\Return}{\State\oldReturn}
 
 
@@ -135,7 +137,7 @@
 \majorfieldpt{Ciência da Computação}
 \majorfielden{Computer Science}
 
-\title{Um Sistema de Recomendação Semântico Baseado em Conteúdo}
+\title{Recomendação com similaridade semântica ponderada por links de recursos na DBPedia}
 \date{Setembro/2018}
 
 \author{Lucas Lara Marotta}
