@@ -72,7 +72,7 @@ Para trabalhar com as informações dos usuários e dos filmes, permitindo criar
 	
 	\item{A entidade "movie" persiste os dados dos filmes retirados do projeto MovieLens\footnote{https://movielens.org}, assim como o processamento da sinopse dos filmes para geração dos \textit{tokens}.}
 	
-	\item{A entidade "idf" persiste o cálculo do \ac{IDF} da equação \ref{eq:tfidf}, que servirá para o cálculo da similaridade cosseno, por motivos de comparação que serão discutidos no \ref{cap:evaluation}.}
+	\item{A entidade "idf" persiste o cálculo do \ac{IDF} da Equação \ref{eq:tfidf}, que servirá para o cálculo da similaridade cosseno, por motivos de comparação que serão discutidos no \ref{cap:evaluation}.}
 	
 	\item{As entidades "lod\_cache" e "lod\_cache\_relation" tratam-se do serviço de cache para o cálculo da similaridade, assim poupando tempo para consultas do serviço do DBPedia. Na seção \ref{ssec:cache} a estrutura de cache dos sistema é melhor abordada.}
 \end{itemize}
@@ -86,7 +86,7 @@ Para trabalhar com as informações dos usuários e dos filmes, permitindo criar
 
 \subsection{Modelo de filmes}
 
-De posse da estrutura de dados utilizados para o filme, é importante também formalizar como esses compõem o modelo utilizado na recomendação, afinal este é o item a ser recomendado para o usuário. É definido o conjunto $X$ como sendo conjunto de todos os filmes, onde cada filme $F \subset X$ é um conjunto de tokens $t_f$ extraídos pelo processo de \ac{NLP} (ver \ref{ssec:data_nlp}) através da sinopse deste. Desda forma pode-se formalizar o modelo de filmes conforme mostra as equações \ref{eq:film_model} e \ref{eq:film_model2}.
+Com a estrutura de dados utilizada para os filmes, é importante também formalizar como compõem o modelo utilizado na recomendação, afinal este é o item a ser recomendado para o usuário. É definido um conjunto $X$ como sendo conjunto de todos os filmes, onde cada filme $F \subset X$ é um conjunto de tokens $t_f$ extraídos pelo processo de \ac{NLP} (ver seção \ref{ssec:data_nlp}) através da sinopse deste. Desda forma pode-se formalizar o modelo de filmes conforme mostra as equações \ref{eq:film_model} e \ref{eq:film_model2}.
 
 \begin{equation}
 	X = \bigcup\limits_{i=1}^{\infty} F_{i}
@@ -94,25 +94,22 @@ De posse da estrutura de dados utilizados para o filme, é importante também fo
 \end{equation}
 
 \begin{equation}
-	F = \{t_{f1}, ..., t_{fn} \; | \; 1 \leq n \leq \mathbb{N}^*\}
+	F = \{t_{f_1}, ..., t_{f_n} \; | \; 1 \leq n \leq \mathbb{N}^*\}
 \label{eq:film_model2}
 \end{equation}
 
 \subsection{Modelo de usuários}
+\label{ssec:user_model}
 
-Os usuários inicialmente são estruturados como um conjunto de filmes de sua preferência, contudo desta forma não é possível realizar uma comparação com o modelo de filmes utilizando a métrica de similaridade proposta (ver \ref{ssec:sim_rec}), pois esta realiza uma comparação de termo a termo. Uma opção inicial seria simplesmente calcular todos os termos dos filmes de preferência do usuário, utilizando o processo de \ac{NLP}, e uni-los num grande conjunto, porém isto tornaria o processo muito custoso para ser executado, além de não escalar bem conforme as preferência do usuário aumentam. Sendo assim optou-se por calcular os "melhores termos" que representam o usuário, como sendo um conjunto de termos de um tamanho definido. Para calcular os "melhores termos" é aplicado um modelo de frequência, o \ac{TFIDF} (ver equação \ref{eq:tfidf}), que busca criar um ranking de termos determinando o quão importante são numa coleção, no caso a união de todos os termos de todos os filmes. Com isso é definido $U$ como o conjunto de filmes $F$ de preferências do usuário, onde cada termo do filme $t_f \in F$ forma o conjunto $P$, sendo todos os termos de todos os filmes das preferências. Posteriormente defini-se o conjunto $C_u$ como sendo o modelo do usuário, como o conjunto de tamanho $z$ dos melhores termos $t_f \in P$ ao passar pela seleção da função $M_{tfidf}$ (ver algoritmo \ref{alg:alg_best_terms}). Por fim o conjunto o $Z$ como sendo a união de todos os modelos de usuário $C_u$. O tamanho de $C_u$ é algo que será explorado no capítulo \ref{cap:evaluation}. As equações \ref{eq:user_model} à \ref{eq:user_model4} demonstram a construção do modelo do usuário.
+Os usuários inicialmente são estruturados como um conjunto de filmes de sua preferência, contudo desta forma é impossível realizar a comparação com o modelo de filmes utilizando a métrica de similaridade proposta (ver \ref{ssec:sim_rec}), devido a comparação ser de termo a termo. Uma opção inicial seria simplesmente calcular todos os termos dos filmes de preferência do usuário, utilizado no processo de \ac{NLP}, e uni-los num grande conjunto, porém isto se tornaria muito custoso para ser executado, além de não escalar bem conforme as preferência do usuário aumentam. Sendo assim optou-se por calcular os "melhores termos" que representam o usuário, como sendo um conjunto de termos de um tamanho definido. Para calcular os "melhores termos" é aplicado um modelo de frequência, o \ac{TFIDF} (ver Equação \ref{eq:tfidf}), que busca criar um ranking de termos determinando o quão importante são numa coleção, no caso a união de todos os conjuntos filmes e seus termos. Com isso é definido $Y$ como sendo o conjunto de todo os usuários $U$, sendo cada um a união dos conjuntos de filmes $F$ das preferências do usuário, conteúdo todos os seus termos. Esses termos são denominados de termos do usuário, representado pelo elemento $t_u$. Posteriormente defini-se o conjunto $M_u$ como sendo o modelo do usuário dos melhores termos $t_u \in U$ ao passar pela seleção da função $M_{tfidf}$ (ver algoritmo \ref{alg:alg_best_terms}), possuindo um tamanho definido pela constante $z$. Por fim o conjunto o $Z$ é a união de todos os modelos de usuário $M_u$. O tamanho de $M_u$ é algo que será explorado no capítulo \ref{cap:evaluation}. As equações \ref{eq:user_model} à \ref{eq:user_model4} demonstram a construção do modelo do usuário.
 
 \begin{equation}
-	Z = \bigcup\limits_{i=1}^{\infty} C_{ui}
+	Z = \bigcup\limits_{i=1}^{\infty} M_{u_i}
 \label{eq:user_model}
 \end{equation}
 
 \begin{equation}
-	C_u = \{t_f \;| \; t_f \in P, \; M_{tfidf}(t_f), \; |C_u| = z \land z \in \mathbb{N}^*\}
-\end{equation}
-
-\begin{equation}
-	(\forall F \subset U) \quad P = \{t_{f1}, ..., t_{fn} \; | \; t_f \in F, \; 1 \leq n \leq \mathbb{N}^*\}
+	(\forall F \subset U) \quad M_u = \{t_u \;| \; t_u \in F, \; M_{tfidf}(t_u), \; |M_u| = z \; \land \; z \in \mathbb{N}^*\}
 \end{equation}
 
 \begin{equation}
@@ -120,16 +117,21 @@ Os usuários inicialmente são estruturados como um conjunto de filmes de sua pr
 \label{eq:user_model4}
 \end{equation}
 
+\begin{equation}
+	Y = \bigcup\limits_{i=1}^{\infty} U_i
+\label{eq:user_model5}
+\end{equation}
+
 \subsection{Preparação dos dados para recomendação}
 \label{ssec:data_nlp}
 
-Antes da execução das recomendações é necessário realizar a etapa do pré-processamento dos dados. Para cada filme são gerados tokens que são palavras relevantes presentes na descrição. Essas palavras relevantes tratam-se do processo de exclusão daquelas que pouco agregam significado ao que se refere a temática do filme, como é o exemplo de preposições, conjunções e artigos.
+Antes da execução das recomendações é necessário realizar a etapa do pré-processamento dos dados. Para cada filme são gerados \textit{tokens} que são palavras relevantes presentes na descrição. Essas palavras relevantes tratam-se do processo de exclusão daquelas que pouco agregam significado ao que se refere a temática do filme, como é o exemplo de preposições, conjunções e artigos.
 
-Para este projeto foi utilizado o processo de \ac{NLP} que envolve uma série de tarefas para o processamento de linguagens naturais, para compreensão e interação entre máquinas e humanos, conforme é apresentado por \cite{Collobert:2011}. A Figura \ref{fig:nlp} ilustra as tarefas comuns no processamento de linguagem natural. Este projeto utiliza as seguintes das tarefas para a criação dos termos dos filmes:
+Para extração dessas palavras, foi utilizado o processo denominado de \ac{NLP} que envolve uma série de tarefas para o processamento de linguagens naturais \footnote{Linguagem desenvolvida naturalmente pelo ser humano de forma não premeditada, no caso a escrita}, para compreensão e interação entre máquinas e humanos, conforme é apresentado por \cite{Collobert:2011}. A Figura \ref{fig:nlp} ilustra as tarefas comuns no processamento de linguagem natural. O foco é extrair dos termos palavras com fortes significados, como adjetivos, verbos, além de também identificar substantivos, inclusive os compostos. Abaixo consta as tarefas que foram utilizadas para no processo de preparação dos dados:
 
 \begin{itemize}
-	\item{\textbf{Chunking, tokenization}: Esta tarefa consiste em segmentar um texto em partes da linguagem, sendo responsável por criar separar em tokens. Chunking, visa ir além de separar as palavras mas separar o texto em frases em partes maiores do texto.}
-	\item{\textbf{Tagging, part-of-speech}: O objetivo desta tarefa é reconhecer as palavras do processo de tokenization em "partes do discurso", criando \textit{tags} para identificar o que elas representam na linguagem. Nesta parte é onde se classificam as palavras em verbos, adjetivos, substantivos, pontuações etc.}
+	\item{\textbf{Tokenization}: Esta tarefa consiste em segmentar um texto em partes da linguagem, sendo responsável por criar separar em tokens. Muitas vezes também é utilizado o processo de \textit{chunking} que visa ir além de separar as palavras mas segmentar o texto em frases em partes maiores do texto, algo que não foi utilizado neste projeto.}
+	\item{\textbf{Tagging, \ac{POS}}: O objetivo desta tarefa é reconhecer as palavras do processo de tokenization como "partes do discurso", criando \textit{tags} para identificar o que elas representam na linguagem. Nesta parte é onde se classificam as palavras em verbos, adjetivos, substantivos, pontuações etc.}
 	\item{\textbf{\ac{NER}}: Esta tarefa objetiva reconhecer nas palavras e tokens aquelas que tratam-se de nomes próprios, além de associá-las à algum tipo, como pessoas, lugares, moedas etc.}
 \end{itemize}
 
@@ -150,10 +152,10 @@ Para facilitar a execução dessas tarefas do \ac{NLP}, optou-se por utilizar o 
 	\begin{tabular}{| m{1.3cm} | m{9.4cm}| c | m{2cm}}
 		\hline
 		\multicolumn{1}{|c|}{\bfseries Tag} & \multicolumn{1}{c|}{\bfseries Descrição} \\ \hline
-		NN & Substantivo, singular ou incontável \\ \hline 	
-		NNS	& Substantivo, plural \\ \hline]
-		NNP	& Nome próprio, singular \\ \hline
-		NNP	& Nome próprio, plural \\ \hline
+		NN & Substantivo comum, singular ou incontável \\ \hline 	
+		NNS	& Substantivo comum, plural \\ \hline
+		NNP	& Substantivo próprio, singular \\ \hline
+		NNPS & Substantivo próprio, plural \\ \hline
 		JJ & Adjetivo \\ \hline
 		JJR & Adjetivo comparativo \\ \hline
 		JJS & Adjetivo superlativo \\ \hline
@@ -162,7 +164,7 @@ Para facilitar a execução dessas tarefas do \ac{NLP}, optou-se por utilizar o 
 	\end{tabular}
 \end{table}
 
-Após o \textit{tagging}, é adicionado aos conjunto de termos os tokens da tarefa \ac{NER}, o que não é meramente o reconhecimento de nomes próprios do texto, mas também de nomes compostos. Esse processo é de grande valia para a etapa de similaridade uma vez que tendo um nome como "Buzz Lightyear", apenas utilizando o processo da marcação das partes do discurso, resultaria em dois termos "Buzz" e "Lightyear", sendo que o ideal seja ter apenas o nome composto por inteiro. Os nomes próprios pelo processo de \textit{tagging} também são mantidos na lista de termos, uma vez que o framework utilizado no processo de \ac{NLP} apenas extrai, nomes, lugares e organizações. Para os nomes reconhecidos nesse processo também foi realizada uma formatação para adequação à consultas \ac{SPARQL}, ou seja, nomes compostos como "Buzz Lightyear" serão formatados para "Buzz\textunderscore Lightyear".
+Em seguida é incluído ao conjunto de termos os tokens da tarefa \ac{NER}, o que não é meramente o reconhecimento de nomes próprios do texto, mas também de nomes compostos. Esse processo é de grande valia para a etapa de similaridade uma vez que tendo um nome como "Buzz Lightyear", apenas utilizando o processo da marcação das partes do discurso, resultaria em dois termos "Buzz" e "Lightyear", sendo que o ideal seja também ter o nome composto por inteiro. Os substantivos próprios obtidos pelo processo \ac{POS} também são mantidos no conjunto de termos, uma vez que o framework utilizado no processo de \ac{NLP} apenas extrai, nomes, lugares e organizações. Para os nomes reconhecidos nesse processo também foi realizada uma formatação para adequação à consultas \ac{SPARQL}, ou seja, nomes compostos como "Buzz Lightyear" são formatados para "Buzz\textunderscore Lightyear", mantendo as iniciais maiúsculas e separando as palavras por "\textunderscore" .
 
 A tabela \ref{tab:nlp_example} abaixo demonstra alguns exemplos do tratamento da descrição de filmes para geração de \textit{tokens}. 
 
@@ -182,11 +184,11 @@ A tabela \ref{tab:nlp_example} abaixo demonstra alguns exemplos do tratamento da
 \section{Modelo de Recomendação}
 \label{ssec:sim_rec}
 
-A criação de um modelo de recomendação envolve sugerir novos itens, sendo caracterizada como uma predição de o quão provável o usuário gostará do conteúdo recomendado. Nesta seção serão apresentadas as etapas que existem para construção deste modelo, que envolve na definição da métrica de similaridade, através da equação da similaridade semântica (ver \ref{ssec:formula_rlws}) e da construção da recomendação (ver \ref{ssec:rec_alg}).
+A criação de um modelo de recomendação envolve sugerir novos itens, sendo caracterizada como uma predição de o quão provável o usuário terá interesse no conteúdo recomendado. Nesta seção serão apresentadas as etapas que existem para construção deste modelo, que envolve a definição da métrica de similaridade, através da equação da similaridade semântica (ver \ref{ssec:formula_rlws}) e da construção da recomendação (ver \ref{ssec:rec_alg}).
 
-Conforme abordado no capítulo \ref{cap:semantic_web} a similaridade semântica utiliza e retira proveito das estruturas de uma ontologia que neste caso trata-se das acessíveis através do DBPedia\footnote{http://wiki.dbpedia.org}. Cada termo de um filme será considerado como um potencial recurso na DBPedia, e os recursos tratam-se de entidades de ontologias mapeadas no grafo dos princípios do \ac{LOD}. Diante disso, a métrica proposta é estabelecer uma equação de similaridade, utilizando-se de um modelo considera a estrutura desses recursos, analisando a quantidade de relações, e links diretos ou indiretos entre tais recursos. Para estabelecer a equação proposta, considerou-se dois trabalhos relacionados com similaridade semântica, o de \cite{PassantLDSD} que apresenta a equação \ac{LDSD}, e mais recentemente de \cite{PiaoResim}, que propõem o \ac{RESIM}. O primeiro trabalho tenta estabelecer a importância que um recurso tem em relação ao total de relações da união de dois recursos, sem preferências entre links diretos e indiretos, enquanto que \ref{PiaoResim} estende e modifica esse entendimento criando uma média ponderada entre as relações dos recursos e a similaridade entre as propriedades desses recursos.
+Conforme abordado no capítulo \ref{cap:semantic_web}, a similaridade semântica utiliza e retira proveito das estruturas de uma ontologia que neste caso trata-se das acessíveis através do DBPedia\footnote{http://wiki.dbpedia.org}. Cada termo de um filme será considerado como um potencial recurso na DBPedia, e os recursos tratam-se de entidades de ontologias mapeadas no grafo dos princípios do \ac{LOD}. Diante disso, a métrica proposta é estabelecer uma equação de similaridade, utilizando-se de um modelo que considera a estrutura desses recursos, analisando a quantidade de relações e links diretos ou indiretos entre tais recursos. Para estabelecer a equação proposta, considerou-se dois trabalhos relacionados com similaridade semântica, o de \cite{PassantLDSD} que apresenta a equação \ac{LDSD}, e mais recentemente de \cite{PiaoResim}, que propõem o \ac{RESIM}. O primeiro trabalho tenta estabelecer a importância que um recurso tem em relação ao total de relações da união de dois recursos, sem preferências entre links diretos e indiretos, enquanto que \cite{PiaoResim} estende e modifica esse entendimento criando uma média ponderada entre as relações dos recursos e a similaridade entre suas propriedades.
 
-Este trabalho propõe um novo método, denominado de \ac{RLWS} para realizar a medida da similaridade entre dois recursos presentes no DBPedia, criando uma média ponderada entre a relevância dos links diretos e indiretos, para gerar um valor na escala de 0 a 1, onde valores menores denotam menor similaridade.
+Este trabalho propõe um novo método denominado de \ac{RLWS}, para realizar a medida da similaridade entre dois recursos presentes no DBPedia, criando uma média ponderada entre a relevância dos links diretos e indiretos, para gerar um valor na escala de 0 a 1, onde valores menores denotam menor similaridade.
 
 \subsection{Equação para similaridade semântica}
 \label{ssec:formula_rlws}
@@ -200,19 +202,19 @@ Um conjunto que segue os princípios LOD é um grafo $G$ tal que $G = (R, L, I)$
 \begin{equation}
 	RLWS(r_a, r_b) = 
 	\begin{dcases*}
-		1 \text{,} \;\; URI(r_a) = URI(r_b) \;\; \text{ou} \;\; r_a \textit{ dbo:wikiPageRedirects } r_b\\
-		\frac{P_d(r_a, r_b) * w_d + P_i(r_a, r_b) * w_i}{w_d + w_i}, \; \text{caso contrário}
+		1 \text{,} \;\; URI(r_a) = URI(r_b) \;\; \text{ou} \;\; r_a \; \textit{ dbo:wikiPageRedirects } \; r_b\\
+		\frac{S_d(r_a, r_b) * w_d + S_i(r_a, r_b) * w_i}{w_d + w_i}, \; \text{caso contrário}
 	\end{dcases*}
 \label{eq:rlws}
 \end{equation}
 
 \begin{equation}
-	P_d(r_a, r_b) = 1 - \frac{1}{1 + \frac{\sum_i C_{di}(l_i, r_a, r_b) + \sum_i C_{do}(l_i, r_a, r_b)}{1 + \log (C_d(r_a) + C_d(r_b))}}
+	S_d(r_a, r_b) = 1 - \frac{1}{1 + \frac{\sum_i C_{di}(l_i, r_a, r_b) + \sum_i C_{do}(l_i, r_a, r_b)}{1 + \log (C_d(r_a) + C_d(r_b))}}
 \label{eq:rlws_ex1}
 \end{equation}
 
 \begin{equation}
-	P_i(r_a, r_b) = 1 - \frac{1}{1 + \frac{\sum_i C_{ii}(l_i, r_a, r_b)}{1 + \log (C_i(r_a) + C_i(r_b))}}
+	S_i(r_a, r_b) = 1 - \frac{1}{1 + \frac{\sum_i C_{ii}(l_i, r_a, r_b)}{1 + \log (C_i(r_a) + C_i(r_b))}}
 \label{eq:rlws_ex2}
 \end{equation}
 
@@ -223,7 +225,7 @@ Um conjunto que segue os princípios LOD é um grafo $G$ tal que $G = (R, L, I)$
 	\label{fig:cd_links}
 \end{figure}
 
-A equação possui um condicional que implica o valor 1 quando dois recursos comparados tenham a mesma \textit{URI} ou estejam relacionados pela propriedade \textit{dbo:wikiPageRedirects}. Essa propriedade nada mais trata-se de redirecionamentos do próprio serviço do DBPedia, que quando consultado recursos como "Movie" e "Film", resultam na mesma página, pois são redirecionamentos. Para maior generalização o termo "link" será utilizado para se referir a ligações tanto como recursos ou propriedades relacionadas. As funções $C_d$ e $C_i$ tratam-se de computar os links distintos de um recurso qualquer, ou seja todas as ligações distintas a outros recursos, de forma direta e indireta respectivamente. No caso da função $C_d$, são computados todos os recursos distintos que sejam alcançados por uma propriedade qualquer através de um recurso analisado em questão, mais aqueles que partem de outro recurso e chegam nesse mesmo desejado. O exemplo da Figura \ref{fig:cd_links} apresenta o recurso "Tom\_Cruise" a ser calculado, onde possui um link direto sainte para o recurso "American\_film\_producers" através da propriedade "sujeito de", e outro link direto de entrada pelo recurso "Jack\_Reacher" através da propriedade "retratado por". 
+A equação possui um condicional que implica o valor 1 quando dois recursos comparados tenham a mesma \textit{URI} ou estejam relacionados pela propriedade \textit{dbo:wikiPageRedirects}. Essa propriedade nada mais trata de redirecionamentos do próprio serviço do DBPedia, que quando consultando recursos como "Movie" e "Film", resultam na mesma página, pois são redirecionamentos. Para maior generalização o termo "link" será utilizado para se referir tanto a ligações como recursos ou propriedades relacionadas. As funções $C_d$ e $C_i$ tratam-se de computar os links distintos de um recurso qualquer, ou seja todas as ligações distintas a outros recursos, de forma direta e indireta respectivamente. No caso da função $C_d$, são computados todos os recursos distintos que sejam alcançados por uma propriedade qualquer através de um recurso analisado em questão, mais aqueles que partem de outro recurso e chegam nesse mesmo desejado. O exemplo da Figura \ref{fig:cd_links} apresenta o recurso "Tom\_Cruise" a ser calculado, que possui um link direto sainte para o recurso "American\_film\_producers" através da propriedade "sujeito de", e outro link direto de entrada pelo recurso "Jack\_Reacher" através da propriedade "retratado por".
 
 \begin{lstlisting}[caption=Consulta SPARQL para contagem de links diretos, language=SQL, frame=single, label={cod:sparql_cd}, float, numbers=left]
 PREFIX  :  <http://dbpedia.org/resource/>
@@ -241,7 +243,7 @@ WHERE {
 }
 \end{lstlisting}
 
-A contagem desses links é realizada através da consulta \ac{SPARQL} conforme a Figura \ref{fig:cd_links}. Alguns filtros de propriedades são realizados, pois não são relevantes para a consulta. A propriedade \textit{dbo:wikiPageRedirect} é realizada por outra consulta, mas é adicionada no filtro das consultas de contagem, para não levá-la em consideração. Para a função $C_i$ apenas são contabilizados os links indiretos de saída, por motivos de desempenho de consultas SPARQL no DBPedia. A imagem \ref{fig:ci_links} retrata o cenário para os links indiretos, e o código \ref{cod:sparql_ci} a contagem dos links indiretos. Quanto para as funções $C_{di}$, $C_{do}$ e $C_{io}$, referem-se a contagem dos links distintos compartilhados entre dois recursos, sendo os dois primeiros de forma direta e o último de forma indireta. As equações \ref{cod:sparql_cdio} e \ref{cod:sparql_cio} apresentam as consultas \ac{SPARQL} para realizar a contagem dos links.
+A contagem desses links é realizada através da consulta \ac{SPARQL} conforme a Figura \ref{fig:cd_links}. Alguns filtros de propriedades são realizados, pois não são relevantes para a consulta. A propriedade \textit{dbo:wikiPageRedirect} é realizada por outra consulta a parte, mas é adicionada no filtro, para não levá-la em consideração durante a contagem. Para a função $C_i$ apenas são contabilizados os links indiretos de saída, por motivos de desempenho de consultas SPARQL no DBPedia. A imagem \ref{fig:ci_links} retrata o cenário para os links indiretos, e o Código \ref{cod:sparql_ci} a contagem dos links indiretos. Quanto para as funções $C_{di}$, $C_{do}$ e $C_{io}$, referem-se a contagem dos links distintos compartilhados entre dois recursos, sendo os dois primeiros de forma direta e o último de forma indireta. Os Códigos \ref{cod:sparql_cdio} e \ref{cod:sparql_cio} apresentam as consultas \ac{SPARQL} para realizar a contagem dos links.
 
 \begin{figure}
 	\centering
@@ -302,7 +304,7 @@ WHERE {
 }
 \end{lstlisting}
 
-O objetivo da equação é obter o quão relevante é o relacionamento entre dois recursos em relação a soma dos relacionamentos deles a quaisquer outros, obtendo $P_d$ para um percentual de participação dos links diretos e $P_i$ para os indiretos. Posteriormente essa participação ou relevancia é aplicada a equação de média ponderada com os pesos $w_d$ e $w_i$, obtendo esta similaridade semântica média com o peso dos links. É importante ressaltar que para manter a equação correta é necessário que a soma dos pesos seja igual 1. A introdução das funções de $\log$ tem o objetivo de transformar os dados, suavizando o enviesamento da proporção entre os valores do total da soma de links diretos em relação aos links da comparação de $r_a$ e $r_b$. De caráter ilustrativo, quando comparamos termos como "United\_States" e "Group" em relação aos links indiretos temos uma soma de 429.116 links que em comparação entre o que relaciona um ao outro é de 2.010.
+O objetivo da equação é obter o quão relevante é o relacionamento entre dois recursos em relação a soma dos relacionamentos deles a quaisquer outros, obtendo $S_d$ para uma "similaridade direta" entre $r_a$ e $r_b$, e $S_i$ para uma "similaridade indireta". Posteriormente essas similaridades são aplicada na média ponderada com os pesos $w_d$ e $w_i$, obtendo esta similaridade semântica média com o peso dos links. É importante ressaltar que para manter a equação correta é necessário que a soma dos pesos seja igual 1. A introdução das funções de $\log$ tem o objetivo de transformar os dados, suavizando o enviesamento da proporção entre os valores do total da soma de links diretos em relação aos links da comparação de $r_a$ e $r_b$. De caráter ilustrativo, quando comparamos termos como "United\_States" e "Group" em relação aos links indiretos, tem uma soma de 429.116 links que em comparação entre o que relaciona um ao outro é de 2.010.
 
 Por último é destacável notar que a equação exibe os axiomas abaixo que são importantes para a consistência da similaridade:
 
@@ -314,10 +316,9 @@ Por último é destacável notar que a equação exibe os axiomas abaixo que sã
 \subsection{Algoritmo da recomendação}
 \label{ssec:rec_alg}
 
-De posse da equação de similaridade semântica entre dois recursos, possibilita
-comparar os termos dos filmes que por sua vez habilita a construção de um \textit{ranking} de filmes mais similares em relação as preferências do usuário. Para montar o perfil, o modelo do usuário, este deverá tornar-se uma \textit{query} no mesmo formato do modelo de filmes, ou seja, uma lista de termos. Apesar de ser possível utilizar todos os termos de todos os filmes que o usuário gostou, optou-se por escolher uma quantidade determinada de "melhores termos únicos". Esses melhores termos são calculados através de um modelo construído pela frequência, o \ac{TFIDF}. Esse cálculo trata-se de uma estatística que tem por objetivo de refletir o quão importante um termo é para o documento numa coleção \citep{rajaraman_ullman_2011}.
+Com equação de similaridade semântica entre dois recursos é possível comparar os termos dos filmes que por sua vez habilita a construção de um \textit{ranking} de filmes mais similares em relação as preferências do usuário. Para montar esse perfil de preferências, conforme foi apresentado na seção \ref{ssec:user_model}, o usuário se tornará um conjunto de termos, podendo ser interpretado como uma \textit{query}, no mesmo formato do modelo de filmes, onde objetivo é uma comparação entre um conjunto e outro, utilizando a similaridade proposta. Apesar de ser possível utilizar todos os termos de todos os filmes que o usuário gostou, optou-se por escolher uma quantidade determinada de "melhores termos únicos". Esses melhores termos são calculados através de um modelo construído pela frequência, o \ac{TFIDF}. Esse cálculo trata-se de uma estatística que tem por objetivo de refletir o quão importante um termo é para o documento numa coleção \citep{rajaraman_ullman_2011}.
 
-A primeira parte trata-se da frequência do termo em relação ao documento, o que neste caso refere-se a cada termo de um filme do usuário e sua frequência em relação aos termos desse filme. Quanto a segunda parte refere-se ao inverso da frequência do documento, que busca balancear os termos muito frequentes em relação aos pouco frequentes, uma vez que não necessariamente todos os termos tem importância igual. Dessa forma é construída uma listagem única de todos os termos de todos os filmes do usuário que para cada um deles seja contabilizado a presença na coleção dos filmes. Por fim, à avaliação de cada termo, segue conforme a equação {\ref{eq:tfidf}}.
+A primeira Equação \ref{eq:tf}, trata-se da frequência do termo em relação ao documento, o que neste caso refere-se a cada termo de um filme do usuário e sua frequência em relação aos termos desse filme. Quanto a segunda, \ref{eq:idf}, refere-se ao inverso da frequência do documento, que busca balancear os termos muito frequentes em relação aos pouco frequentes, uma vez que não necessariamente todos os termos tem importância igual. Dessa forma é construída um conjunto de termos únicos de todos os filmes do usuário que para cada um deles seja contabilizado a presença na coleção dos filmes. Por fim, cada termo recebe um \textit{score}, conforme a Equação {\ref{eq:tfidf}}.
 
 \begin{equation}
 	TFIDF(t) = TF(t) * IDF(t)
@@ -334,7 +335,31 @@ A primeira parte trata-se da frequência do termo em relação ao documento, o q
 \label{eq:idf}
 \end{equation}
 
-Após o cálculo dos melhores termos, é montado o perfil do usuário no mesmo formato de um filme que posteriormente é comparado com todos os outros filmes que o usuário não tenha informado preferência. Dessa forma conclui-se com o algoritmo \ref{alg:alg_recomendacao} para a geração dos filmes recomendados. Esse algorítimo de recomendação utiliza a equação de similaridade (\ac{RLWS}) da seguinte forma:
+Com a equação pronta basta estabelecer um \textit{ranking} de termos, escolhendo aqueles com os melhores \textit{scores}, para montar o perfil do usuário. Nota-se que com esta equação obtém-se um score por termo de cada filme, e eventualmente este termo pode reaparecer em outro conjunto de termos de outro filme, possuindo um score diferente. Entretanto, como é estabelecido um ranking de melhores termos únicos, não há relevancia na presença de dois termos iguais com scores diferentes, o interesse é montar um perfil com termos distintos e variados com boa pontuação. Vale ressaltar que conforme estabelecido em \ref{ssec:user_model} é definida uma constante $z$ como sendo o tamanho do conjunto desses "melhores termos" extraídos desse ranking criado. No capítulo \ref{cap:evaluation} o impacto do tamanho do perfil do usuário será melhor explorado. Estabelecido o conjunto de termos do usuário, este será comparado com o conjunto de termos de todos os filmes que não tenha informado preferência. Apresentada a concepção do usuário e como construir seu perfil, defini-se formalmente o modelo de recomendação, conforme a Equação:
+
+\begin{equation}
+	(\forall U \subset Y) \quad m^{max}
+		
+	(\forall U \subset Z\; \land \; F \subset X)\; m_{max, u} = arg \; max_{m \in F_u}[recModel(u, f)]
+\label{eq:rec_model_max}
+\end{equation}
+
+\begin{equation}
+	D_u = X - U
+\label{eq:rec_model}
+\end{equation}
+
+\begin{equation}
+	recModel(U, F) = S(M_u, F)
+\label{eq:rec_model}
+\end{equation}
+
+\begin{equation}
+	(\forall t_u \in M_u) \quad S(M_u, F) = avg \{max [RLWS(t_u, t_f)], \; t_f \in F\}
+\label{eq:rec_model_similarity}
+\end{equation}
+
+Dessa forma conclui-se com o algoritmo \ref{alg:alg_recomendacao} para a geração dos filmes recomendados. Esse algorítimo de recomendação utiliza a equação de similaridade (\ac{RLWS}) da seguinte forma:
 
 \begin{itemize}
 	\item{Para cada termo do usuário é realizada uma comparação com todos os outros termos do filme.}
@@ -416,7 +441,7 @@ O pseudo-código \ref{alg:alg_recomendacao} exemplifica os passos para o cálcul
 É importante ressaltar que para este projeto foi desenvolvido um sistema de \textit{cache} para o cálculo da similaridade de recomendação dos filmes, dividido-se em duas camadas:
 
 \begin{itemize}
-	\item{\textbf{Cache remoto com banco de dados}: Para calcular a similaridade entre dois tokens quaisquer, o sistema utiliza uma equação (\ref{eq:rlws}) de similaridade que tira proveito do serviço da DBPedia. Na equação, conforme abordado em \ref{ssec:sim_rec} realiza-se a contagem de links diretos e indiretos dos recursos. Essa contagem posteriormente é armazenada no banco de dados para uma consulta mais ágil.}
+	\item{\textbf{Cache remoto com banco de dados}: Para calcular a similaridade entre dois tokens quaisquer, o sistema utiliza uma Equação (\ref{eq:rlws}) de similaridade que tira proveito do serviço da DBPedia. Na equação, conforme abordado em \ref{ssec:sim_rec} realiza-se a contagem de links diretos e indiretos dos recursos. Essa contagem posteriormente é armazenada no banco de dados para uma consulta mais ágil.}
 	\item{\textbf{Cache local, em memória}: Quando novos recursos são comparados e não estão no \textit{cache} do banco de dados (referenciado como cache remoto) eles precisam ser calculados e posteriormente persistidos. Contudo, como o número de comparações é grande, tendo em vista que cada palavra dos termos do usuário são comparadas com todas as palavras dos filmes, o processo de realizar tais consultas ao banco no momento da comparação prejudica o desempenho da aplicação. Dessa forma optou-se por utilizar a estrutura de \textit{cache} em memória fornecida pelo \textit{framework} Spring\footnote{https://spring.io}. No primeiro momento obtém-se todos os recursos em cache do banco dados da comparação de um filme com o usuário, sendo armazenados numa estrutura de dados na memória \ac{RAM} (referenciado como cache local). Num segundo momento durante a comparação dos termos, para aqueles que não estão presentes no cache, também são acumulados numa estrutura à parte, também no cache local, para indicar que esses deverão ser persistidos no banco de dados posteriormente a comparação de filmes. Dessa forma, minimiza-se o tráfego de dados entre a aplicação e o banco de dados durante a comparação de filmes, acelerando o processo.}
 \end{itemize}
 	
