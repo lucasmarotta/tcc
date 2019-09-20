@@ -338,8 +338,6 @@ A primeira Equação \ref{eq:tf}, trata-se da frequência do termo em relação 
 Com a equação pronta basta estabelecer um \textit{ranking} de termos, escolhendo aqueles com os melhores \textit{scores}, para montar o perfil do usuário. Nota-se que com esta equação obtém-se um score por termo de cada filme, e eventualmente este termo pode reaparecer em outro conjunto de termos de outro filme, possuindo um score diferente. Entretanto, como é estabelecido um ranking de melhores termos únicos, não há relevancia na presença de dois termos iguais com scores diferentes, o interesse é montar um perfil com termos distintos e variados com boa pontuação. Vale ressaltar que conforme estabelecido em \ref{ssec:user_model} é definida uma constante $z$ como sendo o tamanho do conjunto desses "melhores termos" extraídos desse ranking criado. No capítulo \ref{cap:evaluation} o impacto do tamanho do perfil do usuário será melhor explorado. Estabelecido o conjunto de termos do usuário, este será comparado com o conjunto de termos de todos os filmes que não tenha informado preferência. Apresentada a concepção do usuário e como construir seu perfil, defini-se formalmente o modelo de recomendação, conforme a Equação:
 
 \begin{equation}
-	(\forall U \subset Y) \quad m^{max}
-		
 	(\forall U \subset Z\; \land \; F \subset X)\; m_{max, u} = arg \; max_{m \in F_u}[recModel(u, f)]
 \label{eq:rec_model_max}
 \end{equation}
