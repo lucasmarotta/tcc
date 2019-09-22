@@ -74,7 +74,7 @@ Para trabalhar com as informações dos usuários e dos filmes, permitindo criar
 	
 	\item{A entidade "idf" persiste o cálculo do \ac{IDF} da Equação \ref{eq:tfidf}, que servirá para o cálculo da similaridade cosseno, por motivos de comparação que serão discutidos no \ref{cap:evaluation}.}
 	
-	\item{As entidades "lod\_cache" e "lod\_cache\_relation" tratam-se do serviço de cache para o cálculo da similaridade, assim poupando tempo para consultas do serviço do DBPedia. Na seção \ref{ssec:cache} a estrutura de cache dos sistema é melhor abordada.}
+	\item{As entidades "lod\_cache" e "lod\_cache\_relation" tratam-se do serviço de cache para o cálculo da similaridade, assim poupando tempo para consultas do serviço do DBPedia. Na seção \ref{sec:cache} a estrutura de cache dos sistema é melhor abordada.}
 \end{itemize}
 
 \begin{figure}
@@ -84,9 +84,12 @@ Para trabalhar com as informações dos usuários e dos filmes, permitindo criar
 	\label{fig:user_model}
 \end{figure}
 
+\label{ssec:database}
 \subsection{Modelo de filmes}
 
-Com a estrutura de dados utilizada para os filmes, é importante também formalizar como compõem o modelo utilizado na recomendação, afinal este é o item a ser recomendado para o usuário. É definido um conjunto $X$ como sendo conjunto de todos os filmes, onde cada filme $F \subset X$ é um conjunto de tokens $t_f$ extraídos pelo processo de \ac{NLP} (ver seção \ref{ssec:data_nlp}) através da sinopse deste. Desda forma pode-se formalizar o modelo de filmes conforme mostra as equações \ref{eq:film_model} e \ref{eq:film_model2}.
+Com a estrutura de dados utilizada para os filmes, é importante também formalizar como é seu modelo na recomendação, afinal este é o item a ser recomendado para o usuário. É definido um conjunto $X$ como sendo conjunto de todos os filmes, onde cada filme $F \subset X$ é um conjunto de tokens únicos $t_f$ extraídos pelo processo de \ac{NLP} (ver seção \ref{ssec:data_nlp}) através da sinopse deste. Para simplificar a formalização dos modelos, nota-se que o conjunto de termos $F$ do filme representa o filme junto com seus metadados, conforme definido em \ref{ssec:database}.
+
+Desda forma formaliza-se o modelo de filmes conforme mostra as equações \ref{eq:film_model} e \ref{eq:film_model2}.
 
 \begin{equation}
 	X = \bigcup\limits_{i=1}^{\infty} F_{i}
@@ -101,7 +104,7 @@ Com a estrutura de dados utilizada para os filmes, é importante também formali
 \subsection{Modelo de usuários}
 \label{ssec:user_model}
 
-Os usuários inicialmente são estruturados como um conjunto de filmes de sua preferência, contudo desta forma é impossível realizar a comparação com o modelo de filmes utilizando a métrica de similaridade proposta (ver \ref{ssec:sim_rec}), devido a comparação ser de termo a termo. Uma opção inicial seria simplesmente calcular todos os termos dos filmes de preferência do usuário, utilizado no processo de \ac{NLP}, e uni-los num grande conjunto, porém isto se tornaria muito custoso para ser executado, além de não escalar bem conforme as preferência do usuário aumentam. Sendo assim optou-se por calcular os "melhores termos" que representam o usuário, como sendo um conjunto de termos de um tamanho definido. Para calcular os "melhores termos" é aplicado um modelo de frequência, o \ac{TFIDF} (ver Equação \ref{eq:tfidf}), que busca criar um ranking de termos determinando o quão importante são numa coleção, no caso a união de todos os conjuntos filmes e seus termos. Com isso é definido $Y$ como sendo o conjunto de todo os usuários $U$, sendo cada um a união dos conjuntos de filmes $F$ das preferências do usuário, conteúdo todos os seus termos. Esses termos são denominados de termos do usuário, representado pelo elemento $t_u$. Posteriormente defini-se o conjunto $M_u$ como sendo o modelo do usuário dos melhores termos $t_u \in U$ ao passar pela seleção da função $M_{tfidf}$ (ver algoritmo \ref{alg:alg_best_terms}), possuindo um tamanho definido pela constante $z$. Por fim o conjunto o $Z$ é a união de todos os modelos de usuário $M_u$. O tamanho de $M_u$ é algo que será explorado no capítulo \ref{cap:evaluation}. As equações \ref{eq:user_model} à \ref{eq:user_model4} demonstram a construção do modelo do usuário.
+Os usuários inicialmente são estruturados como um conjunto de filmes de sua preferência, contudo desta forma é impossível realizar a comparação com o modelo de filmes utilizando a métrica de similaridade proposta (ver \ref{ssec:sim_rec}), devido a comparação ser de termo a termo. Uma opção inicial seria simplesmente calcular todos os termos dos filmes de preferência do usuário, utilizado no processo de \ac{NLP}, e uni-los num grande conjunto, porém isto se tornaria muito custoso para ser executado, além de não escalar bem conforme as preferência do usuário aumentam. Sendo assim, optou-se por calcular os "melhores termos" que representam o usuário, como sendo um conjunto de termos de um tamanho definido. Para calcular os "melhores termos" é aplicado um modelo de frequência, o \ac{TFIDF} (ver Equação \ref{eq:tfidf}), que busca criar um ranking de termos determinando o quão importante são numa coleção, no caso a união de todos os conjuntos filmes e seus termos. Com isso é definido $Y$ como sendo o conjunto de todo os usuários $U$, e este por sua vez a união de todos os filmes $F_u$ de sua preferência, conteúdo todos os seus termos. Esses termos são denominados de termos do usuário, representado pelo elemento $t_u$. Assim como o modelo de filmes, o conjunto de termos $U$ do usuário também representa seus metadados. Posteriormente defini-se o conjunto $M_u$ como sendo o modelo do usuário dos melhores termos $t_u \in U$ ao passar pela seleção da função $M_{tfidf}$, que um define um subconjunto de um tamanho definido pela constante $z$. Por fim o conjunto o $Z$ é a união de todos os modelos de usuário $M_u$. O tamanho de $M_u$ é algo que será explorado no capítulo \ref{cap:evaluation}. As equações \ref{eq:user_model} à \ref{eq:user_model4} demonstram a construção do modelo do usuário.
 
 \begin{equation}
 	Z = \bigcup\limits_{i=1}^{\infty} M_{u_i}
@@ -109,11 +112,11 @@ Os usuários inicialmente são estruturados como um conjunto de filmes de sua pr
 \end{equation}
 
 \begin{equation}
-	(\forall F \subset U) \quad M_u = \{t_u \;| \; t_u \in F, \; M_{tfidf}(t_u), \; |M_u| = z \; \land \; z \in \mathbb{N}^*\}
+	(\forall F_u \subset U) \quad M_u = \{t_u \;| \; M_{tfidf}(U, z), \; |M_u| = z \; \land \; z \in \mathbb{N}^*\}
 \end{equation}
 
 \begin{equation}
-	U = \bigcup\limits_{i=1}^{\infty} F_i
+	U = \bigcup\limits_{i=1}^{\infty} F_{u_i}
 \label{eq:user_model4}
 \end{equation}
 
@@ -335,21 +338,23 @@ A primeira Equação \ref{eq:tf}, trata-se da frequência do termo em relação 
 \label{eq:idf}
 \end{equation}
 
-Com a equação pronta basta estabelecer um \textit{ranking} de termos, escolhendo aqueles com os melhores \textit{scores}, para montar o perfil do usuário. Nota-se que com esta equação obtém-se um score por termo de cada filme, e eventualmente este termo pode reaparecer em outro conjunto de termos de outro filme, possuindo um score diferente. Entretanto, como é estabelecido um ranking de melhores termos únicos, não há relevancia na presença de dois termos iguais com scores diferentes, o interesse é montar um perfil com termos distintos e variados com boa pontuação. Vale ressaltar que conforme estabelecido em \ref{ssec:user_model} é definida uma constante $z$ como sendo o tamanho do conjunto desses "melhores termos" extraídos desse ranking criado. No capítulo \ref{cap:evaluation} o impacto do tamanho do perfil do usuário será melhor explorado. Estabelecido o conjunto de termos do usuário, este será comparado com o conjunto de termos de todos os filmes que não tenha informado preferência. Apresentada a concepção do usuário e como construir seu perfil, defini-se formalmente o modelo de recomendação, conforme a Equação:
+Com a equação pronta basta estabelecer um \textit{ranking} de termos, escolhendo aqueles com os melhores \textit{scores}, para montar o perfil do usuário. Nota-se que com esta equação obtém-se um score por termo de cada filme, e eventualmente este termo pode reaparecer em outro conjunto de termos de outro filme, possuindo um score diferente. Entretanto, como é estabelecido um ranking de melhores termos únicos, não há relevancia na presença de dois termos iguais com scores diferentes, o interesse é montar um perfil com termos distintos e variados com boa pontuação. Vale ressaltar que conforme estabelecido em \ref{ssec:user_model} é definida uma constante $z$ como sendo o tamanho do conjunto desses "melhores termos" extraídos desse ranking criado. No capítulo \ref{cap:evaluation} o impacto do tamanho do perfil do usuário será melhor explorado. 
+
+Definido o conjunto de termos do usuário, este será comparado com o conjunto de termos de todos os filmes que o usuário não tenha informado preferência, denominado de $D_u$, pois o objetivo é recomendar novos itens. Para melhor compreensão o conjunto dos termos do filme $F$ e do usuário $U$, representam respectivamente seus metadados, conforme estabelecido em \ref{ssec:database}. Sendo assim, almeja-se obter os filmes com os melhores \textit{scores} de recomendação, definido por $R_{max, U}$, que é o resultado da maximização das melhores recomendações $R$ obtida pela equação $recModel(U, F)$. As equações abaixo demonstram a formalização do cálculo da recomendação:
 
 \begin{equation}
-	(\forall U \subset Z\; \land \; F \subset X)\; m_{max, u} = arg \; max_{m \in F_u}[recModel(u, f)]
+	(\forall U \subset Z\; \land \; F \subset D_u)\; R_{max, U} = \; max_{R \subset D_u}[recModel(U, F)]
 \label{eq:rec_model_max}
 \end{equation}
 
 \begin{equation}
 	D_u = X - U
-\label{eq:rec_model}
+\label{eq:rec_model_movies}
 \end{equation}
 
 \begin{equation}
 	recModel(U, F) = S(M_u, F)
-\label{eq:rec_model}
+\label{eq:rec_model_eq}
 \end{equation}
 
 \begin{equation}
@@ -357,15 +362,12 @@ Com a equação pronta basta estabelecer um \textit{ranking} de termos, escolhen
 \label{eq:rec_model_similarity}
 \end{equation}
 
-Dessa forma conclui-se com o algoritmo \ref{alg:alg_recomendacao} para a geração dos filmes recomendados. Esse algorítimo de recomendação utiliza a equação de similaridade (\ac{RLWS}) da seguinte forma:
+Nota-se que para criar um \textit{ranking} de melhores filmes, defini-se a equação $S(M_u, F)$ que trata-se da média da maximização da comparação de todo termo do modelo do usuário $M_u$, com os termos do filme $F$. Como não há repetição de termos, para cada termo $t_u \in M_u$ é comparado com  $t_f \in F$, através da equação de similaridade \ac{RLWS}. Posteriormente de cada $RLWS(t_u, t_f)$ escolhe-se o maior score, e em seguida procede-se para o próximo termo $t_u$ a ser comparado com todo os outros termos $t_f$. Com todos os maiores scores das comparações, é realizada uma média simples obtendo o score do filme, tendo assim o modelo de recomendação. Esse processo de recomendação possui ainda algumas observações, conforme descrito abaixo:
 
 \begin{itemize}
-	\item{Para cada termo do usuário é realizada uma comparação com todos os outros termos do filme.}
 	\item{Caso a quantidade de termos do usuário seja menor que a do filme, será feita uma comparação partindo-se dos termos do filme, assim a similaridade dos filmes mantém-se simétrica.}
 	\item{Caso um dos termos a ser comparado não se trate de um recurso no DBPedia, então esta comparação é descartada e não impacta na similaridade.}
-	\item{Na comparação de cada termo seja partindo da lista do usuário ou do filme, no final será escolhido o score com maior similaridade daquele termo.}
-	\item{Após a escolha dos melhores scores de comparação de todos os termos, é realizada uma média simples dos scores, tendo no final o score final da similaridade entre o filme e o usuário.}
-	\item{No fim são escolhidos os \textit{n} melhores scores das comparações entre filmes e o usuário. Caso um score seja igual, a escolha entre um e outro será aleatória.}
+	\item{São escolhidos os \textit{n} melhores scores das comparações entre filmes e o usuário. Caso um score seja igual, a escolha entre um e outro será aleatória.}
 \end{itemize}
 
 O pseudo-código \ref{alg:alg_recomendacao} exemplifica os passos para o cálculo da similaridade entre os termos do usuário e os termos do filme.
@@ -374,33 +376,18 @@ O pseudo-código \ref{alg:alg_recomendacao} exemplifica os passos para o cálcul
     \label{alg:alg_recomendacao}
 	\caption{Pseudocódigo da geração dos filmes recomendados/sugeridos.}
     \begin{algorithmic}[1]
-        \Function{GeraRecomendacoes}{$usuario, qtdTermos, qtdSugestoes, filmes$}
-        	\State  $outrosFilmes\gets O$\Comment{Diferença entre $filmes$ e o conjunto de filmes de $usuario$ não marcados (like ou deslike)}
-        	\State $melhoresTermos\gets$ \Call{ObtemMelhoresTermos}{$usuario, qtdTermos$}
-        	\State $similaridades\gets S$\Comment{S é um conjunto vazio de similaridades}
-        	\ForAll{filme $f$ de $outrosFilmes$}
-        		\State $termosDoFilme\gets f.termos$
-        		\State $similaridades$ {inclui} \Call{CalculaRLWSEntreTermos}{$melhoresTermos, termosDoFilme, wi, wd$}
+        \Function{GeraRecomendacoes}{$U, z, n, X, w_i, w_d$}
+        	\State $D_u \gets X - U$\Comment{outros filmes}
+        	\State $M_u \gets M_{tfidf}(U, z)$\Comment{calcula os $z$ melhores termos únicos com TFIDF}
+        	\State $R \gets \O$\Comment{conjunto vazio das recomendações}
+        	\ForAll{filme $F \subset D_u$}
+        		\If{$|M_u| > F$}\Comment{verifica quem é maior para manter simetria}
+        			\State $R.inclui \gets$ \Call{CalculaRLWSEntreTermos}{$M_u, F, w_i, w_d$}
+				\Else
+					\State $R.inclui \gets$ \Call{CalculaRLWSEntreTermos}{$F, M_u, w_i, w_d$}	
+        		\EndIf
         	\EndFor
-        \EndFunction
-    \end{algorithmic}
-\end{algorithm}
-
-\begin{algorithm}
-\label{alg:alg_best_terms}
-	\caption{Pseudocódigo da geração dos melhores termos.}
-	\begin{algorithmic}[1]
-        \Function{ObtemMelhoresTermos}{$usuario, qtdTermos$}
-            \State  $termos\gets U$\Comment{U é o conjunto único de todos os termos dos filmes que o usuário marcou como like}
-            \State  $melhoresTermos\gets S$\Comment{S é um conjunto vazio de termos}
-            \State  $tfIdfTermos\gets E$\Comment{E é um conjunto vazio do cálculo do TF-IDF do termo}
-            \ForAll{termo $t$ de $termos$}
-                \ForAll{filme $f$ de $u$}
-                    \State $tfIdfTermos$ {inclui o cálculo do TF-IDF do termo $t$ em relação aos termos do filme $f$}
-                \EndFor
-            \EndFor
-            \State {ordena $tfIdfTermos$ de forma decrescente}
-            \Return {subconjunto de tamanho $qtdTermos$, da relação de $melhoresTermos$}
+        	\Return $max(R, n)$\Comment{retorna o conjunto de n filmes com maior score} 
         \EndFunction
     \end{algorithmic}
 \end{algorithm}
@@ -408,24 +395,24 @@ O pseudo-código \ref{alg:alg_recomendacao} exemplifica os passos para o cálcul
 \begin{algorithm}
 	\caption{Cálculo do RLWS entre termos do usuário e do filme.}
 	\begin{algorithmic}[1]
-        \Function{CalculaRLWSEntreTermos}{$termos1, termos2, wi, wd$}\Comment{wd - é o peso para os links diretos, wi - é o peso para os links indiretos}
-        	\State $combinacoes\gets 0$
-        	\State $similaridade\gets 0$
-        	\ForAll{termo $t1$ de $termos1$}
+        \Function{CalculaRLWSEntreTermos}{$M_u, F, w_i, w_d$}\Comment{$w_d$ - é o peso para os links diretos, $w_i$ - é o peso para os links indiretos}
+        	\State $comparacoes \gets 0$\Comment{total de comparações de termos válidos}
+        	\State $similaridade \gets 0$
+        	\ForAll{termo $t_u \in M_u$}
         		\State $melhorScore\gets -1$
-        		\ForAll{termo $t2$ de $termos2$}
-        			\State $s\gets$ RLWS($t1, t2, wi, wd$)
-        			\If{$s$ is valido \ $s > melhorScore$}
-        				$melhorScore\gets s$
+        		\ForAll{termo $t_f \in F$}
+        			\State $s \gets RLWS(t_u, t_f, w_i, w_d)$
+        			\If{$s$ valido \textbf{AND} $s > melhorScore$}
+        				\State $melhorScore \gets s$
         			\EndIf
         		\EndFor
         		\If{$melhorScore > -1$}
-        			$similaridade\gets similaridade + melhorScore$
-        			$combinacoes\gets combinacoes + 1$
+        			\State $similaridade \gets similaridade + melhorScore$
+        			\State $comparacoes \gets comparacoes + 1$
         		\EndIf        		      	
         	\EndFor
-			\If{$combinacoes > 0$}
-				\Return $similaridade / combinacoes$
+			\If{$comparacoes > 0$}
+				\Return $similaridade / comparacoes$
 			\Else
 				\Return $0$
 			\EndIf
@@ -433,8 +420,17 @@ O pseudo-código \ref{alg:alg_recomendacao} exemplifica os passos para o cálcul
     \end{algorithmic}
 \end{algorithm}
 
-\label{ssec:cache}
-\subsection{Estrutura de Cache para Recomendação}
+A Figura \ref{fig:rlws_ex} ilustra como é o fluxo da recomendação e seu cálculo. No exemplo define-se que $M_u$ como o conjunto de termos extraídos do texto "Lula fala com a mídia no Paraná", e por sua vez $F$ como os termos do texto "Presidente saúda imprensa em Curitiba". O objetivo é de que dois textos \textbf{possuem palavras diferentes, mas são similares}.
+
+\begin{figure}
+	\centering
+	\includegraphics[scale=0.32]{imagens/rlws_ex.png}
+	\caption{Imagem que exemplifica o fluxo da recomendação.}
+	\label{fig:rlws_ex}
+\end{figure}
+
+\section{Estrutura de Cache para Recomendação}
+\label{sec:cache}
 
 É importante ressaltar que para este projeto foi desenvolvido um sistema de \textit{cache} para o cálculo da similaridade de recomendação dos filmes, dividido-se em duas camadas:
 
