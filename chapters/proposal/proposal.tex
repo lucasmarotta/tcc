@@ -7,17 +7,11 @@ You can't connect the dots looking forward; you can only connect them looking ba
 
 Desde tempos o homem busca construir ferramentas e máquinas que ampliem e sustem sua capacidade de trabalho e produção. Com o advento dos programas de máquina, o \textit{software} tornou-se essencial para a demanda de problemas e desafios população. Como avaliado por \citep{Sommerville2010}, o software não se restringe a propriedades materiais das leis da física ou por processos de manufatura, o que por um lado simplifica a engenharia de software devido falta de restrições físicas, mas por outro, o torna complexo e custoso para mudanças. Assim, com a crescente quantidade e diversidade de computadores e dispositivos, é cada vez mais relevante a qualidade de software, visando a legibilidade, manutenção e evolução.
 
-Neste capítulo serão apresentados os conceitos para a criação de sistema de recomendação com similaridade semântica ponderada por links de recursos na DBPedia\footnote{http://wiki.dbpedia.org}, sendo baseado nas preferências do usuário. Serão discutidas as tecnologias, arquiteturas, modelos dos dados, recomendação, algoritmos e requisitos do protótipo do sistema.
+Neste capítulo serão apresentados os conceitos para a criação de sistema de recomendação com similaridade semântica ponderada por links de recursos na DBPedia\footnote{http://wiki.dbpedia.org}, sendo baseado nas preferências do usuário. Serão discutidas as tecnologias, arquiteturas, modelos dos dados, recomendação e algoritmos.
 
 \section{Arquitetura}
 
-A organização e estrutura do protótipo deste projeto divide-se em duas grandes camadas, a primeira através de uma interface Web utilizando o padrão \ac{MVC}\footnote{Padrão de arquitetura de software que separa o software em três camadas que comunicam entre si: apresentação, lógica de negócio e dados} para prover a interação com o usuário registrando seu perfil, histórico de preferências, além da apresentação das recomendações. A segunda grande camada é responsável pela administração e construção das recomendações, sendo executada em \textit{background}.
-
-O objetivo da divisão dessas camadas é prover independência entre os processos, uma vez que a geração das recomendações não ocorre em tempo real, ou seja, durante o tempo que o usuário interage com o sistema. Outra razão é organizar o sistema em camadas em que cada uma seja responsável por funcionalidades específicas no fluxo entre o sistema e o usuário. Assim, o desenvolvimento e alterações podem ser realizadas de forma mais independente.
-
-\subsection{Arquitetura para recomendação}
-
-A camada que é responsável pela construção das recomendações possui os seguintes principais serviços:
+Na arquitetura do sistema proposto, existe uma camada que é responsável pela construção das recomendações que possui os seguintes principais serviços:
 
 \begin{itemize}
 	\item{\textbf{Geração de Tokens}: Um dos objetivos do sistema é recomendar itens baseando-se no conteúdo não estruturado, no caso a sinopse dos filmes. A primeira tarefa é extrair as palavras, os \textit{tokens} relevantes dos textos, como nomes, adjetivos, lugares, entre outras, utilizando o processo de \ac{NLP}.}
@@ -26,8 +20,6 @@ A camada que é responsável pela construção das recomendações possui os seg
 	
 	\item{\textbf{Geração das recomendações}: No último serviço, o sistema deverá construir um modelo dados através da geração de tokens para comparar as preferências do usuário com um filme, utilizando a métrica de similaridade proposta. Na seção \ref{sec:dataModel} é apresentado como é construído esses modelos e na seção \ref{ssec:sim_rec} o método utilizado para gerar a comparação e prover as recomendações.}
 \end{itemize}
-
-O fluxo de dados entre as camadas de interação e recomendação funcionam de tal forma que num primeiro momento o usuário constrói seu perfil na plataforma, escolhendo seus filmes de preferência e em seguida solicita recomendações que serão adicionadas posteriormente. A camada do \ac{MVC} realiza a gestão dessas interações com o usuário e enfileira uma solicitação para a camada de recomendação que irá analisar o perfil do usuário e gerará as recomendações, armazenando-as num banco de dados para fácil consulta posteriormente. A diante será apresentado mais aprofundadamente o processo de recomendação executado pelos serviços apresentados.
 
 \section{Processo de Recomendação}
 
@@ -45,13 +37,13 @@ A proposta é criar uma recomendação baseada em conteúdo, ou seja, nos intere
 	
 	\item{\textbf{Pré-processamento dos filmes}: Nessa etapa após a coleta dos filmes, os dados serão previamente processados para a geração de \textit{tokens} com \ac{NLP}, analisando a descrição dos itens (sinopse dos filmes). Após processados os \textit{tokens} serão persistidos no banco de dados.}
 	
-	\item{\textbf{Coleta das preferências do usuário}: Serão coletados dados das preferências dos usuários, ou seja, os filmes de interesse, que neste trabalho trata-se da coleção de filmes que o usuário gostou (\textit{like}). Nessa etapa poderá ser utilizado o perfil do Facebook\footnote{https://facebook.com} para obter para obter tais dados.}
+	\item{\textbf{Coleta das preferências do usuário}: Serão coletadas as avaliações dos usuários pelo projeto MovieLens, podendo assim montar um perfil de preferências.}
 
 	\item{\textbf{Cálculo da Similaridade}: Após a etapa de pré-processamento dos filmes, será realizado o cálculo da similaridade entre os tokens do modelo do usuário e do filme, utilizando o métrica proposta \ac{RLWS}.}
 	
-	\item{\textbf{Geração das recomendações}: De posse do cálculo da similaridade, será gerada uma lista de tamanho qualquer com os melhores \textit{scores} obtidos do cálculo desta similaridade. Posteriormente essa coleção filmes sugeridos será armazenada no banco, podendo ser atualizada conforme o perfil do usuário altera, ou novos filmes são cadastrados na base de dados. Na seção \ref{ssec:sim_rec} é demonstrado e discutido o algoritmo central para a similaridade e recomendação.}
+	\item{\textbf{Geração das recomendações}: De posse do cálculo da similaridade, será gerado um conjunto de tamanho qualquer com os melhores \textit{scores} obtidos do cálculo desta similaridade. Posteriormente essa coleção filmes sugeridos será armazenada no banco, podendo ser atualizada conforme o perfil do usuário altera, ou novos filmes são cadastrados na base de dados. Na seção \ref{ssec:sim_rec} é demonstrado e discutido o algoritmo central para a similaridade e recomendação.}
 	
-	\item{\textbf{Apresentação dos resultados}: Por fim o sistema apresentará os resultados das recomendações para o usuário, que posteriormente poderão ser avaliados pelo usuário.}
+	\item{\textbf{Apresentação dos resultados}: Por fim o sistema apresentará os resultados das recomendações para o usuário.}
 \end{enumerate}
 
 A Figura \ref{fig:recsys_fluxo} mostra como esse fluxo de funcionalidades é operado por todo o sistema. A seguir será o modelo dados elaborado para este trabalho.
@@ -66,15 +58,15 @@ Para a estrutura do sistema de recomendação foi elaborado um modelo de dados p
 Para trabalhar com as informações dos usuários e dos filmes, permitindo criar seus modelos para recomendação, os dados foram modelados e organizados de tal forma que possam ser facilmente persistidos e recuperados assim que necessário. A Figura \ref{fig:user_model} mostra como esses dados estão estruturados e interligados. É importante ressaltar algumas observações quanto a essa estrutura:
 
 \begin{itemize}
-	\item{A entidade "user\textunderscore movie" persiste as preferências do usuário, tanto dos filmes que ele marcou como \textit{like} e \textit{deslike}, sendo que o primeiro adquire valor de 1 e o outro de 0. Esse modelo pode ser futuramente revisado para aceitar valores que não sejam binários.}
+	\item{A entidade \textit{rating} persiste as avaliações dos usuários, medidas de 0 a 5. Desta entidade será construída as preferências do usuário, ou seja, extraídos aqueles filmes que possuem boas avaliações refletindo aquilo que o usuário tem interesse.}
 	
-	\item{A entidade "user\textunderscore recomendation" persiste as sugestões de filmes calculadas pelo sistema, e o atributo "similarity" trata-se do algoritmo de similaridade utilizado, o que torna-se especialmente útil para realizar comparações com outros métodos (será discutido no \ref{cap:evaluation}).}
+	\item{A entidade \textit{recomendation} persiste as sugestões de filmes calculadas pelo sistema, e o atributo \enquote{similarity} trata-se do algoritmo de similaridade utilizado, o que torna-se especialmente útil para realizar comparações com outros métodos (será discutido no \ref{cap:evaluation}).}
 	
-	\item{A entidade "movie" persiste os dados dos filmes retirados do projeto MovieLens\footnote{https://movielens.org}, assim como o processamento da sinopse dos filmes para geração dos \textit{tokens}.}
+	\item{A entidade \textit{movie} persiste os dados dos filmes retirados do projeto MovieLens\footnote{https://movielens.org}, assim como o processamento da sinopse dos filmes para geração dos \textit{tokens}.}
 	
-	\item{A entidade "idf" persiste o cálculo do \ac{IDF} da Equação \ref{eq:tfidf}, que servirá para o cálculo da similaridade cosseno, por motivos de comparação que serão discutidos no \ref{cap:evaluation}.}
+	\item{A entidade \textit{idf} persiste o cálculo do \ac{IDF} da Equação \ref{eq:tfidf}, que servirá para o cálculo da similaridade cosseno, por motivos de comparação que serão discutidos no \ref{cap:evaluation}.}
 	
-	\item{As entidades "lod\_cache" e "lod\_cache\_relation" tratam-se do serviço de cache para o cálculo da similaridade, assim poupando tempo para consultas do serviço do DBPedia. Na seção \ref{sec:cache} a estrutura de cache dos sistema é melhor abordada.}
+	\item{As entidades \textit{lod\_cache} e \textit{lod\_cache\_relation} tratam-se do serviço de cache para o cálculo da similaridade, assim poupando tempo para consultas do serviço do DBPedia. Na seção \ref{sec:cache} a estrutura de cache dos sistema é melhor abordada.}
 \end{itemize}
 
 \begin{figure}
@@ -104,7 +96,7 @@ Desda forma formaliza-se o modelo de filmes conforme mostra as equações \ref{e
 \subsection{Modelo de usuários}
 \label{ssec:user_model}
 
-Os usuários inicialmente são estruturados como um conjunto de filmes de sua preferência, contudo desta forma é impossível realizar a comparação com o modelo de filmes utilizando a métrica de similaridade proposta (ver \ref{ssec:sim_rec}), devido a comparação ser de termo a termo. Uma opção inicial seria simplesmente calcular todos os termos dos filmes de preferência do usuário, utilizado no processo de \ac{NLP}, e uni-los num grande conjunto, porém isto se tornaria muito custoso para ser executado, além de não escalar bem conforme as preferência do usuário aumentam. Sendo assim, optou-se por calcular os "melhores termos" que representam o usuário, como sendo um conjunto de termos de um tamanho definido. Para calcular os "melhores termos" é aplicado um modelo de frequência, o \ac{TFIDF} (ver Equação \ref{eq:tfidf}), que busca criar um ranking de termos determinando o quão importante são numa coleção, no caso a união de todos os conjuntos filmes e seus termos. Com isso é definido $Y$ como sendo o conjunto de todo os usuários $U$, e este por sua vez a união de todos os filmes $F_u$ de sua preferência, conteúdo todos os seus termos. Esses termos são denominados de termos do usuário, representado pelo elemento $t_u$. Assim como o modelo de filmes, o conjunto de termos $U$ do usuário também representa seus metadados. Posteriormente defini-se o conjunto $M_u$ como sendo o modelo do usuário dos melhores termos $t_u \in U$ ao passar pela seleção da função $M_{tfidf}$, que um define um subconjunto de um tamanho definido pela constante $z$. Por fim o conjunto o $Z$ é a união de todos os modelos de usuário $M_u$. O tamanho de $M_u$ é algo que será explorado no capítulo \ref{cap:evaluation}. As equações \ref{eq:user_model} à \ref{eq:user_model4} demonstram a construção do modelo do usuário.
+Os usuários inicialmente são estruturados como um conjunto de filmes, sendo extraídos aqueles que avaliou com três estrelas e meia ou mais, portando torando-se as suas preferências. Contudo desta forma é impossível realizar a comparação com o modelo de filmes utilizando a métrica de similaridade proposta (ver \ref{ssec:sim_rec}), devido a comparação ser de termo a termo. Uma opção inicial seria simplesmente calcular todos os termos dos filmes de preferência do usuário, utilizado no processo de \ac{NLP}, e uni-los num grande conjunto, porém isto se tornaria muito custoso para ser executado, além de não escalar bem conforme as preferência do usuário aumentam. Sendo assim, optou-se por calcular os \enquote{melhores termos únicos} que representam o usuário, como sendo um conjunto de termos de um tamanho definido. Para calcular esses \enquote{melhores termos} é aplicado um modelo de frequência, o \ac{TFIDF} (ver Equação \ref{eq:tfidf}), que busca criar um ranking de termos determinando o quão importante são numa coleção, no caso a união de todos os conjuntos filmes e seus termos. Com isso é definido $Y$ como sendo o conjunto de todo os usuários $U$, e este por sua vez a união de todos os filmes $F_u$ de sua preferência, contendo todos os seus termos. Esses termos são denominados de termos do usuário, representado pelo elemento $t_u$. Assim como o modelo de filmes, o conjunto de termos $U$ do usuário também representa seus metadados. Posteriormente defini-se o conjunto $M_u$ como sendo o modelo do usuário dos melhores termos $t_u \in U$ ao passar pela seleção da função $M_{tfidf}$, que um define um subconjunto de um tamanho definido pela constante $z$. Por fim, o conjunto $Z$ é a união de todos os modelos de usuário $M_u$. O tamanho de $M_u$ é algo que será explorado no capítulo \ref{cap:evaluation}. As equações \ref{eq:user_model} à \ref{eq:user_model4} demonstram a construção do modelo do usuário.
 
 \begin{equation}
 	Z = \bigcup\limits_{i=1}^{\infty} M_{u_i}
@@ -223,7 +215,7 @@ Um conjunto que segue os princípios LOD é um grafo $G$ tal que $G = (R, L, I)$
 
 \begin{figure}
 	\centering
-	\includegraphics[scale=0.5]{imagens/cd_links.png}
+	\includegraphics[scale=0.4]{imagens/cd_links.png}
 	\caption{Imagem que retrata os links diretos saintes e entrantes de um recurso.}
 	\label{fig:cd_links}
 \end{figure}
@@ -321,7 +313,7 @@ Por último é destacável notar que a equação exibe os axiomas abaixo que sã
 
 Com equação de similaridade semântica entre dois recursos é possível comparar os termos dos filmes que por sua vez habilita a construção de um \textit{ranking} de filmes mais similares em relação as preferências do usuário. Para montar esse perfil de preferências, conforme foi apresentado na seção \ref{ssec:user_model}, o usuário se tornará um conjunto de termos, podendo ser interpretado como uma \textit{query}, no mesmo formato do modelo de filmes, onde objetivo é uma comparação entre um conjunto e outro, utilizando a similaridade proposta. Apesar de ser possível utilizar todos os termos de todos os filmes que o usuário gostou, optou-se por escolher uma quantidade determinada de "melhores termos únicos". Esses melhores termos são calculados através de um modelo construído pela frequência, o \ac{TFIDF}. Esse cálculo trata-se de uma estatística que tem por objetivo de refletir o quão importante um termo é para o documento numa coleção \citep{rajaraman_ullman_2011}.
 
-A primeira Equação \ref{eq:tf}, trata-se da frequência do termo em relação ao documento, o que neste caso refere-se a cada termo de um filme do usuário e sua frequência em relação aos termos desse filme. Quanto a segunda, \ref{eq:idf}, refere-se ao inverso da frequência do documento, que busca balancear os termos muito frequentes em relação aos pouco frequentes, uma vez que não necessariamente todos os termos tem importância igual. Dessa forma é construída um conjunto de termos únicos de todos os filmes do usuário que para cada um deles seja contabilizado a presença na coleção dos filmes. Por fim, cada termo recebe um \textit{score}, conforme a Equação {\ref{eq:tfidf}}.
+A Equação \ref{eq:tf}, trata-se da frequência do termo em relação ao documento, o que neste caso refere-se a cada termo de um filme do usuário e sua frequência em relação aos termos desse filme. Quanto a segunda, \ref{eq:idf}, refere-se ao inverso da frequência do documento, que busca balancear os termos muito frequentes em relação aos pouco frequentes, uma vez que não necessariamente todos os termos tem importância igual. Dessa forma é construída um conjunto de termos únicos de todos os filmes do usuário que para cada um deles seja contabilizado a presença na coleção dos filmes. Por fim, cada termo recebe um \textit{score}, conforme a Equação {\ref{eq:tfidf}}.
 
 \begin{equation}
 	TFIDF(t) = TF(t) * IDF(t)
@@ -338,7 +330,12 @@ A primeira Equação \ref{eq:tf}, trata-se da frequência do termo em relação 
 \label{eq:idf}
 \end{equation}
 
-Com a equação pronta basta estabelecer um \textit{ranking} de termos, escolhendo aqueles com os melhores \textit{scores}, para montar o perfil do usuário. Nota-se que com esta equação obtém-se um score por termo de cada filme, e eventualmente este termo pode reaparecer em outro conjunto de termos de outro filme, possuindo um score diferente. Entretanto, como é estabelecido um ranking de melhores termos únicos, não há relevancia na presença de dois termos iguais com scores diferentes, o interesse é montar um perfil com termos distintos e variados com boa pontuação. Vale ressaltar que conforme estabelecido em \ref{ssec:user_model} é definida uma constante $z$ como sendo o tamanho do conjunto desses "melhores termos" extraídos desse ranking criado. No capítulo \ref{cap:evaluation} o impacto do tamanho do perfil do usuário será melhor explorado. 
+Com a equação pronta basta estabelecer um \textit{ranking} de termos, escolhendo aqueles com os melhores \textit{scores}, para montar o perfil do usuário. Nota-se que com esta equação obtém-se um score por termo de cada filme, e eventualmente este termo pode reaparecer em outro conjunto de termos de outro filme, possuindo um score diferente. Entretanto, como é estabelecido um ranking de melhores termos únicos, não há interesse na presença de dois termos iguais com scores diferentes, o interesse é montar um perfil com termos distintos e variados com melhor pontuação. Vale ressaltar que conforme estabelecido em \ref{ssec:user_model} é definida uma constante $z$ como sendo o tamanho do conjunto desses \enquote{melhores termos} extraídos desse ranking criado. No capítulo \ref{cap:evaluation} o impacto do tamanho do perfil do usuário será melhor explorado.  Sendo assim, é definida a Equação \ref{eq:max_tfidf}, como extensão para obtenção dos melhores termos, que avalia cada termo único $t$ do modelo de usuário $M_u$, escolhendo aqueles com melhor score.
+
+\begin{equation}
+	M_u(t) = max \; TFIDF(t)
+\label{eq:max_tfidf}
+\end{equation}
 
 Definido o conjunto de termos do usuário, este será comparado com o conjunto de termos de todos os filmes que o usuário não tenha informado preferência, denominado de $D_u$, pois o objetivo é recomendar novos itens. Para melhor compreensão o conjunto dos termos do filme $F$ e do usuário $U$, representam respectivamente seus metadados, conforme estabelecido em \ref{ssec:database}. Sendo assim, almeja-se obter os filmes com os melhores \textit{scores} de recomendação, definido por $R_{max, U}$, que é o resultado da maximização das melhores recomendações $R$ obtida pela equação $recModel(U, F)$. As equações abaixo demonstram a formalização do cálculo da recomendação:
 
@@ -379,7 +376,7 @@ O pseudo-código \ref{alg:alg_recomendacao} exemplifica os passos para o cálcul
         \Function{GeraRecomendacoes}{$U, z, n, X, w_i, w_d$}
         	\State $D_u \gets X - U$\Comment{outros filmes}
         	\State $M_u \gets M_{tfidf}(U, z)$\Comment{calcula os $z$ melhores termos únicos com TFIDF}
-        	\State $R \gets \O$\Comment{conjunto vazio das recomendações}
+        	\State $R \gets \varnothing$\Comment{conjunto vazio das recomendações}
         	\ForAll{filme $F \subset D_u$}
         		\If{$|M_u| > F$}\Comment{verifica quem é maior para manter simetria}
         			\State $R.inclui \gets$ \Call{CalculaRLWSEntreTermos}{$M_u, F, w_i, w_d$}
@@ -397,7 +394,7 @@ O pseudo-código \ref{alg:alg_recomendacao} exemplifica os passos para o cálcul
 	\begin{algorithmic}[1]
         \Function{CalculaRLWSEntreTermos}{$M_u, F, w_i, w_d$}\Comment{$w_d$ - é o peso para os links diretos, $w_i$ - é o peso para os links indiretos}
         	\State $comparacoes \gets 0$\Comment{total de comparações de termos válidos}
-        	\State $similaridade \gets 0$
+        	\State $similaridade \gets \varnothing$\Comment{conjunto vazio das recomendações}
         	\ForAll{termo $t_u \in M_u$}
         		\State $melhorScore\gets -1$
         		\ForAll{termo $t_f \in F$}
@@ -406,7 +403,7 @@ O pseudo-código \ref{alg:alg_recomendacao} exemplifica os passos para o cálcul
         				\State $melhorScore \gets s$
         			\EndIf
         		\EndFor
-        		\If{$melhorScore > -1$}
+        		\If{$melhorScore > -1$}\Comment{descarta os não encontrados no DBPedia}
         			\State $similaridade \gets similaridade + melhorScore$
         			\State $comparacoes \gets comparacoes + 1$
         		\EndIf        		      	
@@ -440,64 +437,6 @@ A Figura \ref{fig:rlws_ex} ilustra como é o fluxo da recomendação e seu cálc
 \end{itemize}
 	
 Para não sobrecarregar o tamanho do cache em memória, a cada determinado número de comparações filmes o sistema esvazia o cache, persistindo os dados dos novos recursos e comparações de tokens. Assim tem-se um bom balanço de desempenho entre o cache remoto e cache local.
-
-\section{Requisitos}
-
-Os requisitos de um sistema são descrições do que deve fazer, suas funcionalidades e serviços que restringem sua operação \citep{Sommerville2010}. Tradicionalmente são classificados entre \textbf{funcionais} e \textbf{não funcionais}, para diferentes níveis de detalhamento e diferentes leitores.
-
-\begin{itemize}
-	\item{\textbf{Requisitos funcionais}: Descrevem o funcionamento do sistema, e para isso devem prover como o sistema deve reagir à entrada/saída assim como seus comportamentos em diferentes situações.}
-	
-	\item{\textbf{Requisitos não funcionais}: Devem estabelecer as restrições das funcionalidades e serviços oferecidos pelo sistema. São descritas caraterísticas gerais do sistema, como a usabilidade que não se referem a termos específicos como os requisitos funcionais.}
-\end{itemize}
-
-Para cada requisito é utilizado um código para identificar a funcionalidade, assim facilitando referenciá-la durante o desenvolvimento. Nesta seção serão apresentados os requisitos funcionais e não funcionais para o desenvolvimento do protótipo do sistema apresentado neste trabalho. Para a descrição das funcionalidades optou-se por usar códigos com a sintaxe [RF0X] para requisitos funcionais e [RNF0X] para requisitos não funcionais. Junto ao código e a descrição do requisito foi adicionada a sua prioridade. As prioridades são classificadas em três categorias: a) \textbf{Essencial} para os que precisam ser implementados indispensavelmente; b) \textbf{Importante} para os que são importantes para o funcionamento, mas não são cruciais; c) \textbf{Desejável} para os que não interferem diretamente nas funcionalidades básicas do sistema, embora relevantes, mas que podem ser deixados para ser implementados posteriormente.
-
-\subsection{Requisitos funcionais}
-
-A Tabela \ref{tab:req-funcionais} apresenta os requisitos funcionais do sistema.
-
-\begin{table}[H]
-	\label{tab:req-funcionais}
-	\centering
-	\caption{Requisitos funcionais do sistema.}
-	\def\arraystretch{1.2} % padding da linhas da tabela
-	\begin{tabular}{|m{1.2cm} | m{3cm} | m{7.2cm}| c | m{1.9cm}}
-		\hline
-		\multicolumn{1}{|c|}{\bfseries Código} & \multicolumn{1}{c|}{\bfseries Nome} & \multicolumn{1}{c|}{\bfseries Descrição} & \multicolumn{1}{c|}{\bfseries Prioridade} \\ \hline
-		RF01	& Cadastrar usuário	& Realizar o cadastro de usuários para criação do seu perfil	& Essencial \\ \hline
-		RF02	& Cadastrar usuário com o Facebook	& Permitir o cadastro de usuários utilizando sua conta do Facebook	& Importante \\ \hline
-		RF03	& Fazer login/logout	& Usuários devem ser identificados permitindo a entrada e saída da aplicação	& Essencial \\ \hline
-		RF04	& Fazer login pelo Facebook	& Permitir o login do usuário pelo Facebook	& Importante \\ \hline
-		RF05	& Cadastrar filmes do usuário	& Usuários identificados podem cadastrar novos filmes no seu perfil	& Essencial \\ \hline
-		RF06	& Visualizar filmes do usuário	& Usuários identificados podem visualizar os filmes cadastrados no seu perfil	& Essencial \\ \hline
-		RF07	& Pesquisar filmes cadastrados	& Usuários identificados podem pesquisar filmes cadastrados na base do sistema	& Importante \\ \hline
-		RF08	& Cadastrar filmes	& O sistema deve permitir a alimentação de filmes para a base dados	& Essencial \\ \hline
-		RF09	& Visualização de filmes recomendados	& O sistema deve ser capaz de criar uma lista de filmes recomendados, baseado nos filmes registrados do perfil do usuário	& Essencial \\ \hline
-		RF10	& Coletar filmes do Facebook	& Usuários identificados com o Facebook devem ter seus filmes importados	& Importante \\ \hline
-	\end{tabular}
-\end{table}
-
-\subsection{Requisitos não funcionais}
-
-A tabela \ref{tab:req-nao-funcionais} apresenta os requisitos não funcionais informando sua característica. Todos os requisitos apresentados são considerados importantes.
-
-\begin{table}[H]
-	\label{tab:req-nao-funcionais}
-	\centering
-	\caption{Requisitos não funcionais do sistema.}
-	\def\arraystretch{1.3} % padding da linhas da tabela
-	\begin{tabular}{| m{1.3cm} | m{9.4cm}| c | m{2cm}}
-		\hline
-		\multicolumn{1}{|c|}{\bfseries Código} & \multicolumn{1}{c|}{\bfseries Descrição} & \multicolumn{1}{c|}{\bfseries Característica} \\ \hline
-		RNF01	& O sistema deve ser fácil uso e dispensar prévio treinamento	& Usuabilidade \\ \hline
-		RNF02	& O sistema deve estar organizado de tal forma a não deixar o usuário confuso e ao mesmo tempo incentivar a sua exploração com interesse visual	& Usuabilidade \\ \hline
-		RNF03	& O sistema deve ser capaz de atualizar as similaridades calculadas dos filmes em \textit{background}	& Funcionalidade \\ \hline
-		RNF04	& O sistema deve prover uma metalinguagem para momentos em que o usuário deve aguardar o processamento de dados, tais como ícones, informativos etc.	& Usuabilidade \\ \hline
-		RNF05	& O sistema deve possuir um desempenho adequado para que o cálculo da lista de filmes recomendados tenham o menor impacto de carregamento na navegação do usuário.	& Funcionalidade \\ \hline
-		RNF06	& O sistema deve ser capaz de incluir novos filmes em \textit{background}	& Funcionalidade \\ \hline
-	\end{tabular}
-\end{table}
 
 \section{Tecnologias}
 
@@ -551,4 +490,4 @@ No projeto essa tecnologia será utilizada para tirar proveito dos algoritmos de
 
 \section{Sumário}
 
-Neste capítulo foram apresentadas as funcionalidades e especificações do protótipo do projeto, assim como as tecnologias empregadas. Também foram abordadas as etapas do ciclo de vida da aplicação, demonstrando o modelo de dados, assim como a etapa de preparação para recomendação. Por fim foi elaborada a proposta de um novo método de similaridade semântica, mostrando suas características e equações, além dos algoritmos para geração das recomendações. No próximo capítulo serão apresentados os resultados obtidos com novo método elaborado, junto técnicas para sua obtenção, assim como a comparação com outros modelos.
+Neste capítulo foram apresentadas as funcionalidades para a proposta do sistema de recomendação, assim como as tecnologias empregadas. Também foram abordadas as etapas do ciclo de vida da aplicação, demonstrando o modelo de dados, assim como a etapa de preparação para recomendação. Por fim foi elaborada a proposta de um novo método de similaridade semântica, mostrando suas características e equações, além dos algoritmos para geração das recomendações. No próximo capítulo serão apresentados os resultados obtidos com novo método elaborado, junto técnicas para sua obtenção, assim como a comparação com outros modelos.

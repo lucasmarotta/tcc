@@ -9,6 +9,8 @@ http://www.inf.unibz.it/~ricci/papers/intro-rec-sys-handbook.pdf
 https://groups.google.com/forum/#!topic/recsysufba/LLUuEC1g9ws
 https://www.quora.com/Whats-the-difference-between-semantic-relatedness-and-semantic-similarity-and-how-to-calculate-them
 https://en.wikipedia.org/wiki/Semantic_similarity
+https://medium.com/@cfpinela/how-to-evaluate-recommender-systems-874a313d7724
+https://www.blabladata.com/2014/10/26/evaluating-recommender-systems/
 
 WMD Similarity
 
