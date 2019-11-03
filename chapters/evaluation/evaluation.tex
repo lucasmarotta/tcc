@@ -13,12 +13,12 @@ Na avaliação de um sistema de recomendação é importante entender sua eficá
 O objetivo dos experimentos que serão apresentados, é avaliar se a utilização da similaridade semântica junto ao método de recomendação proposto, é capaz de trazer resultados melhores nas métricas de avaliação em relação a similaridade do cosseno utilizando \ac{TFIDF}.  Os resultados tratam-se das análises das métricas extraídas das avaliações realizadas por usuários em relação as recomendações geradas por esses métodos.
 
 Para realizar os testes entre os dois métodos de recomendação é necessário construir um perfil do usuário,
-formado através dos filmes que avaliou. Cada usuário deve ter pelo menos 10 avaliações. Com intuito de captar os interesses do usuário, definiu-se que para montar o modelo do usuário com seus melhores termos, serão utilizados apenas os filmes com avaliação igual ou superior a 3,5, sendo 5 a avaliação máxima. No capítulo \ref{cap:proposal} foi definido que o perfil do usuário seria um conjunto $M_u$ dos melhores termos, possuindo um tamanho $z$ constante. Nos experimentos a seguir foi estipulado $z$ como 15 termos. A quantidade de termos definida possui um impacto grande na performance do sistema, uma vez que a complexidade do algoritmo da comparação entre termos é de $O(zm)$ (considerando $z$ como constante tem-se $O(m)$), sendo $m$ a quantidade de termos do filme. A Figura \ref{fig:tempo_x_termos} demonstra um gráfico da quantidade de termos em relação ao tempo de processamento, considerando que todos os dados estão no \textit{cache local}, conforme abordado no capítulo \ref{cap:proposal}, ou seja, o melhor caso.
+formado através dos filmes que avaliou. Cada usuário deve ter pelo menos 10 avaliações. Com intuito de captar os interesses do usuário, definiu-se que para montar o modelo do usuário com seus melhores termos, serão utilizados apenas os filmes com avaliação igual ou superior a 3,5, sendo 5 a avaliação máxima. No capítulo \ref{cap:proposal} foi definido que o perfil do usuário seria um conjunto $M_u$ dos melhores termos, possuindo um tamanho $z$ constante. Nos experimentos a seguir foi estipulado $z$ como 15 termos. A quantidade de termos definida possui um impacto grande na performance do sistema, uma vez que a complexidade do algoritmo da comparação entre termos é de $O(zm)$ (considerando $z$ como constante tem-se $O(m)$), sendo $m$ a quantidade de termos do filme. A Figura \ref{fig:tempo_x_termos} demonstra um gráfico da quantidade de termos do modelo do usuário em relação ao tempo de processamento, considerando que todos os dados estão no \textit{cache local}, conforme abordado no capítulo \ref{cap:proposal}, ou seja, o melhor caso.
 
 \begin{figure}
 	\centering
-	\includegraphics[scale=0.85]{imagens/tempo_x_termos.jpg}
-	\caption{Gráfico da relação gráfico da quantidade de termos em relação ao tempo de processamento. Execução numa máquina com processador \textit{i7 6700K}, 16GB RAM, \textit{Windows 10}.}
+	\includegraphics[scale=0.3]{imagens/tempo_x_termos.jpg}
+	\caption{Gráfico da relação do tamanho do modelo do usuário (quantidade de termos usados) com o tempo de processamento para recomendação de um usuário. Todas as comparações de termos estão em \textit{cache}. Execução numa máquina com processador \textit{i7 6700K}, 16GB RAM, \textit{Windows 10}.}
 	\label{fig:tempo_x_termos}
 \end{figure}
 
@@ -142,17 +142,6 @@ Como a quantidade de resultados pode ser muito grande para calcular a precisão,
 	p@k = \frac{r}{k}
 \label{eq:precision_at_k}
 \end{equation}
-
-\subsection{Recall}
-
-Outra métrica de precisão utilizando classificações binárias é o \textit{recall}, que trata-se da proporção de resultados \textit{true positive} em relação ao total possível de positivos reais avaliados pelo usuário \citep{Powers_2008}. Os valores irão progredir de 0 a 1 sempre, sendo o valor 1 atribuído para todos os elementos a partir (inclusive) do último item previsto como \textit{true positive}. O objetivo além de verificar quais os itens mais relevantes, é constatar o quão melhor eles se posicionam na ordem dos retornados, sendo o ideal é de que mais itens como \textit{true positive} estejam nos primeiros resultados \citep{Jannach:2010}. A Equação \ref{eq:recall} demonstra o cálculo do \textit{recall} $R$, onde $tp$ trata-se da quantidade de itens \textit{true positive} e $fn$ como \textit{false negative}.
-
-\begin{equation}
-	R = \frac{tp}{tp + fn}
-\label{eq:recall}
-\end{equation}
-
-Também por extensão podemos calcular $R@k$ como sendo o \textit{recall} até os $k$ primeiros resultados. Assim, primeiro obtém-se o total de itens relevantes até $k$ para ser utilizado como denominador da equação do original do \textit{recall}.
 
 \subsection{Mean Average Precision (MAP)}
 
@@ -317,3 +306,18 @@ Para avaliar a objetividade do \ac{SR} foi utilizada a métrica \ac{MRR} perante
 \end{figure}
 
 \section{Discussão dos resultados}
+
+
+\section{Pontos de melhorias}
+
+Alguns desafios foram encontrados durante a construção do sistema de recomendação, principalmente relacionada a métrica de similaridade. Notou-se que ambiguidade é um grande problema para análise de recursos na DBPedia\footnote{http://wiki.dbpedia.org}, inclusive ambiguidade em dois sentidos. A primeira deve-se à ambiguidade no próprio serviço da web semântica que é vista pela propriedade \textit{dbo:wikiPageDisambiguates}, como no exemplo do termo \enquote{Paraná}, que pode ser resolvido para o estado brasileiro, rio ou clube de futebol. Quando uma pesquisa com termo ambíguo é realizada a contagem de links torna-se menos eficaz do que feita sabendo qual termo específico está se referindo. 
+
+A segunda ambiguidade é a da gerada pela propriedade \textit{dbo:wikiPageRedirects}, que trata-se de como o termo é resolvido para seu nome final, comportando-se como \textit{alias}. Quando se é buscado um termo como \textit{Automobile}, o mesmo é redirecionado para \textit{Car} como \ac{URI} final, isso para todos os possíveis \enquote{sinônimos}. Ainda que no sistema sejam considerados termos iguais devido à análise de redirecionamentos entre si, quando se comparado com outro termo, existe uma divergência para pior na contagem de links indiretos. Em futuros trabalhos poderá ser feito um ajuste nas consultas para que a contagem de links diretos e indiretos sejam mais precisas, diminuindo os problemas de ambiguidade.
+
+Outra questão importante trata-se do custo para se executar o modelo de recomendação proposto, pois ainda que o limite superior da complexidade de tempo seja $O(|Y| * |M_u| * |D_u|)$, dentro do esperado, a questão é de que o modelo do usuário e de filmes tendo um custo $|M_u| * |D_u|$ torna-se um conjunto de termos grande para ser executado no DBPedia, mesmo utilizando \textit{multithreading}\footnote{Multithreading trata-se da possibilidade de trabalhar com múltiplas linhas execução concorrente, tornando um processamento de dados paralelo invés de linear.} e a estrutura de \textit{cache} da contagem de links proposta no capítulo \ref{cap:proposal}, pois as possibilidades de combinações são enormes e requer diversas execuções para alcançar um cache suficientemente grande para que isto não seja um problema. Inclusive este problema é um dos fatores que dificultaram a execução de testes com mais usuários, algo que precisa de mais tempo para ter um conjunto maior de comparações seja feita. Outra possibilidade de ser estudada é a de realizar ajustes nos modelos para resultar num conjunto de comparações menor diminuindo assim o tempo de processamento.
+
+Com melhorias realizadas no modelo do usuário de filmes para diminuir a carga de comparações no DBPedia, possibilita expandir mais facilmente os testes \textit{online}, inclusive relacionado a este ponto também facilitaria a construção de uma plataforma online na Web para que o usuário pudesse escolher suas preferências, exibindo as recomendações para que ele mesmo avalie, dispensando o uso de entrevistas. Outro ponto de melhoria trata-se no processo de \ac{NLP}, onde foram utilizados modelos pré treinados oferecidos pela biblioteca \textit{OpenNLP}\footnote{https://opennlp.apache.org}. Com o uso deste modelo ocorreram diversas falhas ao reconhecer nomes de entidades (processo \ac{NER}). Para isso existem algumas possibilidades, como a de realizar um treinamento baseado nos textos dos filmes do projeto, ou experimentar outras ferramentas como a \textit{Stanford CoreNLP}\footnote{https://stanfordnlp.github.io/CoreNLP/}.
+
+\section{Sumário}
+
+Neste capítulo foram apresentados os resultados obtidos com o sistema de recomendação construído, assim como uma análise da métrica de similaridade semântica. Para isso foram discutidas as metodologias junto com os dados utilizadas, além de estudas as métricas que foram usadas nos resultados.
