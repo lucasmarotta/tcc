@@ -238,6 +238,82 @@ Avaliadas as premissas e os resultados para a similaridade semântica proposta, 
 
 \subsection{MAP}
 
-Para medir a assertividade do \ac{SR} foi utilizada a métrica \ac{MAP} perante dois conjuntos de usuários, os dos testes \textit{offline} (sendo no total de 30) e os \textit{online} (com total de 4). 
+Para medir a assertividade do \ac{SR} foi utilizada a métrica \ac{MAP} perante dois conjuntos de usuários, os dos testes \textit{offline} (sendo no total de 30) e os \textit{online} (com total de 4). As Figuras \ref{fig:map_line} e \ref{fig:map_box_plot} apresentam os resultados obtidos nos três experimentos, tanto para os testes online quanto para os offline. 
+
+O mais notável dos valores obtidos é o fato de que os testes do experimento 2, com \textit{RLWS 0,2/0,8}, teve um desempenho consideravelmente melhor que os outros, em especial a seu par que privilegia os links diretos. Mesmo com um desempenho inferior, o teste \textit{RLWS 0,8/0,2} obteve um resultado próximo da similaridade do cosseno até os 10 primeiros itens, piorando a partir de então. Isso pode indicar que com um valor um pouco menor para os relacionamentos diretos como 0,65/0,45, tem o potencial de melhorar os resultados. Outro observação importante é que para os 5 primeiros itens as duas métricas \ac{RLWS} possuem uma maior precisão, o que pode ser notado tanto para os limites superiores e \textit{outliers} nas Figuras \ref{fig:map_box_plot_a} e \ref{fig:map_box_plot_b}.
+
+\begin{figure}
+    \begin{subfigure}{.5\textwidth}
+        \centering
+        \includegraphics[width=.8\linewidth]{imagens/map_results.jpg}
+        \caption{testes online}
+        \label{fig:map_line_a}
+    \end{subfigure}%
+    \begin{subfigure}{.5\textwidth}
+        \centering
+        \includegraphics[width=.8\linewidth]{imagens/map_results.jpg}
+        \caption{testes offline}
+        \label{fig:map_line_b}
+    \end{subfigure}
+    \caption{MAP - Gráfico com linhas dos três experimentos nos testes online e offline}
+    \label{fig:map_line}
+\end{figure}
+
+\begin{figure}
+    \begin{subfigure}{.5\textwidth}
+        \centering
+        \includegraphics[width=.8\linewidth]{imagens/map_box_plot.jpg}
+        \caption{testes online}
+        \label{fig:map_box_plot_a}
+    \end{subfigure}%
+    \begin{subfigure}{.5\textwidth}
+        \centering
+        \includegraphics[width=.8\linewidth]{imagens/map_box_plot.jpg}
+        \caption{testes offline}
+        \label{fig:map_box_plot_b}
+    \end{subfigure}
+    \caption{MAP - Gráfico de caixa dos três experimentos nos testes online e offline}
+    \label{fig:map_box_plot}
+\end{figure}
+
+\subsection{MRR}
+
+Para avaliar a objetividade do \ac{SR} foi utilizada a métrica \ac{MRR} perante dois conjuntos de usuários, os dos testes \textit{offline} (sendo no total de 30) e os \textit{online} (com total de 4). As Figuras \ref{fig:mrr_line} e \ref{fig:mrr_box_plot} apresentam os resultados obtidos nos três experimentos, tanto para os testes online quanto para os offline. 
+
+É possível observar que no teste \textit{offline} para ambos os experimentos da métrica \ac{RLWS} foram encontrados resultados positivos já no primeiro item, isto para metade dos usuários, sendo para o método do \textit{COSINE} fica um pouco abaixo. Após o primeiro item, os testes demonstram o mesmo resultado da métrica \ac{MAP}, ou seja, a similaridade do cosseno tem um desempenho um pouco superior a do experimento 1 com \textit{RLWS 0,8/0,2}. Por se manterem relativamente sem progressos no resultado a partir do décimo o item, os gráficos da Figura \ref{fig:mrr_box_plot} não possuem valores intermediários apenas, destacando-se mais os valores \textit{outliers}. Isso significa que para entre o \textit{rank} 5 e 10 para a grande maioria dos usuários foi recomendado um item positivo.
+
+\begin{figure}
+    \begin{subfigure}{.5\textwidth}
+        \centering
+        \includegraphics[width=.8\linewidth]{imagens/mrr_results.jpg}
+        \caption{testes online}
+        \label{fig:mrr_line_a}
+    \end{subfigure}%
+    \begin{subfigure}{.5\textwidth}
+        \centering
+        \includegraphics[width=.8\linewidth]{imagens/mrr_results.jpg}
+        \caption{testes offline}
+        \label{fig:mrr_line_b}
+    \end{subfigure}
+    \caption{MRR - Gráfico com linhas dos três experimentos nos testes online e offline}
+    \label{fig:mrr_line}
+\end{figure}
+
+\begin{figure}
+    \begin{subfigure}{.5\textwidth}
+        \centering
+        \includegraphics[width=.8\linewidth]{imagens/mrr_box_plot.jpg}
+        \caption{testes online}
+        \label{fig:mrr_box_plot_a}
+    \end{subfigure}%
+    \begin{subfigure}{.5\textwidth}
+        \centering
+        \includegraphics[width=.8\linewidth]{imagens/mrr_box_plot.jpg}
+        \caption{testes offline}
+        \label{fig:mrr_box_plot_b}
+    \end{subfigure}
+    \caption{MRR - Gráfico de caixa dos três experimentos nos testes online e offline}
+    \label{fig:mrr_box_plot}
+\end{figure}
 
 \section{Discussão dos resultados}
