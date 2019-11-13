@@ -370,7 +370,6 @@ Nota-se que para criar um \textit{ranking} de melhores filmes, defini-se a equa�
 O pseudo-código \ref{alg:alg_recomendacao} exemplifica os passos para o cálculo da similaridade entre os termos do usuário e os termos do filme.
 
 \begin{algorithm}
-    \label{alg:alg_recomendacao}
 	\caption{Pseudocódigo da geração dos filmes recomendados/sugeridos.}
     \begin{algorithmic}[1]
         \Function{GeraRecomendacoes}{$U, z, n, X, w_i, w_d$}
@@ -387,6 +386,7 @@ O pseudo-código \ref{alg:alg_recomendacao} exemplifica os passos para o cálcul
         	\Return $max(R, n)$\Comment{retorna o conjunto de n filmes com maior score} 
         \EndFunction
     \end{algorithmic}
+\label{alg:alg_recomendacao}
 \end{algorithm}
 
 \begin{algorithm}

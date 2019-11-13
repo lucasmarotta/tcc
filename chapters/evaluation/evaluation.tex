@@ -1,14 +1,14 @@
 \chapter{Avaliação}
 \label{cap:evaluation}
 
-Neste capítulo serão apresentadas as avaliações da solução proposta, metodologias utilizadas, conjunto de dados estudados, métricas e discussões sobre o significado dos resultado em relação aos objetivos inicialmente traçados. Espera-se que com o desenvolvimento de uma métrica de similaridade semântica, explorando as relações de recursos no DBPedia\footnote{http://wiki.dbpedia.org}, seja possível tirar vantagem para sugerir itens, invés da análise mais sintática do conteúdo utilizado em métodos como \ac{TFIDF}. Também é desejado verificar o impacto do uso da sinopse do filme, um dado não estruturado, invés de itens mais comuns como gênero, diretor, atores, com o objetivo de \enquote{fugir} das recomendações que prendam mais o usuário no mesmo tipo de filmes, mas ainda assim ser capaz de ser relevante aos seus interesses.
+Neste capítulo serão apresentadas as avaliações da solução proposta, metodologias utilizadas, conjunto de dados estudados, métricas e discussões sobre o significado dos resultados em relação aos objetivos inicialmente traçados. Espera-se que com o desenvolvimento de uma métrica de similaridade semântica, explorando as relações de recursos no DBPedia\footnote{http://wiki.dbpedia.org}, seja possível tirar vantagem para sugerir itens, invés da análise mais sintática do conteúdo utilizado em métodos como \ac{TFIDF}. Também é desejado verificar o impacto do uso da sinopse do filme, um dado não estruturado, invés de itens mais comuns como gênero, diretor, atores, com o objetivo de \enquote{fugir} das recomendações que prendam mais o usuário no mesmo tipo de filmes, mas ainda assim ser capaz de ser relevante aos seus interesses.
 
-Inicialmente serão apresentados os dados utilizados e resultados iniciais do uso da métrica de similariade utilizada, analisando os efeitos desejados. Posteriormente o método de recomendação que utiliza a similaridade semântica apresentado na seção \ref{ssec:formula_rlws} será comparado com o método da similaridade do cosseno, utilizando-se métricas que serão definidas e apresentadas. O resultado esperado é de que utilizando um método que leve em consideração relações semânticas tenha melhores resultados daqueles que apenas possuem análises sintáticas. Por fim, serão abordadas discussões sobre resultados alcançados além de pontos de melhoria.
+Inicialmente serão apresentados os dados utilizados e resultados iniciais do uso da métrica de similaridade utilizada, analisando os efeitos desejados. Posteriormente o método de recomendação que utiliza a similaridade semântica apresentado na seção \ref{ssec:formula_rlws} será comparado com o método da similaridade do cosseno, utilizando-se métricas que serão definidas e apresentadas. O resultado esperado é de que utilizando um método que leve em consideração relações semânticas tenha melhores resultados daqueles que apenas possuem análises sintáticas. Por fim, serão abordadas discussões sobre resultados alcançados além de pontos de melhoria.
 
 \section{Metodologia}
 \label{sec:methodology}
 
-Na avaliação de um sistema de recomendação é importante entender sua eficácia e seus algoritmos envolvidos, uma vez que uma análise incorreta pode levar subestimação ou superestimação da sua real precisão, como aponta \cite{Aggarwal2016:Evaluation}. Sendo assim, recomendadores podem ser avaliados tanto usando métodos denominados como \textit{online} ou \textit{offline}. Num sistema \textit{online} as opiniões e reações dos usuários são consideradas e medidas de acordo com as recomendações apresentadas, tendo a participação de fato, como algo crucial para a compreensão dos resultados. Contudo, como a avaliação desse método requer a participação do usuário, o que nem sempre é viável, e por isso também existe o método \textit{offline}, onde um conjunto de diferentes tipos de dados históricos dos usuários são utilizados \citep{Herlocker:1999}. Para os experimentos descritos nesta seção, serão utilizados em sua maioria um conjunto de dados offline retirados do projeto MovieLens\footnote{https://movielens.org}, conforme apresentado na seção \ref{sec:av_data_set}. Utilizando-se da mesma metodologia também serão avaliados resultados de usuários online, mas para um grupo bem pequeno, apenas para realizar uma comparação da diferença de resultados encontrados.
+Na avaliação de um sistema de recomendação é importante entender sua eficácia e seus algoritmos envolvidos, uma vez que uma análise incorreta pode levar subestimação ou superestimação da sua real precisão, como aponta \cite{Aggarwal2016:Evaluation}. Sendo assim, recomendadores podem ser avaliados tanto usando métodos denominados como \textit{online} ou \textit{offline}. Num sistema \textit{online} as opiniões e reações dos usuários são consideradas e medidas de acordo com as recomendações apresentadas, tendo sua participação de fato, como algo crucial para a compreensão dos resultados. Contudo, como a avaliação desse método requer a participação do usuário, o que nem sempre é viável, também existe o método \textit{offline}, onde um conjunto de diferentes tipos de dados históricos dos usuários são utilizados \citep{Herlocker:1999}. Para os experimentos descritos nesta seção, serão utilizados em sua maioria um conjunto de dados offline retirados do projeto MovieLens\footnote{https://movielens.org}, conforme apresentado na seção \ref{sec:av_data_set}. Utilizando-se da mesma metodologia também serão avaliados resultados de testes online, mas para um grupo bem pequeno, apenas para realizar uma comparação da diferença de resultados encontrados.
 
 O objetivo dos experimentos que serão apresentados, é avaliar se a utilização da similaridade semântica junto ao método de recomendação proposto, é capaz de trazer resultados melhores nas métricas de avaliação em relação a similaridade do cosseno utilizando \ac{TFIDF}.  Os resultados tratam-se das análises das métricas extraídas das avaliações realizadas por usuários em relação as recomendações geradas por esses métodos.
 
@@ -27,9 +27,9 @@ Definida a metodologia para a construção do perfil do usuário, na análise do
 Os três experimentos consistem nas seguintes abordagens:
 
 \begin{enumerate}
-	\item{\textbf{Experimento 1}: Serão construídas recomendações utilizando o método apresentado na proposta, utilizando a similaridade \ac{RLWS} com pesos 0,8 para links diretos e 0,2 para indiretos.}
-	\item{\textbf{Experimento 2}: Semelhante ao experimento 1, mas com 0,2 para links diretos e 0,8 para indiretos.}
-	\item{\textbf{Experimento 3}: Recomendações construídas utilizando o método da similaridade do cosseno.}
+	\item{\textbf{Experimento 1}: Serão construídas recomendações utilizando o método apresentado na seção \ref{ssec:formula_rlws}, definindo os pesos como 0,8 para links diretos e 0,2 para indiretos. A seguir este experimento será referido como \textbf{RLWS DIRECT}, indicando que a prioridade nos relacionamentos diretos entre recursos.}
+	\item{\textbf{Experimento 2}: Semelhante ao experimento 1, mas com pesos 0,2 para links diretos e 0,8 para indiretos. Este experimento será referido como \textbf{RLWS INDIRECT} para indicar a prioridade dos relacionamentos indiretos entre recursos.}
+	\item{\textbf{Experimento 3}: Recomendações construídas utilizando o método da similaridade do cosseno, referenciada por \textbf{COSINE}.}
 \end{enumerate}
 
 O objetivo da variação dos pesos para a similaridade \ac{RLWS} é analisar o comportamento privilegiando o relacionamento direto ou indireto de recursos na DBPedia.
@@ -56,9 +56,9 @@ Os dados usados durante os experimentos tratam-se de filmes , usuários com seus
 	Usuários, teste offline & 30					\\ \hline
 	Usuários, teste online & 4						\\ \hline
 	Total de avaliações       & 11.997.970          \\ \hline
-	Total URIs             & 22.977                 \\ \hline
-	Total URIs válidas     & 18.629                 \\ \hline
-	Total de comparações de URIs & 2.729.025        \\ \hline
+	Total URIs             & 22.978                 \\ \hline
+	Total URIs válidas     & 18.630                 \\ \hline
+	Total de comparações de URIs & 6.306.451        \\ \hline
 \end{tabular}
 \caption{Contagem dos dados utilizados durante os testes.}
 \label{tab:dataset}
@@ -84,8 +84,8 @@ O total de URIs válidas é um ponto de contenção importante de ser analisado,
 \hline
 \textbf{Dado}                           & \textbf{Valor} \\ \hline
 Cobertura DBPedia                       & 81,08\%        \\ \hline
-Cobertura Links Diretos                 & 13,77\%        \\ \hline
-Cobertura Links Indiretos               & 59,57\%        \\ \hline
+Cobertura Links Diretos                 & 21,63\%        \\ \hline
+Cobertura Links Indiretos               & 64,41\%        \\ \hline
 Cobertura de Filmes com Links Diretos   & 99,96\%        \\ \hline
 Cobertura de Filmes com Links Indiretos & 100,00\%       \\ \hline
 \end{tabular}
@@ -95,7 +95,7 @@ Cobertura de Filmes com Links Indiretos & 100,00\%       \\ \hline
 
 É importante ressaltar que os dados das coberturas apenas consideram os \enquote{links válidos}, ou seja, aqueles que possuem uma URI associada no DBPedia. Nota-se também que os dados mencionados na tabela em relação a cobertura de links diretos e indiretos trata-se das comparações realizadas nos experimentos, sendo assim, não se completam, pois ainda existem links com relacionamentos que não foram comparados.
 
-Algo relevante para destacar quanto à relação entre recursos é de que a quantidade de relacionamentos entre recursos cujo a quantidade links diretos é maior que 0, é de apenas 0,14\%, conforme constatado na Tabela  \ref{tab:lod_cache_stats} da quantização da relação entre recursos. Já era esperado que a maioria dos recursos não tivesse propriedades diretamente conectadas entre si, devido a variedade de comparações indiscriminada entre termos do usuário e termos dos filmes. Isso resulta numa tabela de dados altamente esparsa em relação ao cálculo a participação direta na equação \ac{RLWS}, o que por consequência leva a uma tabela de dados grande contendo diversas comparações zeradas. Quanto a proporção de relacionamentos indiretos maiores que 0 em relação ao total é de 8,81\%. Embora esses valores sejam baixos, o foco é de que para cada termo existam pelo menos um relacionamento a outro termo, seja direta ou indiretamente, e de que esse relacionamento esteja distribuído pela maioria dos filmes, algo que é evidenciado pelos dados da Tabela \ref{tab:lod_statistics}. Na tabela abaixo ainda são apresentados os de recursos relacionados que possuem a propriedade \textit{dbo:wikiPageRedirects}, ou seja, aqueles que o DBPedia resolve sua \ac{URI} como sendo a mesma, portanto para a similaridade considerados iguais.
+Algo relevante para destacar quanto à relação entre recursos é de que a quantidade de relacionamentos entre recursos cujo a quantidade links diretos é maior que 0, é de aproximadamente 0,12\% em relação ao total de relações entre recursos, conforme constatado na Tabela \ref{tab:lod_cache_stats}. Já era esperado que a maioria dos recursos não tivesse propriedades diretamente conectadas entre si, devido a variedade de comparações indiscriminada entre termos do usuário e termos dos filmes. Isso resulta numa tabela de dados altamente esparsa em relação ao cálculo a participação direta na equação \ac{RLWS}, o que por consequência leva a uma tabela de dados grande contendo diversas comparações zeradas. Quanto a proporção de relacionamentos indiretos maiores que 0 em relação ao total é de aproximadamente 8,05\%. Embora esses valores sejam baixos, o foco é de que para cada termo existam pelo menos um relacionamento a outro termo, seja direta ou indiretamente, e de que esse relacionamento esteja distribuído pela maioria dos filmes, algo que é evidenciado pelos dados da Tabela \ref{tab:lod_statistics}. Na tabela abaixo ainda são apresentados os de recursos relacionados que possuem a propriedade \textit{dbo:wikiPageRedirects}, ou seja, aqueles que o DBPedia resolve sua \ac{URI} como sendo a mesma, portanto para a similaridade considerados iguais.
 
 \begin{table}[H]
 \centering
@@ -103,11 +103,11 @@ Algo relevante para destacar quanto à relação entre recursos é de que a quan
 \begin{tabular}{|l|l|}
 \hline
 \textbf{Dado}                                   & \textbf{Quantidades} \\ \hline
-Relação entre recursos                          & 2.729.025            \\ \hline
-Relação entre recursos, direto $> 0$ 			& 3.951                \\ \hline
-Relação entre recursos, indireto $> 0$ 			& 240.629              \\ \hline
-Relação entre recursos, redirecionados entre si & 77                   \\ \hline
-Relação entre recursos, direto e indireto $= 0$ & 2.487.949            \\ \hline
+Relação entre recursos                          & 6.306.451            \\ \hline
+Relação entre recursos, direto $> 0$ 			& 7.977                \\ \hline
+Relação entre recursos, indireto $> 0$ 			& 510.533              \\ \hline
+Relação entre recursos, redirecionados entre si & 194                  \\ \hline
+Relação entre recursos, direto e indireto $= 0$ & 5.794.914            \\ \hline
 \end{tabular}
 \caption{Contagem da relação entre recursos utilizados durante os experimentos.}
 \label{tab:lod_cache_stats}
@@ -120,7 +120,7 @@ Existem diversas métricas que são usadas tanto em avaliações \textit{online}
 
 \subsection{Precision}
 
-Avaliando recomendações com métodos \textit{offline} apenas utilizando dados históricos da preferência do usuário, somente pode informar aqueles itens que foram de conhecimento do usuário, portando todos os outros itens terão de avaliados de outras formas, que não seja diretamente pela sua opinião, o que pode levar à falso positivos e/ou negativos. Por outro lado, avaliando com usuários reais, esses podem julgar todos os itens recomendados, podendo de fato definir se a predição foi correta ou não. Com a avaliação do usuário é possível construir uma tabela de classificação conforme a Figura \ref{fig:truth_table} \citep{Jannach:2010}, onde há cruzamento entre o que o recomendador apresentou e o que usuário avaliou. Se um item foi apresentado na recomendação e o usuário tenha gostado, avaliado como relevante, tem-se um caso de predição correta, ou \textit{true positive}. Outro resultado positivo, trata-se de quando o usuário não tenha gostado e o recomendador omitiu o resultado, ou seja uma omissão correta ou \textit{true negative}. Assim os resultados positivos estão na diagonal da esquerda para direita da tabela, e os resultados não desejados e negativos estão na outra diagonal. 
+Avaliando recomendações com métodos \textit{offline} apenas utilizando dados históricos da preferência do usuário, somente pode informar aqueles itens que foram de conhecimento do usuário, portando todos os outros itens terão de avaliados de outras formas, que não seja diretamente pela sua opinião, o que pode levar à falso positivos e/ou negativos. Por outro lado, avaliando com usuários reais, esses podem julgar todos os itens recomendados, podendo de fato definir se a predição foi correta ou não. Com a avaliação do usuário é possível construir uma tabela de classificação conforme a Figura \ref{fig:truth_table} \citep{Jannach:2010}, onde há o cruzamento entre o que o recomendador apresentou e o que usuário avaliou. Se um item foi apresentado na recomendação e o usuário tenha gostado, avaliado como relevante, tem-se um caso de predição correta, ou \textit{true positive}. Outro resultado positivo, trata-se de quando o usuário não tenha gostado e o recomendador omitiu o resultado, ou seja uma omissão correta ou \textit{true negative}. Assim os resultados positivos estão na diagonal da esquerda para direita da tabela, e os resultados não desejados e negativos estão na outra diagonal. 
 
 \begin{figure}
 	\centering
@@ -183,13 +183,13 @@ A métrica \ac{MRR} trata-se da média da classificação recíproca (\textit{re
 \section{Resultados}
 \label{sec:results}
 
-Antes de apresentar os resultados das recomendações com as avaliações dos usuários, é importante avaliar algumas premissas e comportamentos da própria equação de similaridade, a \ac{RLWS}. Inicialmente o esperado é de que recursos que sejam intuitivamente próximos, ou provavelmente tenham diversas relações entre si,  como \textit{Earth} e \textit{Moon}, possuam maior similaridade do que \textit{Earth} e \textit{Table}. E de fato, mesmo nos dois extremos de pesos, seja priorizando as links diretos ou indiretos, existe uma diferença considerável quando termos estão intuitivamente mais próximos do que aqueles que provavelmente não terão relacionamentos em comum, conforme mostra Figura \ref{tab:rlws_results}. Note que \textit{RLWS(0,8/0,2)} refere-se ao uso dos pesos como sendo o primeiro 0,8 para links diretos e o segundo 0,2 para indiretos.
+Antes de apresentar os resultados das recomendações com as avaliações dos usuários, é importante avaliar algumas premissas e comportamentos da própria equação de similaridade, a \ac{RLWS}. Inicialmente o esperado é de que recursos que sejam intuitivamente próximos, ou provavelmente tenham diversas relações entre si,  como \textit{Earth} e \textit{Moon}, possuam maior similaridade do que \textit{Earth} e \textit{Table}. E de fato, mesmo nos dois extremos de pesos, seja priorizando as links diretos ou indiretos, existe uma diferença considerável quando termos estão intuitivamente mais próximos do que aqueles que provavelmente não terão relacionamentos em comum, conforme mostra Figura \ref{tab:rlws_results}. É importante ressaltar que \enquote{RLWS DIRECT} refere-se à configuração de pesos $w_d = 0,8, w_i = 0,2$, enquanto que \enquote{RLWS INDIRECT} é o inverso, assim priorizando os relacionamentos indiretos entre dos termos.
 
 \begin{table}[H]
 \centering
 \begin{tabular}{|l|l|l|l|}
 \hline
-\textbf{Termo 1} & \textbf{Termo 2}    & \textbf{RLWS (0,8/0,2)} & \textbf{RLWS (0,2/0,8)} \\ \hline
+\textbf{Termo 1} & \textbf{Termo 2}    & \textbf{RLWS DIRECT} & \textbf{RLWS INDIRECT} \\ \hline
 France           & Paris               & 0,434                   & 0,858                   \\ \hline
 France           & Juice               & 0,111                   & 0,443                   \\ \hline
 France           & Art                 & 0,190                   & 0,760                   \\ \hline
@@ -219,7 +219,7 @@ Johnny\_Cash     & Carlene\_Carter     & 0,457                   & 0,743        
 \label{tab:rlws_results}
 \end{table}
 
-É importante ressaltar que mesmo para termos que estejam aparentemente mais distantes, como \textit{Selena\_Gomez} e \textit{Ariana\_Grande}, por se tratarem de "coisas" que não são imediatamente próximas, ainda possuem uma alta similaridade, devido as conexões que ambas as pessoas possuem quanto ao domínio da música e aparições em temas de filmes, programas etc. Já quando compara-se \textit{Selena\_Gomez} com \textit{Elon\_Musk}, mesmo sendo pessoas já possuem uma similaridade bem menor, o que também é intuitivamente esperado. Também se observa na comparação \textit{Johnny\_Cash} e \textit{June\_Carter\_Cash}, uma alta similaridade, pois os dois foram casados e cantores. Outra observação importante é quanto aos termos \textit{Car} e \textit{Automobile} que possuem similaridade 1. Isso é devido que os dois possuem a propriedade \textit{dbo:wikiPageRedirect} conectado seus recursos, o que por regra entra na clausula da equação tendo valor 1. Esses redirecionamentos também ocorrem nos  termos \textit{Future} e \textit{Futuristic}, \textit{Power} e \textit{Powerful} entre outros. Para uma série de termos esses redirecionamentos contribuem bastante para o desempenho da equação, devido a sua real proximidade, apesar de serem termos diferentes.
+É importante ressaltar que mesmo para termos que estejam aparentemente mais distantes, como \textit{Selena\_Gomez} e \textit{Ariana\_Grande}, por se tratarem de "coisas" que não são imediatamente próximas, ainda possuem uma alta similaridade, devido as conexões que ambas as pessoas possuem quanto ao domínio da música e aparições em temas de filmes, programas etc. Já quando compara-se \textit{Selena\_Gomez} com \textit{Elon\_Musk}, mesmo também sendo uma comparação entre pessoas, já possuem uma similaridade bem menor, o que também é intuitivamente esperado. Também se observa na comparação \textit{Johnny\_Cash} e \textit{June\_Carter\_Cash}, uma alta similaridade, pois os dois foram casados e cantores. Outra observação importante é quanto aos termos \textit{Car} e \textit{Automobile} que possuem similaridade 1. Isso é devido que os dois possuem a propriedade \textit{dbo:wikiPageRedirect} conectando seus recursos, o que por regra na equação terá valor 1. Esses redirecionamentos também ocorrem nos termos \textit{Future} e \textit{Futuristic}, \textit{Power} e \textit{Powerful} entre outros. Para uma série de termos esses redirecionamentos contribuem para o desempenho da equação, devido a sua real proximidade, apesar de serem termos diferentes.
 
 Nota-se que intuitivamente os resultados das comparações fazem sentido tanto usando pesos que privilegiam links diretos ou indiretos, o que é vital para coerência no momento da comparação termo a termo. Outro fato importante é a consideração de itens que possuem redirecionamentos, ainda que sejam raros, mas para palavras como "Carro" e "Automóvel" é sensato dizer que são similares.
 
@@ -229,18 +229,20 @@ Avaliadas as premissas e os resultados para a similaridade semântica proposta, 
 
 Para medir a assertividade do \ac{SR} foi utilizada a métrica \ac{MAP} perante dois conjuntos de usuários, os dos testes \textit{offline} (sendo no total de 30) e os \textit{online} (com total de 4). As Figuras \ref{fig:map_line} e \ref{fig:map_box_plot} apresentam os resultados obtidos nos três experimentos, tanto para os testes online quanto para os offline. 
 
-O mais notável dos valores obtidos é o fato de que os testes do experimento 2, com \textit{RLWS 0,2/0,8}, teve um desempenho consideravelmente melhor que os outros, em especial a seu par que privilegia os links diretos. Mesmo com um desempenho inferior, o teste \textit{RLWS 0,8/0,2} obteve um resultado próximo da similaridade do cosseno até os 10 primeiros itens, piorando a partir de então. Isso pode indicar que com um valor um pouco menor para os relacionamentos diretos como 0,65/0,45, tem o potencial de melhorar os resultados. Outro observação importante é que para os 5 primeiros itens as duas métricas \ac{RLWS} possuem uma maior precisão, o que pode ser notado tanto para os limites superiores e \textit{outliers} nas Figuras \ref{fig:map_box_plot_a} e \ref{fig:map_box_plot_b}.
+O mais notável dos valores obtidos é o fato de que os testes do experimento 2, com \textit{RLWS INDIRECT}, teve um desempenho consideravelmente melhor que os outros, em especial a seu par que privilegia os links diretos, isso tanto nos testes online como offline. Quanto aos resultados utilizando a métrica \textit{RLWS DIRECT} possuiu uma divergência entre os testes das Figuras \ref{fig:map_line_a} e \ref{fig:map_line_b}, sendo que o primeiro teste obteve um desempenho próximo à métrica \textit{COSINE}, na verdade até perdendo. Já nos testes offline ambas as variantes \ac{RLWS} obtiveram um desempenho consideravelmente superior à similaridade do cosseno.
+
+Mesmo com um desempenho inferior, o experimento \textit{RLWS DIRECT} obteve um resultado próximo da similaridade do cosseno nos testes online, o que indica que com um peso um pouco menor para os relacionamentos diretos como $w_d = 0,65, w_i = 0,35$, pode-se obter melhores resultados. A influencia dos relacionamentos diretos é esperada que tenha um impacto menor numa visão geral, devido a improbabilidade de um termo possuir tal conexão com outro, conforme é evidenciado pelas estatísticas apresentadas nas Tabelas \ref{tab:lod_statistics} e \ref{tab:lod_cache_stats}. Outra observação importante é que para os 5 primeiros itens as duas métricas \ac{RLWS} possuem uma maior precisão, o que pode ser notado tanto para os limites superiores e \textit{outliers} nas Figuras \ref{fig:map_box_plot_a} e \ref{fig:map_box_plot_b}.
 
 \begin{figure}
     \begin{subfigure}{.5\textwidth}
         \centering
-        \includegraphics[width=.8\linewidth]{imagens/map_results.jpg}
+        \includegraphics[width=.8\linewidth]{imagens/map_results_online.jpg}
         \caption{testes online}
         \label{fig:map_line_a}
     \end{subfigure}%
     \begin{subfigure}{.5\textwidth}
         \centering
-        \includegraphics[width=.8\linewidth]{imagens/map_results.jpg}
+        \includegraphics[width=.8\linewidth]{imagens/map_results_offline.jpg}
         \caption{testes offline}
         \label{fig:map_line_b}
     \end{subfigure}
@@ -251,13 +253,13 @@ O mais notável dos valores obtidos é o fato de que os testes do experimento 2,
 \begin{figure}
     \begin{subfigure}{.5\textwidth}
         \centering
-        \includegraphics[width=.8\linewidth]{imagens/map_box_plot.jpg}
+        \includegraphics[width=.8\linewidth]{imagens/map_box_plot_online.jpg}
         \caption{testes online}
         \label{fig:map_box_plot_a}
     \end{subfigure}%
     \begin{subfigure}{.5\textwidth}
         \centering
-        \includegraphics[width=.8\linewidth]{imagens/map_box_plot.jpg}
+        \includegraphics[width=.8\linewidth]{imagens/map_box_plot_offline.jpg}
         \caption{testes offline}
         \label{fig:map_box_plot_b}
     \end{subfigure}
@@ -267,20 +269,22 @@ O mais notável dos valores obtidos é o fato de que os testes do experimento 2,
 
 \subsection{MRR}
 
-Para avaliar a objetividade do \ac{SR} foi utilizada a métrica \ac{MRR} perante dois conjuntos de usuários, os dos testes \textit{offline} (sendo no total de 30) e os \textit{online} (com total de 4). As Figuras \ref{fig:mrr_line} e \ref{fig:mrr_box_plot} apresentam os resultados obtidos nos três experimentos, tanto para os testes online quanto para os offline. 
+Para avaliar a objetividade do \ac{SR} foi utilizada a métrica \ac{MRR} perante dois conjuntos de usuários, os dos testes \textit{offline} (sendo no total de 30) e os \textit{online} (com total de 4). As Figuras \ref{fig:mrr_line} e \ref{fig:mrr_box_plot} apresentam os resultados obtidos nos três experimentos para ambos os testes. 
 
-É possível observar que no teste \textit{offline} para ambos os experimentos da métrica \ac{RLWS} foram encontrados resultados positivos já no primeiro item, isto para metade dos usuários, sendo para o método do \textit{COSINE} fica um pouco abaixo. Após o primeiro item, os testes demonstram o mesmo resultado da métrica \ac{MAP}, ou seja, a similaridade do cosseno tem um desempenho um pouco superior a do experimento 1 com \textit{RLWS 0,8/0,2}. Por se manterem relativamente sem progressos no resultado a partir do décimo o item, os gráficos da Figura \ref{fig:mrr_box_plot} não possuem valores intermediários apenas, destacando-se mais os valores \textit{outliers}. Isso significa que para entre o \textit{rank} 5 e 10 para a grande maioria dos usuários foi recomendado um item positivo.
+Assim como na métrica \ac{MAP}, também é possível observar um desempenho consideravelmente superior para o experimento 2 com a similaridade \textit{RLWS INDIRECT}. Nota-se que na Figura \ref{fig:mrr_line_a} tem-se uma linha reta com a maior nota possível, indicando que para todos os usuários nos testes online, um resultado positivo foi encontrado logo no primeiro item recomendado. Já para os testes offline é possível observar que para ambos os experimentos da métrica \ac{RLWS} foram encontrados resultados positivos já no primeiro item para mais da metade dos usuários, com o experimento \textit{COSINE} ficando um pouco abaixo. 
+
+Os gráficos de caixa aparentes nas Figuras \ref{fig:mrr_box_plot_a} e \ref{fig:mrr_box_plot_b}, possuem em sua maioria apenas linhas retas juntamente com os \textit{outliers} devido ao fato de que a partir da 5º posição não há muito mais usuários que ainda não obtiveram uma recomendação positiva.
 
 \begin{figure}
     \begin{subfigure}{.5\textwidth}
         \centering
-        \includegraphics[width=.8\linewidth]{imagens/mrr_results.jpg}
+        \includegraphics[width=.8\linewidth]{imagens/mrr_results_online.jpg}
         \caption{testes online}
         \label{fig:mrr_line_a}
     \end{subfigure}%
     \begin{subfigure}{.5\textwidth}
         \centering
-        \includegraphics[width=.8\linewidth]{imagens/mrr_results.jpg}
+        \includegraphics[width=.8\linewidth]{imagens/mrr_results_offline.jpg}
         \caption{testes offline}
         \label{fig:mrr_line_b}
     \end{subfigure}
@@ -291,13 +295,13 @@ Para avaliar a objetividade do \ac{SR} foi utilizada a métrica \ac{MRR} perante
 \begin{figure}
     \begin{subfigure}{.5\textwidth}
         \centering
-        \includegraphics[width=.8\linewidth]{imagens/mrr_box_plot.jpg}
+        \includegraphics[width=.8\linewidth]{imagens/mrr_box_plot_online.jpg}
         \caption{testes online}
         \label{fig:mrr_box_plot_a}
     \end{subfigure}%
     \begin{subfigure}{.5\textwidth}
         \centering
-        \includegraphics[width=.8\linewidth]{imagens/mrr_box_plot.jpg}
+        \includegraphics[width=.8\linewidth]{imagens/mrr_box_plot_offline.jpg}
         \caption{testes offline}
         \label{fig:mrr_box_plot_b}
     \end{subfigure}
@@ -307,17 +311,27 @@ Para avaliar a objetividade do \ac{SR} foi utilizada a métrica \ac{MRR} perante
 
 \section{Discussão dos resultados}
 
+Utilizando as métricas apresentadas na metodologia foi possível observar que em especial ao uso de relacionamentos indiretos entre termos, obteve-se um resultado consideravelmente superior a métrica da similaridade do cosseno. Já quanto a variante \textbf{RLWS DIRECT}, obteve um resultado misto, sendo na maior parte das vezes superior em relação a métrica comparada. Ainda que com um grupo de testes limitado, os resultados indicam que é possível tirar proveito de uma análise semântica entre termos, podendo trazer resultados melhores de que uma análise sintática. Outra observação trata-se de que durante as entrevistas dos usuários nos testes \textit{online}, foi notado que o uso da descrição dos itens como \textit{feature} para construção do modelo de recomendação, aparentemente gerou recomendações que \enquote{fugiram à bolha tradicional} de resultados, algo que era um dos pontos do problema apresentado no capítulo \ref{cap:introducao}. Contudo, para um diversa quantidade de usuários o uso de certas \textit{features} dos itens, como ano de lançamento, gênero, autor ainda podem obter bons resultados, em especial de que é difícil avaliar se o modelo do usuário baseado na sinopse dos filmes, obtendo os termos mais relevantes, consegue captar corretamente suas preferências de narrativa, além de que o uso de outras características dos itens podem ser mais relevantes de usuário para usuário.
+
+Outro ponto importante para ressaltar trata-se de que como o modelo de recomendação (ver seção \ref{ssec:rec_alg}) utiliza a descrição do item, um dado não estruturado, torna o sistema não muito dependente do domínio aplicado, sendo perfeitamente possível de ser utilizado numa recomendação para livros, por exemplo. Ainda que a similaridade semântica proposta seja intuitivamente coerente e de que é possível utilizá-la para modelar recomendações potencialmente mais precisas que métodos tradicionais, não seria tão adequada para comparações de textos grandes, sendo o objetivo para modelar um \ac{SR}, devido ao alto custo e carga de consultas a serem realizadas no DBPedia. Para comparar recursos individualmente ou uma coleção de palavras em pequenos textos, seria o uso mais indicado para tal similaridade.
 
 \section{Pontos de melhorias}
 
-Alguns desafios foram encontrados durante a construção do sistema de recomendação, principalmente relacionada a métrica de similaridade. Notou-se que ambiguidade é um grande problema para análise de recursos na DBPedia\footnote{http://wiki.dbpedia.org}, inclusive ambiguidade em dois sentidos. A primeira deve-se à ambiguidade no próprio serviço da web semântica que é vista pela propriedade \textit{dbo:wikiPageDisambiguates}, como no exemplo do termo \enquote{Paraná}, que pode ser resolvido para o estado brasileiro, rio ou clube de futebol. Quando uma pesquisa com termo ambíguo é realizada a contagem de links torna-se menos eficaz do que feita sabendo qual termo específico está se referindo. 
+Alguns desafios foram encontrados durante a construção do sistema de recomendação, principalmente relacionados a métrica de similaridade. Notou-se que a ambiguidade é um grande problema para análise de recursos na DBPedia\footnote{http://wiki.dbpedia.org}, inclusive ambiguidade em dois sentidos. O primeiro deve-se à ambiguidade no próprio serviço da web semântica que é vista pela propriedade \textit{dbo:wikiPageDisambiguates}, como no exemplo do termo \enquote{Paraná}, que pode ser resolvido para o estado brasileiro, rio ou clube de futebol. Quando uma pesquisa com termo ambíguo é realizada a contagem de links torna-se menos eficaz do que feita sabendo qual termo específico está se referindo. 
 
-A segunda ambiguidade é a da gerada pela propriedade \textit{dbo:wikiPageRedirects}, que trata-se de como o termo é resolvido para seu nome final, comportando-se como \textit{alias}. Quando se é buscado um termo como \textit{Automobile}, o mesmo é redirecionado para \textit{Car} como \ac{URI} final, isso para todos os possíveis \enquote{sinônimos}. Ainda que no sistema sejam considerados termos iguais devido à análise de redirecionamentos entre si, quando se comparado com outro termo, existe uma divergência para pior na contagem de links indiretos. Em futuros trabalhos poderá ser feito um ajuste nas consultas para que a contagem de links diretos e indiretos sejam mais precisas, diminuindo os problemas de ambiguidade.
+O segundo sentido de ambiguidade é a da gerada pela propriedade \textit{dbo:wikiPageRedirects}, que trata-se de como o termo é resolvido para seu nome final, comportando-se como \textit{alias}. Quando se busca um termo como \textit{Automobile}, o mesmo é redirecionado para \textit{Car} como \ac{URI} final, isso para todos os possíveis \enquote{sinônimos}. Ainda que no sistema sejam considerados termos iguais devido à análise de redirecionamentos entre si, quando se compara com outro termo, existe uma divergência para pior na contagem de links indiretos. Em futuros trabalhos poderá ser feito um ajuste nas consultas para que a contagem de links diretos e indiretos sejam mais precisas, diminuindo os problemas de ambiguidade.
 
-Outra questão importante trata-se do custo para se executar o modelo de recomendação proposto, pois ainda que o limite superior da complexidade de tempo seja $O(|Y| * |M_u| * |D_u|)$, dentro do esperado, a questão é de que o modelo do usuário e de filmes tendo um custo $|M_u| * |D_u|$ torna-se um conjunto de termos grande para ser executado no DBPedia, mesmo utilizando \textit{multithreading}\footnote{Multithreading trata-se da possibilidade de trabalhar com múltiplas linhas execução concorrente, tornando um processamento de dados paralelo invés de linear.} e a estrutura de \textit{cache} da contagem de links proposta no capítulo \ref{cap:proposal}, pois as possibilidades de combinações são enormes e requer diversas execuções para alcançar um cache suficientemente grande para que isto não seja um problema. Inclusive este problema é um dos fatores que dificultaram a execução de testes com mais usuários, algo que precisa de mais tempo para ter um conjunto maior de comparações seja feita. Outra possibilidade de ser estudada é a de realizar ajustes nos modelos para resultar num conjunto de comparações menor diminuindo assim o tempo de processamento.
+Outra questão importante trata-se do custo para se executar o modelo de recomendação proposto, pois ainda que o limite superior da complexidade de tempo seja $O(|Y| * |M_u| * |D_u|)$, dentro do esperado, o modelo do usuário e de filmes tendo um custo $|M_u| * |D_u|$, na prática torna-se um conjunto de termos grande para ser executado no DBPedia. É possível identificar este problema pela Equação \ref{eq:comb_term} que demonstra o cálculo de todas as combinações de termos possíveis, sendo $n$ o total de termos associados a \ac{URI}, que apenas utilizando os 5.107 filmes, foram encontrados 18630, resultado num total de 173.529.135 comparações possíveis. Ainda que este seja o limite teórico, e de que muitos termos não venham a ser comparados, é possível notar o quanto este número pode crescer rapidamente, sendo uma alta carga de comparações, mesmo utilizando \textit{multithreading}\footnote{Multithreading trata-se da possibilidade de trabalhar com múltiplas linhas execução concorrente, tornando um processamento de dados paralelo invés de linear.} e a estrutura de \textit{cache} da contagem de links proposta na seção \ref{sec:cache}.
 
-Com melhorias realizadas no modelo do usuário de filmes para diminuir a carga de comparações no DBPedia, possibilita expandir mais facilmente os testes \textit{online}, inclusive relacionado a este ponto também facilitaria a construção de uma plataforma online na Web para que o usuário pudesse escolher suas preferências, exibindo as recomendações para que ele mesmo avalie, dispensando o uso de entrevistas. Outro ponto de melhoria trata-se no processo de \ac{NLP}, onde foram utilizados modelos pré treinados oferecidos pela biblioteca \textit{OpenNLP}\footnote{https://opennlp.apache.org}. Com o uso deste modelo ocorreram diversas falhas ao reconhecer nomes de entidades (processo \ac{NER}). Para isso existem algumas possibilidades, como a de realizar um treinamento baseado nos textos dos filmes do projeto, ou experimentar outras ferramentas como a \textit{Stanford CoreNLP}\footnote{https://stanfordnlp.github.io/CoreNLP/}.
+\begin{equation}
+	C(n, 2) = \frac{n!}{2!(n - 2)!}
+\label{eq:comb_term}
+\end{equation}
+
+O objetivo não é alterar o custo dado pela equação das combinações, mas verificar maneiras de diminuir os modelos para recomendação, assim reduzindo a carga teórica de consultas no DBPedia. Inclusive este problema é um dos fatores que dificultaram a execução de testes com mais usuários, algo que precisa de mais tempo para ter um conjunto maior de comparações. Com essas melhorias realizadas nos modelos, será possível expandir mais facilmente os testes \textit{online}, inclusive relacionado a este ponto também facilitaria a construção de uma plataforma online na Web para que o usuário pudesse escolher suas preferências, exibindo as recomendações para que ele mesmo avalie, dispensando o uso de entrevistas.
+
+Um último ponto de melhoria trata-se do processo de \ac{NLP}, onde foram utilizados modelos pré-treinados oferecidos pela biblioteca \textit{OpenNLP}\footnote{https://opennlp.apache.org}. Com o uso deste modelo ocorreram diversas falhas ao reconhecer nomes de entidades (processo \ac{NER}). Para isso existem algumas possibilidades, como a de realizar um treinamento baseado nos textos dos filmes do próprio projeto, ou experimentar outras ferramentas como a \textit{Stanford CoreNLP}\footnote{https://stanfordnlp.github.io/CoreNLP/}.
 
 \section{Sumário}
 
-Neste capítulo foram apresentados os resultados obtidos com o sistema de recomendação construído, assim como uma análise da métrica de similaridade semântica. Para isso foram discutidas as metodologias junto com os dados utilizadas, além de estudas as métricas que foram usadas nos resultados.
+Neste capítulo foram apresentados os resultados obtidos com o sistema de recomendação construído, assim como uma análise da métrica de similaridade semântica. Para isso foram discutidas as metodologias junto com os dados utilizadas, além de estudadas as métricas que foram usadas nos resultados.

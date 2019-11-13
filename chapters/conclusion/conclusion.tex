@@ -7,20 +7,20 @@ São só dois lados da mesma viagem. O trem que chega é o mesmo trem da partida
 
 Neste trabalho de conclusão de curso foi apresentada uma proposta de recomendação com similaridade semântica ponderada por links de recursos na DBPedia\footnote{http://wiki.dbpedia.org}. Inicialmente estabeleceu-se a motivação pela busca de novos resultados originados da similaridade semântica de elementos. Ainda foram discutidos os problemas que a solução proposta pretende confrontar, como a deficiência e dificuldade de sugerir quando apenas o conteúdo sintático é analisado, além da possibilidade de usuários expandirem sua busca para a mais dos itens comumente recomendados utilizando \textit{features} tradicionais na recomendação baseada em conteúdo.
 
-No capítulo 2 foi introduzido referenciais sobre a construção de um sistema de recomendação, com suas variações, propósitos, além da apresentação de exemplos do estado da arte encontrada em diversas soluções aplicadas no mercado.
+No capítulo 2 foi introduzido referenciais sobre a construção de um sistema de recomendação, com suas variações, propósitos, além da apresentação de exemplos do estado da arte encontrada em diversas soluções utilizadas na literatura e no mercado.
 
 Para o capítulo 3 foram apresentados os conceitos da Web Semântica, como sua formulação, tecnologias e princípios, além do aprofundamento do significado das ontologias. Também foi abordado um panorama sobre a estrutura das tecnologias utilizadas na Web Semântica, a prática dos dados ligados, além do panorama da similaridade semântica e tipos de medidas.
 
 No capítulo 4 é detalhada a proposta para o sistema de recomendação, conceituando as etapas para construir o conjunto de itens recomendados. Também foram apresentados os modelos de dados, do usuário, dos itens e do modelo da recomendação, juntamente com a introdução dos algoritmos e a métrica de similaridade semântica da proposta deste trabalho, com suas equações.
 
-Por último foram vistos os resultados da proposta deste trabalho, além da discussão sobre métricas de avaliação em sistemas de recomendação. Também foram discutidos os resultados obtidos pelas métricas avaliadas, além de pontos de melhoria.
+Por último foram vistos os resultados da proposta deste trabalho, além da discussão sobre métricas de avaliação em sistemas de recomendação. Também foram discutidos os resultados obtidos pelas métricas avaliadas, além de apresentados pontos de melhoria.
 
 \section{Contribuições}
 
-Abaixo consta as principais contribuições oferecidas por este trabalho:
+Abaixo consta um resumo das principais contribuições oferecidas por este trabalho:
 
 \begin{itemize}
-	\item{\textbf{Métrica de similaridade semântica \ac{RLWS}}: Foi proposta uma nova métrica de similaridade semântica ponderada por links de recursos na DBPedia.}
+	\item{\textbf{Métrica de similaridade semântica \ac{RLWS}}: Foi proposta uma nova métrica de similaridade semântica ponderada por links de recursos na DBPedia. O foco é analisar o peso de relacionamentos (a quantidade de links) diretos e indiretos entre tais recursos, realizando uma média simples entre os dois aspectos.}
 	
 	\item{\textbf{Modelo de recomendação}: Foi apresentado um modelo de recomendação baseado em conteúdo utilizando um dado não estruturado, juntamente com um processamento de linguagem natural integrado com uma métrica de similaridade semântica.}
 	
@@ -32,11 +32,11 @@ Abaixo consta as principais contribuições oferecidas por este trabalho:
 Resumindo os pontos discutidos no capítulo \ref{cap:evaluation}, são levantados os seguintes pontos para trabalhos futuros:
 
 \begin{itemize}
-	\item{\textbf{Trabalhar na precisão das consultas \ac{SPARQL}}: Conforme, relatado no capítulo \ref{cap:evaluation}, a comparação de termos entre o modelo de usuário e do filme gera ambiguidades durante as consultas no DBPedia, principalmente aquelas relacionadas a propriedade \textit{dbo:wikiPageRedirects},  o que afeta a contagem de links diretos. Objetivo é trabalhar neste tipo de ambiguidade melhorando os resultados das comparações de termos.}
+	\item{\textbf{Trabalhar na precisão das consultas \ac{SPARQL}}: Conforme relatado no capítulo \ref{cap:evaluation}, a comparação de termos entre o modelo de usuário e do filme gera ambiguidades durante as consultas no DBPedia, principalmente aquelas relacionadas a propriedade \textit{dbo:wikiPageRedirects},  o que afeta a contagem de links indiretos. Objetivo é trabalhar neste tipo de ambiguidade melhorando os resultados das comparações de termos.}
 	
 	\item{\textbf{Aprimorar a extração de termos com \ac{NLP}}: Revisar o processo de extração de termos, uma vez que o mesmo possui falhas na identificação de entidades nomeadas.}
 	
-	\item{\textbf{Proposta de modelos menores}: Os modelos de usuário, dos filmes juntamente com o modelo de recomendação implicam em uma carga muito grande para consultas no DBPedia, sendo assim o objetivo é estudar variações para diminuir a quantidade de termos comparados.}
+	\item{\textbf{Proposta de modelos menores}: O tamanho dos modelos do usuário, do filme juntamente com o modelo de recomendação implicam em uma carga muito grande para consultas no DBPedia, sendo assim o objetivo é estudar variações para diminuir a quantidade de termos comparados.}
 	
 	\item{\textbf{Realizar testes com mais usuários}: Devido ao custo inicial da execução da recomendação de itens, sem possuir informações em \textit{cache} sobre as comparações de termos, foram realizados testes com poucos usuários.}
 
