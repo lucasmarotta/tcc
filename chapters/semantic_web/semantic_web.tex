@@ -144,7 +144,7 @@ Dentro da definição da ontologia poderão ser informados as classes e indivíd
 	\label{fig:sw-w3c-stack}
 \end{figure}
 
-A introdução das tecnologias para alcançar os princípios idealizados na Web Semântica são implantados em camadas. De acordo com \cite{bernerslee2001semantic} é possível dividir esses serviços em três grandes camadas, como demonstrado na figura \ref{fig:sw-layers}. Na camada de estrutura os dados são organizados e definidos seus significados, na qual utiliza-se as triplas do RDF. A camada com os esquemas estão as ontologias, utilizando-se o OWL para a representação de conceitos, inferências através das taxonomias e conjunto de regras. Por último na camada lógica é definida para fazer inferência sobre os dados. Dessa forma, o desenvolvimento dessas tecnologias (ainda em andamento) e padronização dos formatos foi formulado pela W3C como uma pilha das camadas \citep{SemanticWebStack} da Web Semântica confiável, conforme mostrado na figura \ref{fig:sw-w3c-stack}.
+A introdução das tecnologias para alcançar os princípios idealizados na Web Semântica são implantados em camadas. De acordo com \cite{bernerslee2001semantic} é possível dividir esses serviços em três grandes camadas, como demonstrado na Figura \ref{fig:sw-layers}. Na camada de estrutura os dados são organizados e definidos seus significados, na qual utiliza-se as triplas do RDF. A camada com os esquemas estão as ontologias, utilizando-se o OWL para a representação de conceitos, inferências através das taxonomias e conjunto de regras. Por último na camada lógica é definida para fazer inferência sobre os dados. Dessa forma, o desenvolvimento dessas tecnologias (ainda em andamento) e padronização dos formatos foi formulado pela W3C como uma pilha das camadas \citep{SemanticWebStack} da Web Semântica confiável, conforme mostrado na figura \ref{fig:sw-w3c-stack}.
 
 \section{Dados ligados}
 
@@ -169,7 +169,7 @@ Um exemplo notável do uso das dados ligados, é o projeto da DBPedia\footnote{ 
 
 Posteriormente em 2010, para incentivar o uso dados ligados no meio governamental, \cite{LinkedData:2006} desenvolveu um "sistema de avaliação" dos dados ligados. O objetivo era expandir o termo introduzindo os dados abertos, onde fossem publicados sob uma licença que não impede o livre reuso. No sistema de avaliação consta um esquema de pontuação em estrelas de 1 a 5, onde cada estrela a mais também acumula as definições das estrelas anteriores, conforme consta na figura \ref{fig:lod-rating}.
 
-O \ac{LOD} tornou-se o projeto de maior adoção dos princípios dos dados ligados \citep{Bizer2009}, sendo um esforço colaborativo iniciado em 2007 para suportar as definições e tecnologias da Web Semântica introduzidas pela W3C. O motim para o início da colaboração era de mapear os dados da Web identificando os conjuntos que já estavam disponíveis sob licença aberta. O projeto inclui dados de várias fontes, como a Wikipedia\footnote{https://www.wikipedia.org}, Geonames\footnote{http://www.geonames.org}, Wordnet\footnote{https://wordnet.princeton.edu} entre diversos outros de múltiplos domínios, alcançando um impressionante diagrama como mostrado na figura \ref{fig:lod-graph}.
+O \ac{LOD} tornou-se o projeto de maior adoção dos princípios dos dados ligados \citep{Bizer2009}, sendo um esforço colaborativo iniciado em 2007 para suportar as definições e tecnologias da Web Semântica introduzidas pela W3C. O motim para o início da colaboração era de mapear os dados da Web identificando os conjuntos que já estavam disponíveis sob licença aberta. O projeto inclui dados de várias fontes, como a Wikipedia\footnote{https://www.wikipedia.org}, Geonames\footnote{http://www.geonames.org}, Wordnet\footnote{https://wordnet.princeton.edu} entre diversos outros de múltiplos domínios, alcançando um impressionante diagrama como mostrado na Figura \ref{fig:lod-graph}.
 
 \begin{figure}
 	\centering
@@ -238,7 +238,7 @@ As medidas baseadas em estrutura (\textit{Structured-based ou Path-based}, utili
 
 \subsubsection{Baseadas em conteúdo:}
 
-As medidas baseadas no conteúdo, são aquelas que utilizam a informação do conteúdo para medir similaridade. O conteúdo de um conceito é definido pela frequência de termos dado uma coleção de documentos. Grande parte das medidas deste tipo utilizam a informação compartilhada de dois conceitos pais $C_1$ e $C_2$, dos qual $S(C_1; C_2)$ é o conjunto de conceitos que os engloba, conforme a equação \ref{eq:mis}.  O menor $p(C)$ é utilizado quando há mais de um pai em comum que $C$ é o \ac{MIS}, ou seja, o conceito mais informacional que os engloba.
+As medidas baseadas no conteúdo, são aquelas que utilizam a informação do conteúdo para medir similaridade. O conteúdo de um conceito é definido pela frequência de termos dado uma coleção de documentos. Grande parte das medidas deste tipo utilizam a informação compartilhada de dois conceitos pais $C_1$ e $C_2$, dos qual $S(C_1; C_2)$ é o conjunto de conceitos que os engloba, conforme a Equação \ref{eq:mis}.  O menor $p(C)$ é utilizado quando há mais de um pai em comum que $C$ é o \ac{MIS}, ou seja, o conceito mais informacional que os engloba.
 
 	\begin{equation}
 		P_{mis}(C_1, C_2) = min_{C \in S(C_1;C_2)} \{p(C)\}
@@ -285,7 +285,7 @@ O projeto tem o foco em converter o conteúdo presente do Wikipedia em conhecime
 \begin{itemize}
 	\item{Desenvolvimento de um \textit{framework} para extração de informação, o qual converte o conteúdo da Wikipedia em RDF.} 
 
-	\item{Prover o conteúdo da Wikipedia como um largo, multi-domínio \textit{dataset} de RDF. São mais de 100 milhões de triplas já mapeadas. A figura \ref{fig:dbpedia-triples} mostra um recorte das entidades mapeadas do DBPedia.}
+	\item{Prover o conteúdo da Wikipedia como um largo, multi-domínio \textit{dataset} de RDF. São mais de 100 milhões de triplas já mapeadas. A Figura \ref{fig:dbpedia-triples} mostra um recorte das entidades mapeadas do DBPedia.}
 	
 	\item{Interligar o DBpedia com outros conjuntos de dados abertos, o que expande a contagem das triplas RDF para mais de bilhão.}
 	
@@ -306,7 +306,7 @@ O projeto tem o foco em converter o conteúdo presente do Wikipedia em conhecime
 	\label{fig:dbpedia-virtuoso}
 \end{figure}
 
-Como a iniciativa compõe o movimento do LOD, os dados do DBpedia podem ser importados por aplicações \textit{third party} utilizando a licença aberta. O projeto faz uso da plataforma do \textit{Virtuoso Universal Server}\footnote{https://virtuoso.openlinksw.com} para prover os dados de RDFs através de uma interface e um \textit{endpoint} em SPARQL. Na figura \ref{fig:dbpedia-virtuoso} é apresentado um panorama da arquitetura do projeto.
+Como a iniciativa compõe o movimento do LOD, os dados do DBpedia podem ser importados por aplicações \textit{third party} utilizando a licença aberta. O projeto faz uso da plataforma do \textit{Virtuoso Universal Server}\footnote{https://virtuoso.openlinksw.com} para prover os dados de RDFs através de uma interface e um \textit{endpoint} em SPARQL. Na Figura \ref{fig:dbpedia-virtuoso} é apresentado um panorama da arquitetura do projeto.
 
 \subsection{Google Knowledge Graph}
 
@@ -319,7 +319,7 @@ O \textit{Knowledge Graph} é uma base de conhecimento desenvolvida pelo Google\
 	\label{fig:knowledge-graph}
 \end{figure}
 
-Com \textit{Knowledge Graph} é possível pesquisar por pessoas, lugares, esportes, filmes e diversas informações que o Google mapeou no grafo do conhecimento. O serviço já conta com mais de 500 milhões de objetos e 3.5 bilhões de fatos sobre o relacionamento entre diferentes objetos. O objetivo do Google é ampliar o mecanismo de busca em três sentidos: Possibilitar encontrar o item certo, obter um melhor sumário, ser mais amplo e profundo. Um dos primeiros passos da companhia para atingir os objetivos do projeto é a construção do painel do sumário. Quando pesquisamos por \textit{Leonardo Da Vinci}, procurando seja pelas suas pinturas ou por pintores da renascença, o sistema montará um quadro de dados, conforme a figura \ref{fig:knowledge-graph} com as informações, além trazer itens com relações próximas, como seus quadros e outros artistas relacionados. Com esse tratamento \cite{GoogleKnowledge} alega que será possível melhor compreender o que os usuários buscam, além de dar importantes passos para migrar de um motor informação para um de conhecimento, algo importante para o uso em seus assistentes virtuais.
+Com \textit{Knowledge Graph} é possível pesquisar por pessoas, lugares, esportes, filmes e diversas informações que o Google mapeou no grafo do conhecimento. O serviço já conta com mais de 500 milhões de objetos e 3.5 bilhões de fatos sobre o relacionamento entre diferentes objetos. O objetivo do Google é ampliar o mecanismo de busca em três sentidos: Possibilitar encontrar o item certo, obter um melhor sumário, ser mais amplo e profundo. Um dos primeiros passos da companhia para atingir os objetivos do projeto é a construção do painel do sumário. Quando pesquisamos por \textit{Leonardo Da Vinci}, procurando seja pelas suas pinturas ou por pintores da renascença, o sistema montará um quadro de dados, conforme a Figura \ref{fig:knowledge-graph} com as informações, além trazer itens com relações próximas, como seus quadros e outros artistas relacionados. Com esse tratamento \cite{GoogleKnowledge} alega que será possível melhor compreender o que os usuários buscam, além de dar importantes passos para migrar de um motor informação para um de conhecimento, algo importante para o uso em seus assistentes virtuais.
 
 \section{Sumário}
 
