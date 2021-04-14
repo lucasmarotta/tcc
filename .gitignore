@@ -8,5 +8,8 @@ material
 *.toc
 *.lol
 *.lof
+*.tmp
+~$*.docx
+~$*.doc
 main.synctex.gz
 tcc
