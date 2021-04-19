@@ -19,7 +19,7 @@ O sistema do Tapestry foi concebido para a filtragem colaborativa, onde colabora
 
 Para construir o ranque os SRs tentam predizer qual é o item mais adequado àquele usuário \citep{Ricci2011}. Para realizar a tarefa o SR coleta dos usuários suas preferências que podem ser informadas de forma explícita, como avaliação de produtos, ou implícita interpretando suas ações como o histórico de navegação. O princípio do SR é da dependência existente entre o usuário e sua atividade em torno dos itens \citep{Aggarwal:Intro:2016}. Como exemplo, se um usuário comprou um filme de ficção científica, é mais provável que também tenha interesse em outro filme de ficção científica. Dessa forma, o sistema lida com o problema da sobrecarga filtrando itens que sejam menos prováveis do usuário gostar, baseando-se nas demonstrações do interesse prévio em outros itens, seja por outros usuários ou não.
 
-O aumento da importância da Web como meio eletrônico, especialmente para o e-commerce, também se mostrou como força para o desenvolvimento de sistemas de recomendação.  Na Web o usuário pode facilmente informar o seu feedback de produtos sobre o que gostou ou não. Nesse contexto, a aplicação do SR não somente beneficia o usuário, mas também para aqueles que o provem \citep{ ISINKAYE2015261}. Estudos \citep{Mykolas:2015a} demonstram que usuários optam por realizar compras online para poupar tempo. Contudo, com a explosão da variedade de informação disponível, em vez de agir em benefício começa a denigrir a experiência, diminuindo a experiência de uso. É bem aceito que ter escolha é bom, mas ter mais nem sempre é melhor \citep{Ricci2011}.
+O aumento da importância da Web como meio eletrônico, especialmente para o e-commerce, também se mostrou como força para o desenvolvimento de sistemas de recomendação.  Na Web o usuário pode facilmente informar o seu feedback de produtos sobre o que gostou ou não. Nesse contexto, a aplicação do SR não somente beneficia o usuário, mas também para aqueles que o provem \citep{ ISINKAYE2015261}. Estudos \citep{Mykolas:2015a} demonstram que usuários optam por realizar compras online para poupar tempo contudo, com a explosão da variedade de informação disponível, em vez de agir em benefício começa a prejudicar a experiência. É bem aceito que ter escolha é bom, mas ter mais nem sempre é melhor \citep{Ricci2011}.
 
 É importante ressaltar que por fornecer uma informação individualizada, que esteja mais alinhada com o perfil do usuário é o que diferencia os sistemas de recomendação de sistemas de recuperação de informação. Tradicionalmente o motor de buscas deve retornar tudo correspondente a um termo de pesquisa, porém cada vez mais o usuário entra no fator desses sistemas \citep{Burke:2002:HRS:586321.586352}. Sistemas como o Google\footnote{https://www.google.com}, vão além de retornar termos que batem com a consulta, mas também com a quantidade de outras páginas referentes, histórico de buscas, localização, compatibilidade com dispositivos móveis, além de introduzir informações extra a busca, com os quadros do knowledge graph\footnote{ https://www.google.com/intl/bn/insidesearch/features/search/knowledge.html}.
 
@@ -31,7 +31,7 @@ Sistemas de recomendação são sistemas de processamento de informação que li
 \begin{itemize}
 	\item{\textbf{Itens}: Objetos que são recomendados. Podem ser caracterizados pela complexidade valor ou utilidade. O valor de um item pode ser positivo se é útil para o usuário, ou negativo se não é apropriado ou foi uma decisão errada de seleção por parte do mesmo. O usuário pode ser modelado e representado de diferentes formas, variando bastante em relação do domínio operado pelo SR. Toda vez que um usuário interage com um item constrói-se um custo cognitivo, o que pode entrar na relevância na construção do sistema, mesmo se o usuário não chega a adquirir o item interagido. Alguns exemplos de itens são: livros, notícias (baixa complexidade), computadores, viagens, vagas de trabalho (alta complexidade).}
 
-	\item{\textbf{Usuários}: Usuários de um SR, podendo ter uma variedade de objetivos e características. São explorados uma série de informações variadas para personalizar as recomendações. A informação pode ser estruturada de diversas formas de acordo com o seu tipo, e a seleção de um modelo depende das técnicas a serem utilizadas. Modelos para sistemas de filtragem colaborativa pode usar apenas listas de avaliações de itens por usuários. O modelo de usuário cria o seu perfil, ou seja, armazena suas preferências e necessidades. Usuários também podem ser descritos baseados num padrão de comportamento, como o histórico de navegação na Web sua ou localização.}
+	\item{\textbf{Usuários}: Usuários de um SR, pode ter uma variedade de objetivos e características, possibilitando explorar uma série de informações variadas para personalizar as recomendações. A informação pode ser estruturada de diversas formas de acordo com o seu tipo, e a seleção de um modelo depende das técnicas a serem utilizadas. Modelos para sistemas de filtragem colaborativa pode usar apenas listas de avaliações de itens por usuários. O modelo de usuário cria o seu perfil, ou seja, armazena suas preferências e necessidades. Usuários também podem ser descritos baseados num padrão de comportamento, como o histórico de navegação na Web sua ou localização.}
 
 	\item{\textbf{Transações}: Genericamente refere-se a transações gravadas das interações entre usuários e o SR. Transações podem ser vistas como um histórico de registros, um log de dados que armazena importantes informações geradas das interações com o sistema. Um registro pode conter a descrição do que foi consultado para uma recomendação particular de um item.}
 \end{itemize}
@@ -39,16 +39,16 @@ Sistemas de recomendação são sistemas de processamento de informação que li
 \section{Tarefas de um Sistema de Recomendação}
 \label{sec:tarefasSistemaRecomendacao}
 
-Sistemas de recomendação são vistos como mais do que uma ferramenta de prover sugestões de itens que o usuário possa desejar. \citep{Ricci2011} em seu artigo introduziu uma série de funções que podem ser aplicadas a SRs.
+Sistemas de recomendação são vistos como mais do que uma ferramenta de prover sugestões de itens que o usuário possa desejar. Em seu artigo, \cite{Ricci2011} introduziu uma série de funções que podem ser aplicadas a SRs.
 
 \begin{itemize}
-	\item{\textbf{Aumento do número de itens vendidos}: Uma das funções mais importantes para aplicações comerciais. O objetivo é ser capaz de vender outros itens comparados àqueles que são vendidos sem qualquer tipo de recomendação. O objetivo é geralmente alcançado devido a itens que são prováveis de serem úteis a necessidade do usuário.}
+	\item{\textbf{Aumento do número de itens vendidos}: Uma das funções mais importantes para aplicações comerciais. O princípio é ser capaz de vender outros itens comparados àqueles que são vendidos sem qualquer tipo de recomendação. O objetivo é geralmente alcançado devido a itens que são prováveis de serem úteis a necessidade do usuário.}
 
 	\item{\textbf{Vender itens mais diversos}: Também outra função de alta importância, na qual permite o usuário a selecionar itens que podem ser difíceis de encontrar. Num serviço de recomendações de filmes, como o Netflix\footnote{https://www.netflix.com}, o provedor estará interessado que os usuários encontrem conteúdos diversos, não somente os mais populares.}
 
 	\item{\textbf{Aumentar a satisfação do usuário}: Quando um usuário encontra recomendações que sejam de seu interesse, impacta na experiência com o sistema. Um SR bem desenvolvido permite uma combinação precisa de recomendações que juntos a uma interface com boa operabilidade, pode aumentar a noção subjetiva da avaliação de um sistema.}
 
-	\item{\textbf{Aumentar a fidelidade}: Um usuário costuma ser leal a um site que, quando visitado, o reconhece como um consumidor reincidente e o trata como um visitante de valor. É muito comum para um SR levar em consideração as informações obtidas em prévias interações com o usuário. Consequentemente, por quanto mais tempo o usuário interage com o site, mais refinado seu modelo torna, tornando cada vez mais efetivo e customizado o resultado da recomendação.}
+	\item{\textbf{Aumentar a fidelidade}: Um usuário costuma ser leal a um site que, quando visitado, o reconhece como um consumidor reincidente e o trata como um visitante de valor. É muito comum para um SR levar em consideração as informações obtidas em prévias interações com o usuário. Consequentemente, por quanto mais tempo o usuário interage com o site, mais refinado seu modelo fica, tornando cada vez mais efetivo e personalizado o resultado da recomendação.}
 
 	\item{\textbf{Melhor entendimento do que o usuário quer}: Outra função importante, na qual pode ser influenciada por outras aplicações, é a descrição das preferências do usuário, seja coletada de forma explícita ou prevista pelo sistema. Um serviço pode decidir reutilizar esses dados do usuário para anunciar um produto em específico, derivado da coleta das informações de transações do SR.}
 \end{itemize}
@@ -70,13 +70,13 @@ Usuários também podem desejar um SR quando oferecer suporte a suas tarefas ou 
 
 	\item{\textbf{Encontrar um sistema de recomendação confiável}: Nem todos os usuários podem confiar no sistema, dessa forma é importante oferecer testes de suas funcionalidades.}
 
-	\item{\textbf{Melhorar o perfil}: Relativo a capacidade de o usuário prover dados ao SR sobre suas preferências. Tarefa fundamental para personalizar o sistema, caso contrário apenas seria possível oferecer recomendações que fosse relativa ao usuário comum.}
+	\item{\textbf{Melhorar o perfil}: Relativo a capacidade de o usuário prover dados ao SR sobre suas preferências. Tarefa fundamental para personalizar o sistema, caso contrário apenas seria possível oferecer recomendações que fossem relativa ao usuário comum.}
 
 	\item{\textbf{Expressar-se}: Usuários podem não se importar com as recomendações, mas o sistema pode permiti-lo a contribuir com as avaliações e expressão de suas opiniões.}
 
 	\item{\textbf{Ajudar outros}: Para alguns é importante contribuir com informações de suas opiniões e avaliações, pois compartilhando sua experiência pode ajudar outros formarem uma opinião.}
 
-	\item{\textbf{Influenciar outros}: Alguns usuários podem ter apenas o objetivo de influenciar outros, ou até usar o SR para denegrir a imagem de alguns itens.}
+	\item{\textbf{Influenciar outros}: Alguns usuários podem ter apenas o objetivo de influenciar outros, ou até usar o SR para difamar a imagem de alguns itens.}
 \end{itemize}
 
 \section{Técnicas de Recomendação}
