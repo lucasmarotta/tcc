@@ -15,9 +15,9 @@ Na arquitetura do sistema proposto, existe uma camada que é responsável pela c
 
 \begin{itemize}
 	\item{\textbf{Geração de Tokens}: Um dos objetivos do sistema é recomendar itens baseando-se no conteúdo não estruturado, no caso a sinopse dos filmes. A primeira tarefa é extrair as palavras, os \textit{tokens} relevantes dos textos, como nomes, adjetivos, lugares, entre outras, utilizando o processo de \ac{NLP}.}
-	
+
 	\item{\textbf{Cálculo da métrica de similaridade}: Após a geração das palavras importantes dos filmes, o sistema deve possuir um serviço para realizar o cálculo da similaridade entre dois tokens quaisquer, tirando proveito dos serviços da Web Semântica, no caso o DBPedia. Mais a frente será apresentada a equação da similaridade construída para este projeto, conforme consta na seção \ref{ssec:sim_rec}.}
-	
+
 	\item{\textbf{Geração das recomendações}: No último serviço, o sistema deverá construir um modelo dados através da geração de tokens para comparar as preferências do usuário com um filme, utilizando a métrica de similaridade proposta. Na seção \ref{sec:dataModel} é apresentado como é construído esses modelos e na seção \ref{ssec:sim_rec} o método utilizado para gerar a comparação e prover as recomendações.}
 \end{itemize}
 
@@ -34,15 +34,15 @@ A proposta é criar uma recomendação baseada em conteúdo, ou seja, nos intere
 
 \begin{enumerate}
 	\item{\textbf{Coleta dos filmes}: Serão coletados dados dos filmes utilizando o projeto MovieLens\footnote{https://movielens.org} (ver \ref{sec:dataModel}).}
-	
+
 	\item{\textbf{Pré-processamento dos filmes}: Nessa etapa após a coleta dos filmes, os dados serão previamente processados para a geração de \textit{tokens} com \ac{NLP}, analisando a descrição dos itens (sinopse dos filmes). Após processados os \textit{tokens} serão persistidos no banco de dados.}
-	
+
 	\item{\textbf{Coleta das preferências do usuário}: Serão coletadas as avaliações dos usuários pelo projeto MovieLens, podendo assim montar um perfil de preferências.}
 
 	\item{\textbf{Cálculo da Similaridade}: Após a etapa de pré-processamento dos filmes, será realizado o cálculo da similaridade entre os tokens do modelo do usuário e do filme, utilizando o métrica proposta \ac{RLWS}.}
-	
+
 	\item{\textbf{Geração das recomendações}: De posse do cálculo da similaridade, será gerado um conjunto de tamanho qualquer com os melhores \textit{scores} obtidos do cálculo desta similaridade. Posteriormente essa coleção filmes sugeridos será armazenada no banco, podendo ser atualizada conforme o perfil do usuário altera, ou novos filmes são cadastrados na base de dados. Na seção \ref{ssec:sim_rec} é demonstrado e discutido o algoritmo central para a similaridade e recomendação.}
-	
+
 	\item{\textbf{Apresentação dos resultados}: Por fim o sistema apresentará os resultados das recomendações para o usuário.}
 \end{enumerate}
 
@@ -59,13 +59,13 @@ Para trabalhar com as informações dos usuários e dos filmes, permitindo criar
 
 \begin{itemize}
 	\item{A entidade \textit{rating} persiste as avaliações dos usuários, medidas de 0 a 5. Desta entidade será construída as preferências do usuário, ou seja, extraídos aqueles filmes que possuem boas avaliações refletindo aquilo que o usuário tem interesse.}
-	
+
 	\item{A entidade \textit{recomendation} persiste as sugestões de filmes calculadas pelo sistema, e o atributo \enquote{similarity} trata-se do algoritmo de similaridade utilizado, o que torna-se especialmente útil para realizar comparações com outros métodos (será discutido no \ref{cap:evaluation}).}
-	
+
 	\item{A entidade \textit{movie} persiste os dados dos filmes retirados do projeto MovieLens\footnote{https://movielens.org}, assim como o processamento da sinopse dos filmes para geração dos \textit{tokens}.}
-	
+
 	\item{A entidade \textit{idf} persiste o cálculo do \ac{IDF} da Equação \ref{eq:tfidf}, que servirá para o cálculo da similaridade cosseno, por motivos de comparação que serão discutidos no \ref{cap:evaluation}.}
-	
+
 	\item{As entidades \textit{lod\_cache} e \textit{lod\_cache\_relation} tratam-se do serviço de cache para o cálculo da similaridade, assim poupando tempo para consultas do serviço do DBPedia. Na seção \ref{sec:cache} a estrutura de cache dos sistema é melhor abordada.}
 \end{itemize}
 
@@ -96,24 +96,36 @@ Desda forma formaliza-se o modelo de filmes conforme mostra as equações \ref{e
 \subsection{Modelo de usuários}
 \label{ssec:user_model}
 
-Os usuários inicialmente são estruturados como um conjunto de filmes, sendo extraídos aqueles que avaliou com três estrelas e meia ou mais, portando torando-se as suas preferências. Contudo desta forma é impossível realizar a comparação com o modelo de filmes utilizando a métrica de similaridade proposta (ver \ref{ssec:sim_rec}), devido a comparação ser de termo a termo. Uma opção inicial seria simplesmente calcular todos os termos dos filmes de preferência do usuário, utilizado no processo de \ac{NLP}, e uni-los num grande conjunto, porém isto se tornaria muito custoso para ser executado, além de não escalar bem conforme as preferência do usuário aumentam. Sendo assim, optou-se por calcular os \enquote{melhores termos únicos} que representam o usuário, como sendo um conjunto de termos de um tamanho definido. Para calcular esses \enquote{melhores termos} é aplicado um modelo de frequência, o \ac{TFIDF} (ver Equação \ref{eq:tfidf}), que busca criar um ranking de termos determinando o quão importante são numa coleção, no caso a união de todos os conjuntos filmes e seus termos. Com isso é definido $Y$ como sendo o conjunto de todo os usuários $U$, e este por sua vez a união de todos os filmes $F_u$ de sua preferência, contendo todos os seus termos. Esses termos são denominados de termos do usuário, representado pelo elemento $t_u$. Assim como o modelo de filmes, o conjunto de termos $U$ do usuário também representa seus metadados. Posteriormente defini-se o conjunto $M_u$ como sendo o modelo do usuário dos melhores termos $t_u \in U$ ao passar pela seleção da função $M_{tfidf}$, que um define um subconjunto de um tamanho definido pela constante $z$. Por fim, o conjunto $Z$ é a união de todos os modelos de usuário $M_u$. O tamanho de $M_u$ é algo que será explorado no capítulo \ref{cap:evaluation}. As equações \ref{eq:user_model} à \ref{eq:user_model4} demonstram a construção do modelo do usuário.
+Os usuários inicialmente são estruturados como um conjunto de filmes, sendo extraídos aqueles bem avaliados por ele, à partir de uma nota de relevância $r$ baseada num modelo de cinco estrelas, onde nenhuma estrela é totalmente irrelevante e cinco totalmente relevante. Os filmes bem avaliados serão aqueles com relevância $r \geq 3,5$, portanto sendo suas preferências. Contudo, desta forma ainda não é possível realizar a comparação com o modelo de filmes utilizando a métrica de similaridade proposta (ver \ref{ssec:sim_rec}), devido a comparação ser de termo a termo. Uma opção inicial seria simplesmente calcular todos os termos dos filmes de preferência do usuário, utilizado no processo de \ac{NLP}, e uni-los num grande conjunto, porém isto tornaria o modelo de usuário muito custoso para ser utilizado, além de não escalar bem conforme as preferência do usuário aumentam. Sendo assim, optou-se por calcular os \enquote{melhores termos únicos} que representam o usuário, como sendo um conjunto de termos de um tamanho definido. Para calcular esses \enquote{melhores termos} é aplicado um modelo de frequência, o \ac{TFIDF} (ver Equação \ref{eq:tfidf}), que busca criar um ranking de termos determinando o quão importante são numa coleção, no caso a união de todos os conjuntos filmes e seus termos. Com isso é definido $Y$ como sendo o conjunto de todos os usuários $U$, e este por sua vez a união de todos os filmes $F_u$ e $P$ um subconjunto com aqueles de sua preferência, contendo todos os termos. Esses termos são denominados de termos do usuário, representado pelo elemento $t_u$. Assim como o modelo de filmes, os conjuntos $U$ e $P$ de termos do usuário também representa seus metadados. Posteriormente, define-se o conjunto $M_u$ sendo o \textbf{modelo do usuário} dos melhores termos $t_u \in P$, ao passarem pela seleção da função $M_{tfidf}$, que um define um subconjunto de um tamanho definido pela constante $z$. Por fim, o conjunto $Z$ é a união de todos os modelos de usuário $M_u$. O tamanho de $M_u$ será explorado no capítulo \ref{cap:evaluation}. As equações \ref{eq:user_model1} à \ref{eq:user_model5} formalizam a construção do modelo do usuário.
+
 
 \begin{equation}
-	Z = \bigcup\limits_{i=1}^{\infty} M_{u_i}
-\label{eq:user_model}
+	Y = \bigcup\limits_{i=1}^{\infty} U_i \quad \text{ (todos os usuários)}
+\label{eq:user_model1}
 \end{equation}
 
 \begin{equation}
-	(\forall F_u \subset U) \quad M_u = \{t_u \;| \; M_{tfidf}(U, z), \; |M_u| = z \; \land \; z \in \mathbb{N}^*\}
+	U = \bigcup\limits_{i=1}^{\infty} F_{u_i} \quad \text{ (todos os filmes do usuário)}
+\label{eq:user_model2}
 \end{equation}
 
 \begin{equation}
-	U = \bigcup\limits_{i=1}^{\infty} F_{u_i}
-\label{eq:user_model4}
+	\begin{aligned}
+		P = \bigcup\limits_{i=1}^{\infty} F_{u_i} \quad \{F_{u_i} \;|\; 3,5 \leq r \leq 5 \;\;\land\;\; r \in \mathbb{R} \;\;\land\;\; \frac{r}{0,5} \in \mathbb{N}\}\\
+		\text{(todos os filmes de preferência do usuário)}
+	\end{aligned}
+\label{eq:user_model3}
 \end{equation}
 
 \begin{equation}
-	Y = \bigcup\limits_{i=1}^{\infty} U_i
+	\begin{aligned}
+		(\forall t_u \in F_u \;\land\; F_u \subset P) \quad M_u = \{t_u \;| \; M_{tfidf}(P, z), \; |M_u| = z \; \land \; z \in \mathbb{N}^*\} \\
+		\text{ (aplicação dos melhores termos do usuário)}
+	\end{aligned}
+\end{equation}
+
+\begin{equation}
+	Z = \bigcup\limits_{i=1}^{\infty} M_{u_i} \quad \text{ (todos os modelos de usuários)}
 \label{eq:user_model5}
 \end{equation}
 
@@ -139,15 +151,16 @@ Para extração dessas palavras, foi utilizado o processo denominado de \ac{NLP}
 
 Para facilitar a execução dessas tarefas do \ac{NLP}, optou-se por utilizar o \textit{framework} OpenNLP\footnote{https://opennlp.apache.org}, conforme também abordado na seção \ref{ssec:open_nlp}, que através de um modelo de treinamento, possibilita facilmente realizar o processo de \textit{tagging}, identificando as partes do discurso. Uma vez realizada a anotação do texto definiu-se apenas capturar as palavras marcadas com as \textit{tags} conforme mostra a tabela \ref{tab:nlp_tags}. Vale ressaltar que essas definições foram concebidas para língua inglesa, uma vez que as sinopses importadas do projeto MovieLens\footnote{https://movielens.org} estão nessa língua.
 
+Em seguida é incluído ao conjunto de termos os tokens da tarefa \ac{NER}, o que não é meramente o reconhecimento de nomes próprios do texto, mas também de nomes compostos. Esse processo é de grande valia para a etapa de similaridade uma vez que tendo um nome como "Buzz Lightyear", apenas utilizando o processo da marcação das partes do discurso, resultaria em dois termos "Buzz" e "Lightyear", sendo que o ideal seja também ter o nome composto por inteiro. Os substantivos próprios obtidos pelo processo \ac{POS} também são mantidos no conjunto de termos, uma vez que o framework utilizado no processo de \ac{NLP} apenas extrai, nomes, lugares e organizações. Para os nomes reconhecidos nesse processo também foi realizada uma formatação para adequação à consultas \ac{SPARQL}, ou seja, nomes compostos como "Buzz Lightyear" são formatados para "Buzz\textunderscore Lightyear", mantendo as iniciais maiúsculas e separando as palavras por "\textunderscore" . A tabela \ref{tab:nlp_example} demonstra alguns exemplos do tratamento da descrição de filmes para geração de \textit{tokens}.
+
 \begin{table}[H]
-	\label{tab:nlp_tags}
 	\centering
 	\caption{Relação das tags das partes do discurso}
 	\def\arraystretch{1.3} % padding da linhas da tabela
 	\begin{tabular}{| m{1.3cm} | m{9.4cm}| c | m{2cm}}
 		\hline
 		\multicolumn{1}{|c|}{\bfseries Tag} & \multicolumn{1}{c|}{\bfseries Descrição} \\ \hline
-		NN & Substantivo comum, singular ou incontável \\ \hline 	
+		NN & Substantivo comum, singular ou incontável \\ \hline
 		NNS	& Substantivo comum, plural \\ \hline
 		NNP	& Substantivo próprio, singular \\ \hline
 		NNPS & Substantivo próprio, plural \\ \hline
@@ -157,13 +170,10 @@ Para facilitar a execução dessas tarefas do \ac{NLP}, optou-se por utilizar o 
 		FW & Palavra estrangeira \\ \hline
 		VB & Verbo, forma base \\ \hline
 	\end{tabular}
+\label{tab:nlp_tags}
 \end{table}
 
-Em seguida é incluído ao conjunto de termos os tokens da tarefa \ac{NER}, o que não é meramente o reconhecimento de nomes próprios do texto, mas também de nomes compostos. Esse processo é de grande valia para a etapa de similaridade uma vez que tendo um nome como "Buzz Lightyear", apenas utilizando o processo da marcação das partes do discurso, resultaria em dois termos "Buzz" e "Lightyear", sendo que o ideal seja também ter o nome composto por inteiro. Os substantivos próprios obtidos pelo processo \ac{POS} também são mantidos no conjunto de termos, uma vez que o framework utilizado no processo de \ac{NLP} apenas extrai, nomes, lugares e organizações. Para os nomes reconhecidos nesse processo também foi realizada uma formatação para adequação à consultas \ac{SPARQL}, ou seja, nomes compostos como "Buzz Lightyear" são formatados para "Buzz\textunderscore Lightyear", mantendo as iniciais maiúsculas e separando as palavras por "\textunderscore" .
-
-A tabela \ref{tab:nlp_example} abaixo demonstra alguns exemplos do tratamento da descrição de filmes para geração de \textit{tokens}. 
-
-\begin{table}[]
+\begin{table}[H]
 	\centering
 	\caption{Exemplos da geração de tokens}
 	\def\arraystretch{1.3} % padding da linhas da tabela
@@ -195,7 +205,7 @@ Um conjunto que segue os princípios LOD é um grafo $G$ tal que $G = (R, L, I)$
 \end{definition}
 
 \begin{equation}
-	RLWS(r_a, r_b) = 
+	RLWS(r_a, r_b) =
 	\begin{dcases*}
 		1 \text{,} \;\; URI(r_a) = URI(r_b) \;\; \text{ou} \;\; r_a \; \textit{ dbo:wikiPageRedirects } \; r_b\\
 		\frac{S_d(r_a, r_b) * w_d + S_i(r_a, r_b) * w_i}{w_d + w_i}, \; \text{caso contrário}
@@ -337,29 +347,39 @@ Com a equação pronta basta estabelecer um \textit{ranking} de termos, escolhen
 \label{eq:max_tfidf}
 \end{equation}
 
-Definido o conjunto de termos do usuário, este será comparado com o conjunto de termos de todos os filmes que o usuário não tenha informado preferência, denominado de $D_u$, pois o objetivo é recomendar novos itens. Para melhor compreensão o conjunto dos termos do filme $F$ e do usuário $U$, representam respectivamente seus metadados, conforme estabelecido em \ref{ssec:database}. Sendo assim, almeja-se obter os filmes com os melhores \textit{scores} de recomendação, definido por $R_{max, U}$, que é o resultado da maximização das melhores recomendações $R$ obtida pela equação $recModel(U, F)$. As equações abaixo demonstram a formalização do cálculo da recomendação:
+Definido o conjunto de termos do usuário, este será comparado com o conjunto de termos de todos os filmes que o usuário não tenha informado preferência, ou seja, que ele desconheça, denominado de $D_u$, pois o objetivo é recomendar novos itens. Para melhor compreensão o conjunto dos termos do filme $F$ e do usuário $U$, representam respectivamente seus metadados, conforme estabelecido em \ref{ssec:database}. Sendo assim, almeja-se obter os filmes com os melhores \textit{scores} de recomendação, definido por $R_{max, U}$, que é o resultado da maximização das melhores recomendações $R$ obtida pela equação função $S(M_u, F)$, cuja fornece a similaridade entre o modelo de usuário e o filme. As equações abaixo demonstram a formalização do cálculo da recomendação:
 
 \begin{equation}
-	(\forall U \subset Z\; \land \; F \subset D_u)\; R_{max, U} = \; max_{R \subset D_u}[recModel(U, F)]
-\label{eq:rec_model_max}
-\end{equation}
-
-\begin{equation}
-	D_u = X - U
+	D_u = X - U \quad \text{(filmes que o usuário desconhece)}
 \label{eq:rec_model_movies}
 \end{equation}
 
 \begin{equation}
-	recModel(U, F) = S(M_u, F)
+	\begin{aligned}
+		(\forall t_u \in M_u \;\land\; \forall t_f \in F) \quad recModel(U, F) = M_u \times F\\
+		= \{\{t_{u_1}, t_{f_1}\}, \{t_{u_1}, t_{f_2}\}, ..., \{t_{u_n}, t_{f_m}\}\},\; n = |M_u| \;\land\; m = |F|\\
+		\text{(recModel é o produto cartesiano do modelo de usuário e do filme)}
+	\end{aligned}
 \label{eq:rec_model_eq}
 \end{equation}
 
 \begin{equation}
-	(\forall t_u \in M_u) \quad S(M_u, F) = avg \{max [RLWS(t_u, t_f)], \; t_f \in F\}
+	\begin{aligned}
+		S(M_u, F) = \{\{t_u, f_f\} \subset M_u \times F \;|\; avg[RLWS_{max, t_u}(t_u, t_f)]\}\\
+		\text{(a similaridade com o recModel do filme e o usuário)}
+	\end{aligned}
 \label{eq:rec_model_similarity}
 \end{equation}
 
-Nota-se que para criar um \textit{ranking} de melhores filmes, defini-se a equação $S(M_u, F)$ que trata-se da média da maximização da comparação de todo termo do modelo do usuário $M_u$, com os termos do filme $F$. Como não há repetição de termos, para cada termo $t_u \in M_u$ é comparado com  $t_f \in F$, através da equação de similaridade \ac{RLWS}. Posteriormente de cada $RLWS(t_u, t_f)$ escolhe-se o maior score, e em seguida procede-se para o próximo termo $t_u$ a ser comparado com todo os outros termos $t_f$. Com todos os maiores scores das comparações, é realizada uma média simples obtendo o score do filme, tendo assim o modelo de recomendação. Esse processo de recomendação possui ainda algumas observações, conforme descrito abaixo:
+\begin{equation}
+	\begin{aligned}
+		(\forall U \subset Y\; \land \; F \subset D_u) \quad R_{max, U} = \; max_{F \subset D_u}[S(M_u, F)]\\
+		\text{(Rank de recomendações maximizando $S$ com filmes desconhecidos)}
+	\end{aligned}
+\label{eq:rec_model_max}
+\end{equation}
+
+Para que a similaridade entre o modelo de usuário e o filme seja concebida, é definido o modelo de recomendação $recModel(U, F)$, como sendo a função que gera o produto cartesiano entre cada termo $t_f \in M_u$ e $t_f \in F$. Em seguida o cálculo de $S$ trata-se da média da maximização do $RLWS$ de cada termo $t_u$ do modelo do usuário, com os termos $t_f$ do filme, para que então seja criado o \textit{ranking} de filmes com maior \textit{score}. Nota-se que não haverão termos repetidos tanto no modelo do usuário como no modelo do filme, portanto cada termo "tem a mesma relevância no conjunto". Esse processo de recomendação possui ainda algumas observações, conforme descrito abaixo:
 
 \begin{itemize}
 	\item{Caso a quantidade de termos do usuário seja menor que a do filme, será feita uma comparação partindo-se dos termos do filme, assim a similaridade dos filmes mantém-se simétrica.}
@@ -377,13 +397,13 @@ O pseudo-código \ref{alg:alg_recomendacao} exemplifica os passos para o cálcul
         	\State $M_u \gets M_{tfidf}(U, z)$\Comment{calcula os $z$ melhores termos únicos com TFIDF}
         	\State $R \gets \varnothing$\Comment{conjunto vazio das recomendações}
         	\ForAll{filme $F \subset D_u$}
-        		\If{$|M_u| > F$}\Comment{verifica quem é maior para manter simetria}
+        		\If{$|M_u| > |F|$}\Comment{verifica quem é maior para manter simetria}
         			\State $R.inclui \gets$ \Call{CalculaRLWSEntreTermos}{$M_u, F, w_i, w_d$}
 				\Else
-					\State $R.inclui \gets$ \Call{CalculaRLWSEntreTermos}{$F, M_u, w_i, w_d$}	
+					\State $R.inclui \gets$ \Call{CalculaRLWSEntreTermos}{$F, M_u, w_i, w_d$}
         		\EndIf
         	\EndFor
-        	\Return $max(R, n)$\Comment{retorna o conjunto de n filmes com maior score} 
+        	\Return $max(R, n)$\Comment{retorna o conjunto de $n$ filmes com maior score}
         \EndFunction
     \end{algorithmic}
 \label{alg:alg_recomendacao}
@@ -406,7 +426,7 @@ O pseudo-código \ref{alg:alg_recomendacao} exemplifica os passos para o cálcul
         		\If{$melhorScore > -1$}\Comment{descarta os não encontrados no DBPedia}
         			\State $similaridade \gets similaridade + melhorScore$
         			\State $comparacoes \gets comparacoes + 1$
-        		\EndIf        		      	
+        		\EndIf
         	\EndFor
 			\If{$comparacoes > 0$}
 				\Return $similaridade / comparacoes$
@@ -433,10 +453,10 @@ A Figura \ref{fig:rlws_ex} ilustra como é o fluxo da recomendação e seu cálc
 
 \begin{itemize}
 	\item{\textbf{Cache remoto com banco de dados}: Para calcular a similaridade entre dois tokens quaisquer, o sistema utiliza uma Equação (\ref{eq:rlws}) de similaridade que tira proveito do serviço da DBPedia. Na equação, conforme abordado em \ref{ssec:sim_rec} realiza-se a contagem de links diretos e indiretos dos recursos. Essa contagem posteriormente é armazenada no banco de dados para uma consulta mais ágil.}
-	\item{\textbf{Cache local, em memória}: Quando novos recursos são comparados e não estão no \textit{cache} do banco de dados (referenciado como cache remoto) eles precisam ser calculados e posteriormente persistidos. Contudo, como o número de comparações é grande, tendo em vista que cada palavra dos termos do usuário são comparadas com todas as palavras dos filmes, o processo de realizar tais consultas ao banco no momento da comparação prejudica o desempenho da aplicação. Dessa forma optou-se por utilizar a estrutura de \textit{cache} em memória fornecida pelo \textit{framework} Spring\footnote{https://spring.io}. No primeiro momento obtém-se todos os recursos em cache do banco dados da comparação de um filme com o usuário, sendo armazenados numa estrutura de dados na memória \ac{RAM} (referenciado como cache local). Num segundo momento durante a comparação dos termos, para aqueles que não estão presentes no cache, também são acumulados numa estrutura à parte, também no cache local, para indicar que esses deverão ser persistidos no banco de dados posteriormente a comparação de filmes. Dessa forma, minimiza-se o tráfego de dados entre a aplicação e o banco de dados durante a comparação de filmes, acelerando o processo.}
+	\item{\textbf{Cache local, em memória}: A cada comparação realizada é verificado inicialmente se a mesma está presente no cache remoto, evitando consultas desnecessárias ao DBPedia. Após a verificação, a comparação é armazenada num cache local em memória de execução (\ac{RAM}). O objetivo é que durante o cálculo da recomendação de um usuário não seja necessário realizar a todo instante consultas ao banco, visto o volume de comparações, já que cada palavra dos termos do usuário é comparada com todas as palavras dos filmes. O processo de realizar tais consultas ao banco no momento da comparação prejudica o desempenho da aplicação. Assim, optou-se por utilizar a estrutura de \textit{cache} em memória fornecida pelo \textit{framework} Spring\footnote{https://spring.io}. Após um determinado número de comparações o sistema verifica quais delas precisam ser persistidas, salvando-as em sequência e posteriormente liberando o cache em memória.}
 \end{itemize}
-	
-Para não sobrecarregar o tamanho do cache em memória, a cada determinado número de comparações filmes o sistema esvazia o cache, persistindo os dados dos novos recursos e comparações de tokens. Assim tem-se um bom balanço de desempenho entre o cache remoto e cache local.
+
+Com esse sistema minimiza-se o tráfego de dados entre a aplicação, o DBPedia e o banco de dados durante a comparação de filmes, acelerando o processo, além de ter um bom balanço de desempenho entre o cache remoto e cache local
 
 \section{Tecnologias}
 
@@ -444,7 +464,7 @@ Para o desenvolvimento do sistema foram escolhidas algumas tecnologias para arqu
 
 \subsection{JAVA}
 
-JAVA\footnote{https://www.java.com} é uma linguagem de programação de propósito genérico, desenvolvida originalmente por James Gosling na Sun Microsystems\footnote{ https://www.oracle.com/br/sun/index.html} em 1995. Atualmente a linguagem foi comprada pela Oracle Corporation\footnote{https://www.oracle.com}. As características em destaque da linguagem estão no fato de ser baseada em classes e orientada a objetos. A \ac{OOP} é um paradigma de programação que abstrai conceitos em objetos, que podem conter dados, campos e comportamentos nomeados de \textit{methods} \citep{Lewis2000}. 
+JAVA\footnote{https://www.java.com} é uma linguagem de programação de propósito genérico, desenvolvida originalmente por James Gosling na Sun Microsystems\footnote{ https://www.oracle.com/br/sun/index.html} em 1995. Atualmente a linguagem foi comprada pela Oracle Corporation\footnote{https://www.oracle.com}. As características em destaque da linguagem estão no fato de ser baseada em classes e orientada a objetos. A \ac{OOP} é um paradigma de programação que abstrai conceitos em objetos, que podem conter dados, campos e comportamentos nomeados de \textit{methods} \citep{Lewis2000}.
 
 Outra caraterística importante da linguagem trata-se da filosofia apresentada pelos desenvolvedores de “escreva uma vez, rode em qualquer lugar”. A filosofia trata-se da linguagem ser compilada por uma \ac{VM} possibilitando escrever um mesmo pedaço de código que possa ser portado para outra plataforma sem necessidade de alterá-lo, uma vez que cada \ac{VM} implementa as especificidades da nova plataforma abstraindo o acesso ao \ac{SO}.
 
@@ -456,9 +476,9 @@ Spring Boot\footnote{https://projects.spring.io/spring-boot/} é um projeto da P
 
 \begin{itemize}
 	\item{\textbf{Inversão de Controle}: \ac{IOC}, também conhecido como \textit{dependency injection} é um princípio em que as “dependências” devem ser supridas, injetadas por outro objeto. As dependências são objetos que serão usados como “serviços” para acessar suas funcionalidades, dentro dos \textit{containers} de \ac{IOC}. A injeção é a passagem da dependência para um objeto (o cliente) \citep{DependencyInjection2006}. O termo “inversão de controle” origina-se do fato que a criação de valores de classes externas ao objeto não deve ser realizada pelo próprio objeto mas, sim pelos \textit{containers} de \ac{IOC}.}
-	
+
 	\item{\textbf{Acesso a dados}: O framework possui diversas bibliotecas para o acesso a dados, tanto para bancos relacionais como não relacionais. Também é oferecido um sistema \ac{ORM} que trata-se de uma técnica para traduzir o formato de dados de um banco relacional para \ac{OOP}, facilitando sua manipulação.}
-	
+
 	\item{\textbf{Arquitetura MVC}: Fornece todo suporte para customizar e criar uma arquitetura \ac{MVC}.}
 \end{itemize}
 
