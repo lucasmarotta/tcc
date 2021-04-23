@@ -227,14 +227,16 @@ Um conjunto que segue os princípios LOD é um grafo $G$ tal que $G = (R, L, I)$
 \label{eq:rlws_ex2}
 \end{equation}
 
+A equação possui um condicional que implica o valor 1 quando dois recursos comparados tenham a mesma \textit{URI} ou estejam relacionados pela propriedade \textit{dbo:wikiPageRedirects}. Essa propriedade nada mais trata de redirecionamentos do próprio serviço do DBPedia, que quando consultando recursos como "Movie" e "Film", resultam na mesma página, pois são redirecionamentos. Para maior generalização o termo "link" será utilizado para se referir tanto a ligações como recursos ou propriedades relacionadas. As funções $C_d$ e $C_i$ tratam-se de computar os links distintos de um recurso qualquer, ou seja todas as ligações distintas a outros recursos, de forma direta e indireta respectivamente. No caso da função $C_d$, são computados todos os recursos distintos que sejam alcançados por uma propriedade qualquer através de um recurso analisado em questão, mais aqueles que partem de outro recurso e chegam nesse mesmo desejado. O exemplo da Figura \ref{fig:cd_links} apresenta o recurso "Tom\_Cruise" a ser calculado, que possui um link direto sainte para o recurso "American\_film\_producers" através da propriedade "sujeito de", e outro link direto de entrada pelo recurso "Jack\_Reacher" através da propriedade "retratado por".
+
 \begin{figure}
 	\centering
-	\includegraphics[scale=0.4]{imagens/cd_links.png}
+	\includegraphics[scale=0.35]{imagens/cd_links.png}
 	\caption{Imagem que retrata os links diretos saintes e entrantes de um recurso.}
 	\label{fig:cd_links}
 \end{figure}
 
-A equação possui um condicional que implica o valor 1 quando dois recursos comparados tenham a mesma \textit{URI} ou estejam relacionados pela propriedade \textit{dbo:wikiPageRedirects}. Essa propriedade nada mais trata de redirecionamentos do próprio serviço do DBPedia, que quando consultando recursos como "Movie" e "Film", resultam na mesma página, pois são redirecionamentos. Para maior generalização o termo "link" será utilizado para se referir tanto a ligações como recursos ou propriedades relacionadas. As funções $C_d$ e $C_i$ tratam-se de computar os links distintos de um recurso qualquer, ou seja todas as ligações distintas a outros recursos, de forma direta e indireta respectivamente. No caso da função $C_d$, são computados todos os recursos distintos que sejam alcançados por uma propriedade qualquer através de um recurso analisado em questão, mais aqueles que partem de outro recurso e chegam nesse mesmo desejado. O exemplo da Figura \ref{fig:cd_links} apresenta o recurso "Tom\_Cruise" a ser calculado, que possui um link direto sainte para o recurso "American\_film\_producers" através da propriedade "sujeito de", e outro link direto de entrada pelo recurso "Jack\_Reacher" através da propriedade "retratado por".
+A contagem desses links é realizada através da consulta \ac{SPARQL} conforme a Figura \ref{fig:cd_links}. Alguns filtros de propriedades são realizados, pois não são relevantes para a consulta. A propriedade \textit{dbo:wikiPageRedirect} é realizada por outra consulta a parte, mas é adicionada no filtro, para não levá-la em consideração durante a contagem. Para a função $C_i$ apenas são contabilizados os links indiretos de saída, por motivos de desempenho de consultas SPARQL no DBPedia. A imagem \ref{fig:ci_links} retrata o cenário para os links indiretos, e o Código \ref{cod:sparql_ci} a contagem dos links indiretos. Quanto para as funções $C_{di}$, $C_{do}$ e $C_{io}$, referem-se a contagem dos links distintos compartilhados entre dois recursos, sendo os dois primeiros de forma direta e o último de forma indireta. Os Códigos \ref{cod:sparql_cdio} e \ref{cod:sparql_cio} apresentam as consultas \ac{SPARQL} para realizar a contagem dos links.
 
 \begin{lstlisting}[caption=Consulta SPARQL para contagem de links diretos, language=SQL, frame=single, label={cod:sparql_cd}, float, numbers=left]
 PREFIX  :  <http://dbpedia.org/resource/>
@@ -252,11 +254,11 @@ WHERE {
 }
 \end{lstlisting}
 
-A contagem desses links é realizada através da consulta \ac{SPARQL} conforme a Figura \ref{fig:cd_links}. Alguns filtros de propriedades são realizados, pois não são relevantes para a consulta. A propriedade \textit{dbo:wikiPageRedirect} é realizada por outra consulta a parte, mas é adicionada no filtro, para não levá-la em consideração durante a contagem. Para a função $C_i$ apenas são contabilizados os links indiretos de saída, por motivos de desempenho de consultas SPARQL no DBPedia. A imagem \ref{fig:ci_links} retrata o cenário para os links indiretos, e o Código \ref{cod:sparql_ci} a contagem dos links indiretos. Quanto para as funções $C_{di}$, $C_{do}$ e $C_{io}$, referem-se a contagem dos links distintos compartilhados entre dois recursos, sendo os dois primeiros de forma direta e o último de forma indireta. Os Códigos \ref{cod:sparql_cdio} e \ref{cod:sparql_cio} apresentam as consultas \ac{SPARQL} para realizar a contagem dos links.
+O objetivo da equação é obter o quão relevante é o relacionamento entre dois recursos em relação a soma dos relacionamentos deles a quaisquer outros, obtendo $S_d$ para uma "similaridade direta" entre $r_a$ e $r_b$, e $S_i$ para uma "similaridade indireta". Posteriormente essas similaridades são aplicada na média ponderada com os pesos $w_d$ e $w_i$, obtendo esta similaridade semântica média com o peso dos links. É importante ressaltar que para manter a equação correta é necessário que a soma dos pesos seja igual 1. A introdução das funções de $\log$ tem o objetivo de transformar os dados, suavizando o enviesamento da proporção entre os valores do total da soma de links diretos em relação aos links da comparação de $r_a$ e $r_b$. De caráter ilustrativo, quando comparamos termos como "United\_States" e "Group" em relação aos links indiretos, tem uma soma de 429.116 links que em comparação entre o que relaciona um ao outro é de 2.010.
 
 \begin{figure}
 	\centering
-	\includegraphics[scale=0.5]{imagens/ci_links.png}
+	\includegraphics[scale=0.35]{imagens/ci_links.png}
 	\caption{Imagem que retrata os links indiretos saintes de um recurso.}
 	\label{fig:ci_links}
 \end{figure}
@@ -312,8 +314,6 @@ WHERE {
 	FILTER ( ?p2 != dbo:wikiPageExternalLink )
 }
 \end{lstlisting}
-
-O objetivo da equação é obter o quão relevante é o relacionamento entre dois recursos em relação a soma dos relacionamentos deles a quaisquer outros, obtendo $S_d$ para uma "similaridade direta" entre $r_a$ e $r_b$, e $S_i$ para uma "similaridade indireta". Posteriormente essas similaridades são aplicada na média ponderada com os pesos $w_d$ e $w_i$, obtendo esta similaridade semântica média com o peso dos links. É importante ressaltar que para manter a equação correta é necessário que a soma dos pesos seja igual 1. A introdução das funções de $\log$ tem o objetivo de transformar os dados, suavizando o enviesamento da proporção entre os valores do total da soma de links diretos em relação aos links da comparação de $r_a$ e $r_b$. De caráter ilustrativo, quando comparamos termos como "United\_States" e "Group" em relação aos links indiretos, tem uma soma de 429.116 links que em comparação entre o que relaciona um ao outro é de 2.010.
 
 Por último é destacável notar que a equação exibe os axiomas abaixo que são importantes para a consistência da similaridade:
 
@@ -394,7 +394,7 @@ Para que a similaridade entre o modelo de usuário e o filme seja concebida, é 
 O pseudo-código \ref{alg:alg_recomendacao} exemplifica os passos para o cálculo da similaridade entre os termos do usuário e os termos do filme.
 
 \begin{algorithm}
-	\caption{Pseudocódigo da geração dos filmes recomendados/sugeridos.}
+	\caption{Pseudocódigo da geração dos filmes recomendados.}
     \begin{algorithmic}[1]
         \Function{GeraRecomendacoes}{$U, z, n, X, w_i, w_d$}
         	\State $D_u \gets X - U$\Comment{outros filmes}
@@ -408,14 +408,7 @@ O pseudo-código \ref{alg:alg_recomendacao} exemplifica os passos para o cálcul
         		\EndIf
         	\EndFor
         	\Return $max(R, n)$\Comment{retorna o conjunto de $n$ filmes com maior score}
-        \EndFunction
-    \end{algorithmic}
-\label{alg:alg_recomendacao}
-\end{algorithm}
-
-\begin{algorithm}
-	\caption{Cálculo do RLWS entre termos do usuário e do filme.}
-	\begin{algorithmic}[1]
+        \EndFunction\\
         \Function{CalculaRLWSEntreTermos}{$M_u, F, w_i, w_d$}\Comment{$w_d$ - é o peso para os links diretos, $w_i$ - é o peso para os links indiretos}
         	\State $comparacoes \gets 0$\Comment{total de comparações de termos válidos}
         	\State $similaridade \gets \varnothing$\Comment{conjunto vazio das recomendações}
@@ -439,6 +432,7 @@ O pseudo-código \ref{alg:alg_recomendacao} exemplifica os passos para o cálcul
 			\EndIf
         \EndFunction
     \end{algorithmic}
+\label{alg:alg_recomendacao}
 \end{algorithm}
 
 A Figura \ref{fig:rlws_ex} ilustra como é o fluxo da recomendação e seu cálculo. No exemplo define-se que $M_u$ como o conjunto de termos extraídos do texto "Lula fala com a mídia no Paraná", e por sua vez $F$ como os termos do texto "Presidente saúda imprensa em Curitiba". O objetivo é de que dois textos \textbf{possuem palavras diferentes, mas são similares}.

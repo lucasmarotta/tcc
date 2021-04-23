@@ -46,7 +46,7 @@ O exemplo do Código Fonte \ref{cod:sparql-example} demonstra a consulta de dado
 \begin{lstlisting}[caption=Exemplo de consulta na linguagem SPARQL, language=SPARQL, frame=single, label={cod:sparql-example}, float, numbers=left]
 PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-SELECT ?name 
+SELECT ?name
        ?email
 WHERE
   {
@@ -66,7 +66,7 @@ Em essência a ontologia é um documento que define formalmente as relações en
 A linguagem OWL provê três sublinguagens, OWL Lite, OWL DL, OWL Full como apresentado pela \cite{OWLW3C}.
 
 \begin{itemize}
-	\item{\textbf{OWL Lite}: Para a criação hierárquica e simples de limitações de \textit{features}. Como exemplo, é possível oferecer suporte a limitações de cardinalidade que só permitam valores de 0 ou 1. É mais simples de prover suporte.} 
+	\item{\textbf{OWL Lite}: Para a criação hierárquica e simples de limitações de \textit{features}. Como exemplo, é possível oferecer suporte a limitações de cardinalidade que só permitam valores de 0 ou 1. É mais simples de prover suporte.}
 
 	\item{\textbf{OWL DL (descrição lógica)}: Oferece suporte a uma expressividade máxima sem perder a completude computacional (todas as implicações são garantidas para serem computadas), decidibilidade (todos os cálculos finalizaram em um tempo finito). Inclui todas as construções com restrições e separação de tipos (uma classe também não pode ser indivíduo ou propriedade, uma propriedade também não pode ser um indivíduo ou uma classe).}
 
@@ -75,16 +75,16 @@ A linguagem OWL provê três sublinguagens, OWL Lite, OWL DL, OWL Full como apre
 
 Todas as sub-linguagens são extensões de sua predecessora, sendo assim cada ontologia válida em OWL Lite é uma ontologia válida em OWL DL que por sua vez é uma ontologia válida em OWL Full \citep{OWLW3C}. É notável destacar que o inverso das relações não é verdadeiro. Completando, todo documento OWL é um documento em XML construído com o RDF.
 
-\subsubsection{Estrutura de um documento:}
+\subsubsection{Estrutura de um documento}
 
 Com a OWL é possível descrever de forma natural classes e relacionamentos entre documentos e aplicações na Web \citep{OWLReport:2005}. Os termos descritos devem estar dispostos de tal maneira que não cause ambiguidade, assim é necessário que seja informado quais vocabulários serão empregados. Para o uso de vocabulários a \cite{OWLW3C} informa que deve-se definir no topo do documento os \textit{xml namespaces} \footnote{No XML, os namespaces são nomes únicos para elementos e atributos no documento. Para resolver as ambiguidades e facilitar as referências antes dos nomes são utilizados prefixos}, conforme mostrado no código fonte \ref{cod:owl-prefixes}.
 
 \begin{lstlisting}[caption=Exemplo do topo de um documento OWL, language=XML, frame=single, label={cod:owl-prefixes}, float, numbers=left]
-<rdf:RDF 
-    xmlns     ="http://www.w3.org/TR/2004/REC-owl-guide-20040210/wine#" 
-    xmlns:vin ="http://www.w3.org/TR/2004/REC-owl-guide-20040210/wine#"       
-    xml:base  ="http://www.w3.org/TR/2004/REC-owl-guide-20040210/wine#"       
-    xmlns:food="http://www.w3.org/TR/2004/REC-owl-guide-20040210/food#"    
+<rdf:RDF
+    xmlns     ="http://www.w3.org/TR/2004/REC-owl-guide-20040210/wine#"
+    xmlns:vin ="http://www.w3.org/TR/2004/REC-owl-guide-20040210/wine#"
+    xml:base  ="http://www.w3.org/TR/2004/REC-owl-guide-20040210/wine#"
+    xmlns:food="http://www.w3.org/TR/2004/REC-owl-guide-20040210/food#"
     xmlns:owl ="http://www.w3.org/2002/07/owl#"
     xmlns:rdf ="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
@@ -116,10 +116,10 @@ Acrescentando, a \ac{W3C} recomenda incluir no documento um cabeçalho XML que p
 \end{lstlisting}
 
 \begin{lstlisting}[caption=Exemplo do cabeçalho de uma ontologia, language=XML, frame=single, label={cod:owl-ontology-head}, float, numbers=left]
-<owl:Ontology rdf:about=""> 
+<owl:Ontology rdf:about="">
   <rdfs:comment>An example OWL ontology</rdfs:comment>
-  <owl:priorVersion rdf:resource="http://www.w3.org/TR/2003/PR-owl-guide-20031215/wine"/> 
-  <owl:imports rdf:resource="http://www.w3.org/TR/2004/REC-owl-guide-20040210/food"/> 
+  <owl:priorVersion rdf:resource="http://www.w3.org/TR/2003/PR-owl-guide-20031215/wine"/>
+  <owl:imports rdf:resource="http://www.w3.org/TR/2004/REC-owl-guide-20040210/food"/>
   <rdfs:label>Wine Ontology</rdfs:label>
   ...
 \end{lstlisting}
@@ -152,7 +152,7 @@ A evolução da WWW tornou cada vez mais acessível a publicação e acesso a do
 
 Suportando essa evolução da Web \citep{LinkedData:2006} introduziu um conjunto de melhores práticas para a publicação e conexão de dados estruturados na Web, denominado de \textit{Linked Data} (dados ligados). A adoção dessas práticas permite a extensão da Web como um espaço de dados global conectado de diversos domínios, desde pessoas, livros, publicações até dados governamentais dos mais variados assuntos. Com essa Web de dados surge a oportunidade para novos tipos de aplicações \citep{Bizer2009}, como navegadores customizados para um determinado domínio podendo saltar entre diferentes fontes de dados.
 
-Resumidamente, a \cite{LinkedDataW3C} define que para a Web dados ser uma realidade é necessário que os dados estejam disponíveis em padrões de formatos que sejam buscáveis e manipuláveis pelas ferramentas e tecnologias da Web Semântica. Complementando, é preciso também ter acesso ao relacionamento de dados. O conjunto de \textit{datasets} inter-relacionados na Web, para criar links tipificados entre dados de diferentes fontes é o que se denomina de dados ligados.
+Resumidamente, a \cite{LinkedDataW3C} define que para a Web de dados ser uma realidade é necessário que os dados estejam disponíveis em padrões de formatos que sejam buscáveis e manipuláveis pelas ferramentas e tecnologias da Web Semântica. Complementando, é preciso também ter acesso ao relacionamento de dados. O conjunto de \textit{datasets} inter-relacionados na Web, para criar links tipificados entre dados de diferentes fontes é o que se denomina de dados ligados.
 
 Ao contrário dos documentos \ac{HTML} na Web dos hipertextos, os dados ligados se baseiam-se nos documentos contendo dados em RDF. Assim são construídos links que são tipificados para realizar declarações sobre coisas arbitrárias no mundo. \cite{LinkedData:2006} enumerou um conjunto das regras para a publicação e conexão dos dados, conhecidos como os princípios dos dados ligados:
 
@@ -160,7 +160,7 @@ Ao contrário dos documentos \ac{HTML} na Web dos hipertextos, os dados ligados 
 	\item{Usar URIs para nomear coisas}
 	\item{Usar \ac{HTTP} URIs para que pessoas possam procurar seus nomes.}
 	\item{Quando alguém procura uma URI, forneça informação útil, utilizando os padrões como RDF e SPARQL.}
-	\item{Inclua links para outras URIs, para que assim eles possam descobrir mais coisas.}	
+	\item{Inclua links para outras URIs, para que assim eles possam descobrir mais coisas.}
 \end{enumerate}
 
 Um exemplo notável do uso das dados ligados, é o projeto da DBPedia\footnote{ http://wiki.dbpedia.org} que essencialmente torna o conteúdo da Wikipedia\footnote{https://www.wikipedia.org} disponível em RDF.
@@ -180,7 +180,7 @@ O \ac{LOD} tornou-se o projeto de maior adoção dos princípios dos dados ligad
 
 \begin{figure}
 	\centering
-	\includegraphics[scale=0.47]{imagens/lod_graph.jpg}
+	\includegraphics[scale=0.7]{imagens/lod_graph.png}
 	\caption{Diagrama da nuvem dos dados ligados \citep{LODGraph}}
 	\label{fig:lod-graph}
 \end{figure}
@@ -204,15 +204,15 @@ Entretanto, para a similaridade semântica é levado em consideração relaçõe
 
 \begin{itemize}
 	\item{\textbf{Propósito genérico}: \textit{Wordnet}\footnote{https://wordnet.princeton.edu} é um banco de dados que modela o conhecimento léxico da língua inglesa. Nomes, verbos, adjetivos e advérbios são agrupados em conjuntos sinônimos, onde cada um expressa um conceito distinto. Essa ontologia pode ser utilizada para criar um \textit{score} de similaridade. Pode ser considerada um ontologia para termos de linguagem natural.}
-	
-	\item{\textbf{De domínio específico}: \textit{ULMS}\footnote{https://www.nlm.nih.gov/research/umls} é um sistema de linguagem médica com uma rede semântica de ontologias de multiuso, multilíngue para biomedicina, conceitos e assuntos relacionados à saúde. O banco de dados do sistema possui uma coleção de vocabulários de conceitos e termos e seus relacionamentos que são denominados de \textit{Metathesaurus}. Cada Metathesaurus é classificado como pelo menos uma categoria semântica.}	
+
+	\item{\textbf{De domínio específico}: \textit{ULMS}\footnote{https://www.nlm.nih.gov/research/umls} é um sistema de linguagem médica com uma rede semântica de ontologias de multiuso, multilíngue para biomedicina, conceitos e assuntos relacionados à saúde. O banco de dados do sistema possui uma coleção de vocabulários de conceitos e termos e seus relacionamentos que são denominados de \textit{Metathesaurus}. Cada Metathesaurus é classificado como pelo menos uma categoria semântica.}
 \end{itemize}
 
 \subsection{Medidas de Similaridade Semântica}
 
 Na literatura já foram apresentadas algumas medidas de similaridade semântica, mas comumente existem três fatores principais \citep{Slimani2013} que podem ser associados na topologia (i.e. nós do grafo direcionado) das ontologias: \textit{path length}, \textit{depth}, \textit{density}. Todos esses fatores afetam a medida da distância semântica, assim como as características entre dois termos, que podem aumentar ou diminuir as medidas de acordo com suas semelhanças. Quanto a densidade entre dois termos trata-se do número de filhos dos quais pertencem ao menor caminho (\textit{path}) da raiz ao mais específico conceito entre esses termos. Os fatores que influenciam nas medidas levam a definição de uma classificação que podem ser divididas em quatro principais \citep{Slimani2013}: baseadas em estrutura, conteúdo, recursos ou características e as híbridas que combinam as características estruturais (\textit{path length}, \textit{depth}, \textit{density}) e alguma outra abordagem.
 
-\subsubsection{Baseadas em estrutura:}
+\subsubsection{Baseadas em estrutura}
 
 As medidas baseadas em estrutura (\textit{Structured-based ou Path-based}, utilizam funções que computam a similaridade baseada na hierarquia e estrutura da ontologia, ou seja, onde um conceito é definido como “é parte de”, “é um” etc. A função calcula o tamanho do caminho que liga os termos e seus posicionamentos no grafo direcionado da ontologia. Quanto mais dois conceitos são similares, mais \textit{links} existem entre eles. Dentre as medidas baseadas em estrutura se destacam:
 
@@ -220,23 +220,23 @@ As medidas baseadas em estrutura (\textit{Structured-based ou Path-based}, utili
 	\item{\textbf{\textit{Shortest Path} \citep{Rada:1989}}: A medida do menor caminho é um tipo de medida de distância que é primariamente voltada para lidar com hierarquias em redes semânticas. A função da similaridade entre conceitos $C_1$ e $C_2$ é definida como:
 
 	\begin{equation}
-		Sim(C_1, C_2) = 2 * Max(C_1, C_2) - SP	
+		Sim(C_1, C_2) = 2 * Max(C_1, C_2) - SP
 	\label{eq:shortest_path}
 	\end{equation}
-	
+
 	A função $Max$ é o maior tamanho do caminho entre $C_1$ e $C_2$, quanto a $SP$ é menor caminho relacionando os dois conceitos.}
-	
+
 	\item{\textbf{\textit{Weighted Links}}: Similar a medida do menor caminho, contudo é introduzido um conceito de pesos para os links entre os conceitos a serem comparados.}
-	
-	\item{\textbf{\cite{Wu:1994}}: Para essa medida sejam dois conceitos $C_1$ e $C_2$, é levado em consideração a noção intuitiva de que quanto maior a profundidade, mais similares os conceitos são. Na função tem-se que $N_1$ e $N_2$ são a quantidade de links da forma "é um" de $C_1$ e $C_2$, onde o conceito mais específico é o mais próximo ancestral  $C$ entre eles. 
+
+	\item{\textbf{\cite{Wu:1994}}: Para essa medida sejam dois conceitos $C_1$ e $C_2$, é levado em consideração a noção intuitiva de que quanto maior a profundidade, mais similares os conceitos são. Na função tem-se que $N_1$ e $N_2$ são a quantidade de links da forma "é um" de $C_1$ e $C_2$, onde o conceito mais específico é o mais próximo ancestral  $C$ entre eles.
 
 	\begin{equation}
-		Sim_{W \& P}(C_1, C_2) = \frac{2H}{N_1 + N_2 + 2H}	
+		Sim_{W \& P}(C_1, C_2) = \frac{2H}{N_1 + N_2 + 2H}
 	\label{eq:wu_palmer}
-	\end{equation}	}	
+	\end{equation}	}
 \end{itemize}
 
-\subsubsection{Baseadas em conteúdo:}
+\subsubsection{Baseadas em conteúdo}
 
 As medidas baseadas no conteúdo, são aquelas que utilizam a informação do conteúdo para medir similaridade. O conteúdo de um conceito é definido pela frequência de termos dado uma coleção de documentos. Grande parte das medidas deste tipo utilizam a informação compartilhada de dois conceitos pais $C_1$ e $C_2$, dos qual $S(C_1; C_2)$ é o conjunto de conceitos que os engloba, conforme a Equação \ref{eq:mis}.  O menor $p(C)$ é utilizado quando há mais de um pai em comum que $C$ é o \ac{MIS}, ou seja, o conceito mais informacional que os engloba.
 
@@ -250,12 +250,12 @@ Algumas das medidas deste tipo são:
 \begin{itemize}
 
 	\item{\textbf{\cite{Resnik:1999}}: O principio desta medida define que dois conceitos são mais similares se eles possuem mais informações compartilhadas. A informação compartilhada entre $C_1$ e $C_2$ é o conteúdo de conceitos que os engloba no grafo. A definição de \textit{Resnik} define a medida como a seguinte equação:
-	
+
 	\begin{equation}
 		Sim_{Resnik}(C_1, C_2) = - \ln (p_{mis}(C_1, C_2))
 	\label{eq:resnik}
 	\end{equation}}
-	
+
 	\item{\textbf{\cite{Lin1993PrincipleBasedPW}}: A proposta é incorporar o vetor semântico e a ordem das palavras para calcular a similaridade. A medida combina o menor caminho $SP$ entre dois conceitos e a profundidade $N$ da taxonomia em relação ao conceito $C$ mais em comum. A definição da equação segue conforme abaixo:
 
 	\begin{equation}
@@ -264,7 +264,7 @@ Algumas das medidas deste tipo são:
 	\end{equation}}
 \end{itemize}
 
-\subsubsection{Baseadas em características ou recursos:}
+\subsubsection{Baseadas em características ou recursos}
 
 Baseia-se em características ou recursos (\textit{Featured-based}), que partem do princípio de valorizar informações importantes em relação ao conhecimento sobre um termo. A medida assume que os conceitos são descritos por termos indicando suas propriedades ou \textit{features}. A similaridade entre dois conceitos é definida por uma função (\ref{eq:tversky}) que relaciona suas propriedades ou relacionamentos a outros termos similares na hierarquia da ontologia. \cite{Tversky:1977} apresenta uma medida \textit{Feature-based} de termos para calcular a similaridade entre diferentes conceitos, contudo o posicionamento desses termos na taxonomia e a informação do conteúdo não são levadas em consideração. A proposta é de que com termos descritos por um conjunto de palavras como propriedades do conceito, então as que são em comum tendem a aumentar a similaridade, enquanto as que não são em tendem a diminuí-la. Dessa forma, é definida uma equação onde $C_1$ e $C_2$ representam o conjunto de descrições dos termos e $\alpha \in [0,1]$ é a relação de relevância das características que não são em comum. O valor de $\alpha$ aumenta o quão mais em comum dois conceitos são, e decresce com suas diferenças, e não é necessariamente uma relação de simetria, mas mais baseada na similaridade \citep{Slimani2013}.
 
@@ -283,21 +283,37 @@ A DBPedia (DB para \textit{database}) é um esforço colaborativo para a extraç
 O projeto tem o foco em converter o conteúdo presente do Wikipedia em conhecimento estruturado utilizando as tecnologias da Web Semântica, para que outros agentes possam explorar realizando consultas e ligando a outros conjuntos de dados \citep{Auer:2007:DNW:1785162.1785216}. Assim, o projeto cobre uma das limitações da Wikipedia que é a dependência de apenas ter a busca em texto livre para encontrar informação. Desse papel, o projeto promove três importantes contribuições:
 
 \begin{itemize}
-	\item{Desenvolvimento de um \textit{framework} para extração de informação, o qual converte o conteúdo da Wikipedia em RDF.} 
+	\item{Desenvolvimento de um \textit{framework} para extração de informação, o qual converte o conteúdo da Wikipedia em RDF.}
 
-	\item{Prover o conteúdo da Wikipedia como um largo, multi-domínio \textit{dataset} de RDF. São mais de 100 milhões de triplas já mapeadas. A Figura \ref{fig:dbpedia-triples} mostra um recorte das entidades mapeadas do DBPedia.}
-	
+	\item{Prover o conteúdo da Wikipedia como um largo, multi-domínio \textit{dataset} de RDF. Já são cerca de 900 milhões de triplas mapeadas (2021). A Tabela \ref{tab:dbpedia-triples} mostra um recorte das entidades mapeadas do DBPedia.}
+
 	\item{Interligar o DBpedia com outros conjuntos de dados abertos, o que expande a contagem das triplas RDF para mais de bilhão.}
-	
-	\item{Desenvolvimento de uma série de interfaces e módulos de acesso para que tal \textit{dataset} possa ser acessado por serviços da Web ligado a outros sites.}	
+
+	\item{Desenvolvimento de uma série de interfaces e módulos de acesso para que tal \textit{dataset} possa ser acessado por serviços da Web ligado a outros sites.}
 \end{itemize}
 
-\begin{figure}
-	\centering
-	\includegraphics[scale=0.60]{imagens/dbpedia_triples.jpg}
-	\caption{Recorte da tabela de dados de triplas de entidades mapeadas no DBPedia. \citep{DBPedia:2014}}
-	\label{fig:dbpedia-triples}
-\end{figure}
+\begin{table}[]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|l|r|r|r|r|r|r|}
+\hline
+\multicolumn{7}{|c|}{\textbf{Amostra de Dados do DBPedia}}                                                                                                                                                                                                            \\ \hline
+                       & \multicolumn{6}{c|}{\textbf{Línguas}}                                                                                                                                                                                                        \\ \hline
+\textbf{Instâncias}    & \multicolumn{1}{l|}{\textbf{Inglês}} & \multicolumn{1}{l|}{\textbf{Espanhol}} & \multicolumn{1}{l|}{\textbf{Português}} & \multicolumn{1}{l|}{\textbf{Francês}} & \multicolumn{1}{l|}{\textbf{Alemão}} & \multicolumn{1}{l|}{\textbf{Russo}} \\ \hline
+Pessoas                & 1.445.104                            & 99.147                                 & 60.056                                  & 134.749                               & 179.421                              & 86.269                              \\ \hline
+Atores                 & 6.501                                & 13.831                                 & 7.546                                   & 14.019                                & 0                                    & 0                                   \\ \hline
+Artistas               & 96.282                               & 34.898                                 & 14.603                                  & 32.562                                & 0                                    & 30.266                              \\ \hline
+Políticos              & 40.343                               & 7.460                                  & 4.110                                   & 11.461                                & 0                                    & 0                                   \\ \hline
+Lugares                & 735.062                              & 156.377                                & 123.114                                 & 148.586                               & 168.082                              & 91.099                              \\ \hline
+Instuições de   ensino & 49.172                               & 1.709                                  & 514                                     & 2.943                                 & 2.600                                & 1.418                               \\ \hline
+Filmes                 & 87.282                               & 12.140                                 & 11.643                                  & 15.669                                & 18.707                               & 14.912                              \\ \hline
+Livros                 & 31.029                               & 2.217                                  & 1.343                                   & 3.549                                 & 0                                    & 18.491                              \\ \hline
+Software               & 31.401                               & 6.284                                  & 4.245                                   & 8.980                                 & 5.286                                & 0                                   \\ \hline
+\end{tabular}%
+}
+\caption{Recorte da tabela de dados de triplas de entidades mapeadas no DBPedia. \citep{DBPedia:2014}}
+\label{tab:dbpedia-triples}
+\end{table}
 
 \begin{figure}
 	\centering
@@ -314,7 +330,7 @@ O \textit{Knowledge Graph} é uma base de conhecimento desenvolvida pelo Google\
 
 \begin{figure}
 	\centering
-	\includegraphics[scale=0.55]{imagens/knowledge_graph.jpg}
+	\includegraphics[scale=0.8]{imagens/knowledge_graph.jpg}
 	\caption{Ilustração do sumário de dados mapeados no Google Knowledge Graph.}
 	\label{fig:knowledge-graph}
 \end{figure}
