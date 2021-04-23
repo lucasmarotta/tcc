@@ -27,13 +27,15 @@ A proposta é criar uma recomendação baseada em conteúdo, ou seja, nos intere
 
 \begin{figure}
 	\centering
-	\includegraphics[scale=0.42]{imagens/recsys_fluxo.png}
+	\includegraphics[scale=0.28]{imagens/recsys_fluxo.png}
 	\caption{Fluxo das camadas do sistema de recomendação.}
 	\label{fig:recsys_fluxo}
 \end{figure}
 
 \begin{enumerate}
 	\item{\textbf{Coleta dos filmes}: Serão coletados dados dos filmes utilizando o projeto MovieLens\footnote{https://movielens.org} (ver \ref{sec:dataModel}).}
+	
+	\item{\textbf{Persistência dos dados}: Os dados coletados serão persistidos num banco de dados MySQL\footnote{https://www.mysql.com}.}
 
 	\item{\textbf{Pré-processamento dos filmes}: Nessa etapa após a coleta dos filmes, os dados serão previamente processados para a geração de \textit{tokens} com \ac{NLP}, analisando a descrição dos itens (sinopse dos filmes). Após processados os \textit{tokens} serão persistidos no banco de dados.}
 
